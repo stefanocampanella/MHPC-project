@@ -1,0 +1,105 @@
+% !TEX TS-program = lualatex
+%\batchmode
+
+\documentclass[twosides, 11pt, a4paper, openright]{memoir}
+
+\captionnamefont{\bfseries}
+\setlength{\epigraphwidth}{\textwidth}
+\setlength{\epigraphrule}{0pt}
+\epigraphfontsize{\footnotesize}
+\epigraphposition{center}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+
+\makeatletter % necessary for using \@chapapp
+\newcommand{\correctchaptername}{\@chapapp}
+\makeatother
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+
+% Twosides settings: remember to set twosides in documentclass
+%%<--------
+\makepagestyle{twoside}
+\makeevenhead{twoside}{\textsc{\bfseries \correctchaptername{} \thechapter}}{}{}
+\makeoddhead{twoside}{}{}{\textsc{\bfseries \leftmark}}
+\makeevenfoot{twoside}{\bfseries \thepage}{}{}
+\makeoddfoot{twoside}{}{}{\bfseries \thepage}
+%%-------->
+
+% Oneside settings: remember to set oneside in documentclass
+%%<--------
+%% \makepagestyle{oneside}
+%% \makeoddhead{oneside}{}{\textsc{\correctchaptername{} \thechapter -- \leftmark}}{}
+%% \makeoddfoot{oneside}{}{\thepage}{}
+%%-------->
+
+%\usepackage[italian,english]{babel}
+\usepackage{polyglossia}
+\setdefaultlanguage[variant=british]{english}
+%\setotherlanguage{italian}
+\usepackage{csquotes}
+
+\usepackage[a4paper]{geometry}
+
+\usepackage{mathtools,amssymb}
+\usepackage{lualatex-math}
+
+\usepackage{unicode-math}
+\setmainfont{STIX Two Text}
+\setmathfont{STIX Two Math}
+\usepackage{microtype}
+
+\usepackage[
+  hidelinks,
+  plainpages=false,
+  pdfpagelabels,
+  pdfauthor={Stefano Campanella},
+  pdftitle={GEOTop: towards a high performance hydrological model}
+]{hyperref}
+
+%% \usepackage[
+%% backend=biber,
+%% style=numeric,
+%% url=false,
+%% isbn=false,
+%% giveninits=true,
+%% hyperref
+%% ]{biblatex}
+ 
+%% \addbibresource{document.bib}
+%% \renewbibmacro{in:}{}
+
+% May remove some warning during compilation
+%\setlength{\headheight}{14pt}
+
+% Enhanced references 
+%\usepackage[english]{varioref}
+
+% Enhanced tabs
+\usepackage{booktabs}
+
+% Subfigures
+\usepackage[caption = false]{subfig}
+
+% Colors!
+%\usepackage{xcolor}
+
+\author{Stefano Campanella}
+\title{GEOTop: towards a high perfomance hydrological model}
+
+\begin{document}
+\frontmatter
+\pagestyle{plain}
+\input{frontmatter.tex}
+\input{abstract.tex}
+\mainmatter
+\pagestyle{twoside}
+\input{ch1.tex}
+\input{conclusions.tex}
+\newpage
+\backmatter
+\appendix
+\input{apA.tex}
+\pagestyle{plain}
+%\printbibliography
+\end{document}
+

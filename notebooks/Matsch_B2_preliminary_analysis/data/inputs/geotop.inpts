@@ -1,0 +1,123 @@
+! GEOtop input file
+! Station B2 in Montecini
+ 
+! Simulation period 
+TimeStepEnergyAndWater = 900
+InitDateDDMMYYYYhhmm = 02/10/2009 00:00 
+EndDateDDMMYYYYhhmm = 31/12/2015 23:00
+
+! Simulation settings
+PointSim = 1
+WaterBalance = 1
+EnergyBalance = 1
+DtPlotDischarge = 1
+DtPlotBasin = 1
+DtPlotPoint = 1
+StandardTimeSimulation = 1 
+
+! Catchmentcentroid (for Sun position)
+Latitude = 46.668
+Longitude = 10.579
+
+! Energy budget settings
+FlagSkyViewFactor = 1 
+LWinParameterization = 4
+ 
+! Meteo stations 
+MeteoStationCoordinateX = 620815
+MeteoStationCoordinateY = 5171506
+MeteoStationElevation = 1480
+MeteoStationWindVelocitySensorHeight = 2.5
+MeteoStationTemperatureSensorHeight = 2
+
+! Input files 
+!SoilParFile = "soil"
+!HeaderSoilDz = "dz"
+!HeaderSoilInitPres = "init psi"
+
+MeteoFile = "meteo"
+HeaderDateDDMMYYYYhhmmMeteo = "Date"
+HeaderJulianDayfrom0Meteo = "JDfrom0"
+HeaderIPrec = "Iprec"
+HeaderWindVelocity = "WindSp"
+HeaderWindDirection = "WindDir"
+HeaderRH = "RelHum"
+HeaderAirTemp = "AirT" 
+HeaderSWglobal = "Swglobal" 
+
+!TimeDependentVegetationParameterFile = "vegetation_par"
+!HeaderVegHeight = "hveg"
+!HeaderCanopyFraction = "canopy fraction"
+!HeaderLSAI = "lsai"
+
+HorizonMeteoStationFile = "horizon" 
+HeaderHorizonAngle = "AngleFromNorthClockwise"
+HeaderHorizonHeight = "HorizonHeight"
+ 
+! Output files
+PointAll = 1
+PointOutputFile = "output/point"
+
+SoilAll = 1
+SoilLiqContentProfileFile = "output/thetaliq" 
+SoilIceContentProfileFile = "output/thetaice" 
+
+! Point settings 
+CoordinatePointX = 620815
+CoordinatePointY = 5171506
+PointElevation = 1480
+PointSlope = 15
+PointAspect = 225
+
+! Tunable parameters
+
+! Numerical parameters 
+RichardTol = 1.E-7 
+MinTimeStepSupFlow = 1.0
+HeatEqMaxIter = 200
+CanopyMaxIter = 2
+BusingerMaxIter = 2 
+LocMaxIter = 2
+
+! Land cover: meadow
+SoilRoughness = 100 
+ThresSnowSoilRough = 100 
+ThresSnowVegUp = 50 
+ThresSnowVegDown = 10 
+!DecayCoeffCanopy = 2.0 ! default 2.5
+RootDepth = 150 
+MinStomatalRes = 25 
+VegReflectVis = 0.1 
+VegTransVis = 0.07 
+!VegTransNIR = 0.25 ! default 0.2
+CanDensSurface = 0.5 
+!SoilAlbVisDry = 0.15 ! default 0.2
+!SoilAlbNIRDry = 0.25 ! default 0.2
+!SoilAlbVisWet = 0.15 ! default 0.2
+!SoilAlbNIRWet = 0.25 ! default 0.2
+!SurFlowResExp = 0.667 ! default 0.67
+
+! Snow and glaciers
+SnowCorrFactor = 1.398
+SnowAgingCoeffVis = 0.1108
+AlbExtParSnow = 182
+SnowRoughness = 1.6
+IrriducibleWatSatSnow = 0.0595
+WetSnowDefRate = 2.49
+ThresTempSnow = -3.2
+MaxWaterEqSnowLayerContent = 10
+!FreshSnowReflVis = 0.88 ! default 0.9
+!FreshSnowReflNIR = 0.63 ! default 0.65
+!DrySnowDefRate = 1.01 ! default 1.0
+!SnowEmissiv = 0.99 ! default 0.98
+
+! Soil 
+PointSoilType = 1
+InitSoilTemp = 4 
+LateralHydrConductivity = 0.001
+NormalHydrConductivity = 1.0
+!ThetaRes = 0.07 ! default 0.05
+!ThetaSat = 0.7 ! default 0.5
+AlphaVanGenuchten = 0.1
+!NVanGenuchten = 1.2 ! default 1.3
+
