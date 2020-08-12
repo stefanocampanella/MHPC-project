@@ -108,7 +108,7 @@ $ ninja geotop
 
 ## Usage
 
-After login, remember to load the Python module from Spack
+Remember to load the Python module from Spack
 ```
 $ spack load python@3.8.3
 ```
