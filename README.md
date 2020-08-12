@@ -5,7 +5,7 @@ This repository contains notebooks, code and documentation related to my final p
 
 In this project, I will try to get some insights into high-performance derivative-free optimization and exploit HPC for the calibration of parameters of the [GEOtop model](https://geotopmodel.github.io/geotop). The topic is interesting both from a scientific and technical point of view; you can find more information [here](https://stefanocampanella.github.io/MHPC_project_meeting).
 
-Eventually, the code for the project will consist of three packages. These will be a GEOtop wrapper ([GEOtoPy](https://github.com/stefanocampanella/GEOtoPy)), an optimizer (most probably a fork of [Nevergrad](https://github.com/facebookresearch/nevergrad)), and a GEOtop calibration tool, which will make use of the previous two. From a design point of view, the goal is non-trivial. On the one hand, the calibration utility should be simple to use and automate most of the work. On the other, it must be general enough to be used on the full gamut of real-world applications.
+Eventually, the code developed for the project will consist of three packages. These will be a GEOtop wrapper ([GEOtoPy](https://github.com/stefanocampanella/GEOtoPy)), an optimizer (most probably a fork of [Nevergrad](https://github.com/facebookresearch/nevergrad)), and a GEOtop calibration tool, which will make use of the previous two. From a design point of view, the goal is non-trivial. On the one hand, the calibration utility should be simple to use and automate most of the work. On the other, it must be general enough to be used on the full gamut of real-world applications.
 
 At present, the content of this repository is somewhat provisional and exploratory in nature. It contains preliminary analysis and experiments with the interface and the optimizer. At the end of the project, it will host an application to a case study and reports.  
 
@@ -115,14 +115,14 @@ $ spack load python@3.8.3
 
 Now you can run a command within the virtual environment created by Pipenv with `pipenv run command` or open a shell using `pipenv shell`.
 
-To run a notebook under `notebook/foo/bar.ipynb` and save the output in `baz.ipynb` using Papermill issue
+To run a notebook under `notebook/foo/bar.ipynb` and save the output in `baz.ipynb` using [Papermill](https://github.com/nteract/papermill) issue
 
 ```
 # from the root of the project
 $ pipenv run papermill --cwd notebooks/foo notebooks/foo/bar.ipynb baz.ipynb
 ```
 
-or, if you are on a cluster using Slurm
+or, if you are on a cluster using [Slurm](https://slurm.schedmd.com/documentation.html)
 ```
 $ srun pipenv run papermill --cwd notebooks/foo notebooks/foo/bar.ipynb baz.ipynb
 ```
