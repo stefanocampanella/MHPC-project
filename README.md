@@ -3,7 +3,7 @@
 
 This repository contains notebooks, code and documentation related to my final project for the 2019/20 edition of the MHPC. The thesis will be hosted here, as well. 
 
-In this project, I will try to get some insights into high-performance derivative-free optimization and exploit HPC for the calibration of parameters of the [GEOtop model](https://geotopmodel.github.io/geotop). The topic is interesting both from a scientific and technological point of view; you can find more information [here](https://stefanocampanella.github.io/MHPC_project_meeting).
+In this project, I will try to get some insights into high-performance derivative-free optimization and exploit HPC for the calibration of parameters of the [GEOtop model](https://geotopmodel.github.io/geotop). The topic is interesting both from a scientific and technical point of view; you can find more information [here](https://stefanocampanella.github.io/MHPC_project_meeting).
 
 Eventually, the code for the project will consist of three packages. These will be a GEOtop wrapper ([GEOtoPy](https://github.com/stefanocampanella/GEOtoPy)), an optimizer (most probably a fork of [Nevergrad](https://github.com/facebookresearch/nevergrad)), and a GEOtop calibration tool, which will make use of the previous two. From a design point of view, the goal is non-trivial. On the one hand, the calibration utility should be simple to use and automate most of the work. On the other, it must be general enough to be used on the full gamut of real-world applications.
 
