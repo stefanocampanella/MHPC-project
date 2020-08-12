@@ -24,13 +24,13 @@ If you are on an HPC cluster, load the needed modules via `module load module1 m
 
 ## Installation
 
-This project uses Pipenv to manage dependencies. Pipenv will create a virtual environment, download and install the required Python packages for you. 
+This project uses [Pipenv](https://github.com/pypa/pipenv) to manage dependencies. Pipenv will create a virtual environment, download and install the required Python packages for you. 
 
-In turn, Pipenv can be installed using Pip, which should be provided by most Python installations. However, this project uses a relatively recent version of Python, which may not be available on your system (especially if you are working on an HPC cluster). In this case, you will need to install Python 3.8, before using Pip and then Pipenv. The following instructions should work on most systems.
+In turn, Pipenv can be installed using [Pip](https://pip.pypa.io/en/stable/), which should be provided by most Python installations. However, this project uses a relatively recent version of Python, which may not be available on your system (especially if you are working on an HPC cluster). In this case, you will need to install Python 3.8, before using Pip and then Pipenv. The following instructions should work on most systems.
 
 ### Python 3.8
 
-Install Spack with
+Install [Spack](https://spack.io/) with
 ```
 $ git clone https://github.com/spack/spack.git
 $ cd spack
