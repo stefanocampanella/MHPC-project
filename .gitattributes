@@ -1,3 +1,4 @@
 notebooks/Matsch_B2_preliminary_analysis/data/inputs filter=lfs diff=lfs merge=lfs -text
 notebooks/Matsch_B2_preliminary_analysis/data/Lookup[[:space:]]Table.ods filter=lfs diff=lfs merge=lfs -text
 notebooks/Matsch_B2_preliminary_analysis/data/Matsch_B2.h5 filter=lfs diff=lfs merge=lfs -text
+notebooks/Nevergrad_example/data/inputs filter=lfs diff=lfs merge=lfs -text
