@@ -4,16 +4,16 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+jupyterlab = "*"
 
 [packages]
 pandas = "*"
 tables = "*"
 seaborn = "*"
-nevergrad = "*"
-geotopy = "*"
+nevergrad = {extras = ["benchmark"], version = "*"}
+geotopy = ">=0.0.3"
 jupyter = "*"
 papermill = "*"
-jupyterlab = "*"
 
 [requires]
 python_version = "3.8"
