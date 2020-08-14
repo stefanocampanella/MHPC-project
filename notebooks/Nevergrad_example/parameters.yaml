@@ -1,2 +1,6 @@
-num_workers: 32
-budget: 512
+num_workers : 32
+budget : 512
+algorithm : 'PSO'
+period: 'W'
+mean : -2000.0
+var : 1500.0
