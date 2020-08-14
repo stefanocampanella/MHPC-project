@@ -6,7 +6,7 @@
 #SBATCH --time-min=40:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=64
+#SBATCH --cpus-per-task=32
 #SBATCH --hint=compute_bound
 #SBATCH --mail-type=ALL
 #SBATCH --exclusive=user
