@@ -15,6 +15,7 @@
 module load gnu8
 spack load python@3.8.3
 export NUMEXPR_NUM_THREADS=1
+export NUMEXPR_MAX_THREADS=1
 export OMP_NUM_THREADS=1
 
 ROOT=$HOME/MHPC-project
