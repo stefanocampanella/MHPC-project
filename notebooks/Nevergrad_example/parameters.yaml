@@ -1,6 +1,7 @@
 num_workers : 32
 budget : 512
 algorithm : 'PSO'
+timeout : 180
 period: 'W'
 mean : -2000.0
 var : 1500.0
