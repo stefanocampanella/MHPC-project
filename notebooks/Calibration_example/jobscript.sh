@@ -2,8 +2,8 @@
 #
 #SBATCH --job-name=geotop_calibration
 #SBATCH --partition regular2
-#SBATCH --time=2:00:00
-#SBATCH --time-min=1:30:00
+#SBATCH --time=1:00:00
+#SBATCH --time-min=40:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=32

@@ -1,11 +1,15 @@
 systmpfs : '/dev/shm'
 num_workers : 32
-budget : 1024
+budget : 512
 algorithm : 'TwoPointsDE'
 timeout : 180
-n_lower : 8
-n_upper : 32
-dz_lower : 50.0
-dz_upper : 1000.0
-psi_lower : -3000.0
-psi_upper : 1000.0
+par:
+    -   init: 16
+        lower: 8
+        upper: 32
+    -   init: 500.0
+        lower: 50
+        upper: 1000
+    -   init: -2000.0
+        lower: -6500.0
+        upper: 2500.0
