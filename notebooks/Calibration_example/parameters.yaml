@@ -3,6 +3,9 @@ num_workers : 32
 budget : 1024
 algorithm : 'TwoPointsDE'
 timeout : 180
-mean : -2000.0
-var : 1500.0
-dz: [100, 360, 1260, 4500, 16000]
+n_lower : 8
+n_upper : 32
+dz_lower : 50.0
+dz_upper : 1000.0
+psi_lower : -3000.0
+psi_upper : 1000.0
