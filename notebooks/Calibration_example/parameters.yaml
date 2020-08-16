@@ -1,8 +1,8 @@
 systmpfs : '/dev/shm'
 num_workers : 32
-budget : 512
+budget : 1024
 algorithm : 'TwoPointsDE'
 timeout : 180
-period: 'M'
 mean : -2000.0
-var : 100.0
+var : 1500.0
+dz: [100, 360, 1260, 4500, 16000]
