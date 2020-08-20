@@ -1,123 +1,188 @@
 ! GEOtop input file
-! Station B2 in Montecini
- 
-! Simulation period 
+! User manual template with adaptations for station Matsch B2
+! Undocumented and unknown keyword where deleted
+
+!==== Simulation Settings ====
 TimeStepEnergyAndWater = 900
 InitDateDDMMYYYYhhmm = 02/10/2009 00:00 
 EndDateDDMMYYYYhhmm = 31/12/2015 23:00
-
-! Simulation settings
-PointSim = 1
+NumSimulationTimes = 1
 WaterBalance = 1
 EnergyBalance = 1
-DtPlotDischarge = 1
-DtPlotBasin = 1
+PointSim = 1
+StandardTimeSimulation = 1
 DtPlotPoint = 1
-StandardTimeSimulation = 1 
 
-! Catchmentcentroid (for Sun position)
+!==== Point ====
+PointElevation = 1480
+PointSlope = 15
+PointAspect = 225
+!PointSkyViewFactor = ?
+!PointMaxSWE = ?
+!==== not in template ====
+CoordinatePointX = 620815
+CoordinatePointY = 5171506
 Latitude = 46.668
 Longitude = 10.579
 
-! Energy budget settings
-FlagSkyViewFactor = 1 
-LWinParameterization = 4
- 
-! Meteo stations 
+!==== Meteo File ====
+MeteoFile = "meteo"
+HeaderDateDDMMYYYYhhmmMeteo = "Date"
+HeaderJulianDayfrom0Meteo = "JDfrom0"
+HeaderWindVelocity = "WindSp"
+HeaderWindDirection = "WindDir"
+HeaderRH = "RelHum"
+HeaderAirTemp = "AirT"
+HeaderSWglobal = "Swglobal"
+HeaderIPrec = "Iprec"
+!HeaderCloudSWTransmissivity  = ?
+
+!==== Meteo Station File ====
+HorizonMeteoStationFile = "horizon"
+HeaderHorizonAngle = "AngleFromNorthClockwise"
+HeaderHorizonHeight = "HorizonHeight"
+!==== not in template ====
 MeteoStationCoordinateX = 620815
 MeteoStationCoordinateY = 5171506
 MeteoStationElevation = 1480
 MeteoStationWindVelocitySensorHeight = 2.5
 MeteoStationTemperatureSensorHeight = 2
 
-! Input files 
-!SoilParFile = "soil"
-!HeaderSoilDz = "dz"
-!HeaderSoilInitPres = "init psi"
-
-MeteoFile = "meteo"
-HeaderDateDDMMYYYYhhmmMeteo = "Date"
-HeaderJulianDayfrom0Meteo = "JDfrom0"
-HeaderIPrec = "Iprec"
-HeaderWindVelocity = "WindSp"
-HeaderWindDirection = "WindDir"
-HeaderRH = "RelHum"
-HeaderAirTemp = "AirT" 
-HeaderSWglobal = "Swglobal" 
-
-!TimeDependentVegetationParameterFile = "vegetation_par"
-!HeaderVegHeight = "hveg"
-!HeaderCanopyFraction = "canopy fraction"
-!HeaderLSAI = "lsai"
-
-HorizonMeteoStationFile = "horizon" 
-HeaderHorizonAngle = "AngleFromNorthClockwise"
-HeaderHorizonHeight = "HorizonHeight"
- 
-! Output files
-PointAll = 1
-PointOutputFile = "output/point"
-
-SoilAll = 1
-SoilLiqContentProfileFile = "output/thetaliq" 
-SoilIceContentProfileFile = "output/thetaice" 
-
-! Point settings 
-CoordinatePointX = 620815
-CoordinatePointY = 5171506
-PointElevation = 1480
-PointSlope = 15
-PointAspect = 225
-
-! Tunable parameters
-
-! Numerical parameters 
-RichardTol = 1.E-7 
+!==== Water Balance ====
+FrozenSoilHydrCondReduction = 2
+RichardTol = 1.e-8
+RichardMaxIter = 500
+RichardInitForc = 0.01
 MinTimeStepSupFlow = 1.0
-HeatEqMaxIter = 200
-CanopyMaxIter = 2
-BusingerMaxIter = 2 
-LocMaxIter = 2
 
-! Land cover: meadow
+!==== Energy Balance ====
+LWinParameterization = 9
+MoninObukhov = 1
+HeatEqTol = 1.e-5
+HeatEqMaxIter = 500
+ZeroTempAmplitDepth = 20100
+ZeroTempAmplitTemp = -1.25
+
+!==== Land Cover ====
 SoilRoughness = 100 
-ThresSnowSoilRough = 100 
-ThresSnowVegUp = 50 
-ThresSnowVegDown = 10 
-!DecayCoeffCanopy = 2.0 ! default 2.5
-RootDepth = 150 
-MinStomatalRes = 25 
-VegReflectVis = 0.1 
-VegTransVis = 0.07 
-!VegTransNIR = 0.25 ! default 0.2
-CanDensSurface = 0.5 
-!SoilAlbVisDry = 0.15 ! default 0.2
-!SoilAlbNIRDry = 0.25 ! default 0.2
-!SoilAlbVisWet = 0.15 ! default 0.2
-!SoilAlbNIRWet = 0.25 ! default 0.2
-!SurFlowResExp = 0.667 ! default 0.67
+ThresSnowSoilRough = 5
+AlbExtParSnow = 3
+SoilAlbVisDry = 0.5
+SoilAlbNIRDry = 0.5
+SoilAlbVisWet = 0.5
+SoilAlbNIRWet = 0.5
+SoilEmissiv = 0.96
+!==== not in template: to be test ====
+!DecayCoeffCanopy = 2.0
+!CanopyMaxIter = 2
+!RootDepth = 150
+!MinStomatalRes = 25
+!VegReflectVis = 0.1
+!VegTransVis = 0.07
+!VegTransNIR = 0.25
+!CanDensSurface = 0.5
 
-! Snow and glaciers
-SnowCorrFactor = 1.398
-SnowAgingCoeffVis = 0.1108
-AlbExtParSnow = 182
-SnowRoughness = 1.6
-IrriducibleWatSatSnow = 0.0595
-WetSnowDefRate = 2.49
-ThresTempSnow = -3.2
-MaxWaterEqSnowLayerContent = 10
-!FreshSnowReflVis = 0.88 ! default 0.9
-!FreshSnowReflNIR = 0.63 ! default 0.65
-!DrySnowDefRate = 1.01 ! default 1.0
-!SnowEmissiv = 0.99 ! default 0.98
+!==== Snow ====
+FreshSnowReflVis = 0.96
+FreshSnowReflNIR = 0.72
+BlowingSnow = 0
+InitSWE = 0
+InitSnowDensity = 180
+InitSnowTemp = -3
+InitSnowAge = 0
+RainCorrFactor = 1
+SnowCorrFactor = 1.6
+SnowSMIN = 25
+SnowSMAX = 70
+SnowCURV = -150
+DewTempOrNormTemp = 0.65
+ThresTempRain = 2
+ThresTempSnow = -1
+SnowEmissiv = 0.94
+SnowRoughness = 0.1
+FreshSnowReflVis = 0.9
+FreshSnowReflNIR = 0.65
+IrriducibleWatSatSnow = 0.02
+MaxSnowPorosity = 0.7
+DrySnowDefRate = 1
+SnowDensityCutoff = 100
+WetSnowDefRate = 1.5
+SnowViscosity = 1.e6
+AlphaSnow = 1.e2
+!==== not in template: to be tested ====
+!ThresSnowVegUp = 50
+!ThresSnowVegDown = 10, 20, 30
+!SnowAgingCoeffVis = 0.1108
+!MaxWaterEqSnowLayerContent = 10
+!SurFlowResExp = 0.667
 
-! Soil 
+!==== Soil ====
 PointSoilType = 1
-InitSoilTemp = 4 
-LateralHydrConductivity = 0.001
-NormalHydrConductivity = 1.0
-!ThetaRes = 0.07 ! default 0.05
-!ThetaSat = 0.7 ! default 0.5
-AlphaVanGenuchten = 0.1
-!NVanGenuchten = 1.2 ! default 1.3
+SoilLayerNumber=32
+SoilLayerThicknesses=10, 20, 50, 100
+InitSoilTemp = 0.0
+ThetaRes = 0.0
+ThetaSat = 0.2
+AlphaVanGenuchten = 0.0436
+NVanGenuchten = 1.5
+ThermalConductivitySoilSolids = 2.3
+ThermalCapacitySoilSolids = 2.3e6
+!==== not in template: to be tested ====
+InitSoilPressure = -2.2e3
+!LateralHydrConductivity = 0.001
+!NormalHydrConductivity = 1.0
+
+! === Point output file ====
+!DefaultPoint = 0 : unknown keyword
+!PointAll = 1
+PointOutputFileWriteEnd = "point"
+DatePoint = 1
+HeaderDatePoint = "date"
+AirTempPoint = 2
+HeaderAirTempPoint = "Tair"
+PrainPoint = 3
+HeaderPrainPoint = "Prain"
+PsnowPoint = 4
+HeaderPsnowPoint = "Psnow"
+RHPoint = 5
+HeaderRHPoint = "relative_humidity"
+WindSpeedPoint = 6
+HeaderWindSpeedPoint = "wind_speed"
+SWupPoint = 7
+HeaderSWupPoint = "SW_out"
+SWinPoint = 8
+HeaderSWinPoint = "SW_in"
+SWNetPoint = 9
+HeaderSWNetPoint = "SW_net"
+LWinPoint = 10
+HeaderLWinPoint = "LW_in"
+LWupPoint = 11
+HeaderLWupPoint = "LW_out"
+LWNetPoint = 12
+HeaderLWNetPoint = "LW_net"
+CanopyFractionPoint = 13
+HeaderCanopyFractionPoint = "canopy_fraction"
+LEgVegPoint = 14
+HeaderLEgVegPoint = "LEg_veg"
+HgVegPoint = 15
+HeaderHgVegPoint = "Hg_veg"
+LEgUnvegPoint = 16
+HeaderLEgUnvegPoint = "LEg_unveg"
+HgUnvegPoint = 17
+HeaderHgUnvegPoint = "Hg_unveg"
+LEvPoint = 18
+HeaderLEvPoint = "LEv"
+HvPoint = 19
+HeaderHvPoint = "Hv"
+
+!==== Soil output file ====
+SoilPlotDepths = 0.2, 0.5, 2
+SoilLiqContentProfileFileWriteEnd = "theta_liq"
+SoilIceContentProfileFileWriteEnd = "theta_ice"
+
+!==== Unclassified ====
+!==== not in template, to be tested ====
+!BusingerMaxIter = 2
+!LocMaxIter = 2
+!FlagSkyViewFactor = 1
 

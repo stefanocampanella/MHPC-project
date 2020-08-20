@@ -3,13 +3,4 @@ num_workers : 32
 budget : 512
 algorithm : 'TwoPointsDE'
 timeout : 180
-par:
-    -   init: 16
-        lower: 8
-        upper: 32
-    -   init: 500.0
-        lower: 50
-        upper: 1000
-    -   init: -2000.0
-        lower: -6500.0
-        upper: 2500.0
+
