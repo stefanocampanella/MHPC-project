@@ -1,0 +1,147 @@
+! GEOtop input file
+! User manual template with adaptations for station Matsch B2
+! Undocumented and unknown keyword where deleted
+
+!==== Simulation Settings ====
+TimeStepEnergyAndWater = 900
+InitDateDDMMYYYYhhmm = 02/10/2009 00:00 
+EndDateDDMMYYYYhhmm = 31/12/2015 23:00
+NumSimulationTimes = 1
+WaterBalance = 1
+EnergyBalance = 1
+PointSim = 1
+StandardTimeSimulation = 1
+DtPlotPoint = 1
+
+!==== Point ====
+PointElevation = 1480
+PointSlope = 15
+PointAspect = 225
+!PointSkyViewFactor = ?
+!PointMaxSWE = ?
+!==== not in template ====
+CoordinatePointX = 620815
+CoordinatePointY = 5171506
+Latitude = 46.668
+Longitude = 10.579
+
+!==== Meteo File ====
+MeteoFile = "meteo"
+HeaderDateDDMMYYYYhhmmMeteo = "Date"
+HeaderJulianDayfrom0Meteo = "JDfrom0"
+HeaderWindVelocity = "WindSp"
+HeaderWindDirection = "WindDir"
+HeaderRH = "RelHum"
+HeaderAirTemp = "AirT"
+HeaderSWglobal = "Swglobal"
+HeaderIPrec = "Iprec"
+!HeaderCloudSWTransmissivity  = ?
+
+!==== Meteo Station File ====
+HorizonMeteoStationFile = "horizon"
+HeaderHorizonAngle = "AngleFromNorthClockwise"
+HeaderHorizonHeight = "HorizonHeight"
+!==== not in template ====
+MeteoStationCoordinateX = 620815
+MeteoStationCoordinateY = 5171506
+MeteoStationElevation = 1480
+MeteoStationWindVelocitySensorHeight = 2.5
+MeteoStationTemperatureSensorHeight = 2
+
+!==== Water Balance ====
+FrozenSoilHydrCondReduction = 2
+RichardTol = 1.e-8
+RichardMaxIter = 500
+RichardInitForc = 0.01
+MinTimeStepSupFlow = 1.0
+
+!==== Energy Balance ====
+LWinParameterization = 9
+MoninObukhov = 1
+HeatEqTol = 1.e-5
+HeatEqMaxIter = 500
+ZeroTempAmplitDepth = 20100
+ZeroTempAmplitTemp = -1.25
+
+!==== Land Cover ====
+SoilRoughness = 100 
+ThresSnowSoilRough = 5
+AlbExtParSnow = 3
+SoilAlbVisDry = 0.5
+SoilAlbNIRDry = 0.5
+SoilAlbVisWet = 0.5
+SoilAlbNIRWet = 0.5
+SoilEmissiv = 0.96
+!==== not in template: to be test ====
+!DecayCoeffCanopy = 2.0
+!CanopyMaxIter = 2
+!RootDepth = 150
+!MinStomatalRes = 25
+!VegReflectVis = 0.1
+!VegTransVis = 0.07
+!VegTransNIR = 0.25
+!CanDensSurface = 0.5
+
+!==== Snow ====
+FreshSnowReflVis = 0.96
+FreshSnowReflNIR = 0.72
+BlowingSnow = 0
+InitSWE = 0
+InitSnowDensity = 180
+InitSnowTemp = -3
+InitSnowAge = 0
+RainCorrFactor = 1
+SnowCorrFactor = 1.6
+SnowSMIN = 25
+SnowSMAX = 70
+SnowCURV = -150
+DewTempOrNormTemp = 0.65
+ThresTempRain = 2
+ThresTempSnow = -1
+SnowEmissiv = 0.94
+SnowRoughness = 0.1
+FreshSnowReflVis = 0.9
+FreshSnowReflNIR = 0.65
+IrriducibleWatSatSnow = 0.02
+MaxSnowPorosity = 0.7
+DrySnowDefRate = 1
+SnowDensityCutoff = 100
+WetSnowDefRate = 1.5
+SnowViscosity = 1.e6
+AlphaSnow = 1.e2
+!==== not in template: to be tested ====
+!ThresSnowVegUp = 50
+!ThresSnowVegDown = 10, 20, 30
+!SnowAgingCoeffVis = 0.1108
+!MaxWaterEqSnowLayerContent = 10
+!SurFlowResExp = 0.667
+
+!==== Soil ====
+PointSoilType = 1
+SoilLayerNumber=32
+SoilLayerThicknesses=10, 20, 50, 100
+InitSoilTemp = 0.0
+ThetaRes = 0.0
+ThetaSat = 0.2
+AlphaVanGenuchten = 0.0436
+NVanGenuchten = 1.5
+ThermalConductivitySoilSolids = 2.3
+ThermalCapacitySoilSolids = 2.3e6
+!==== not in template: to be tested ====
+InitSoilPressure = -2.2e3
+!LateralHydrConductivity = 0.001
+!NormalHydrConductivity = 1.0
+
+
+!==== Soil output file ====
+SoilAll = 1
+SoilPlotDepths = 0.2, 0.5, 2
+SoilLiqContentProfileFileWriteEnd = "theta_liq"
+SoilIceContentProfileFileWriteEnd = "theta_ice"
+
+!==== Unclassified ====
+!==== not in template, to be tested ====
+!BusingerMaxIter = 2
+!LocMaxIter = 2
+!FlagSkyViewFactor = 1
+
