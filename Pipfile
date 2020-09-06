@@ -12,7 +12,7 @@ pandas = "*"
 tables = "*"
 seaborn = "*"
 nevergrad = {extras = ["benchmark"], version = "*"}
-geotopy = ">=0.0.7"
+geotopy = ">=0.0.8"
 jupyter = "*"
 papermill = "*"
 
