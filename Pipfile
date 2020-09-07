@@ -6,14 +6,17 @@ verify_ssl = true
 [dev-packages]
 jupyterlab = "*"
 rise = "*"
+hiplot = "*"
 
 [packages]
 pandas = "*"
 tables = "*"
 seaborn = "*"
 nevergrad = {extras = ["benchmark"], version = "*"}
+salib = "*"
 geotopy = ">=0.0.8"
 jupyter = "*"
+tqdm = "*"
 papermill = "*"
 
 [requires]

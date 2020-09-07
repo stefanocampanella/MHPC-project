@@ -58,7 +58,7 @@ HeaderWindY = "WindY"
 HeaderRH = "RelHum"
 HeaderAirTemp = "AirT" 
 HeaderDewTemp = "DewT"
-!HeaderAirPress = "AirP"  keyword does not exist
+HeaderAirPress = "AirP"
 HeaderSWglobal = "Swglobal" 
 HeaderCloudSWTransmissivity = "CloudTrans" 
 HeaderLWin = "LWin"
@@ -112,13 +112,13 @@ MinTimeStep=400
 RichardTol = 1.E-7 
 MinLambdaWater = 1.E-7 
 RichardMaxIter = 100 
-!MaxTimesHalvingTimeStepWater = 20 keyword does not exist
+MaxTimesHalvingTimeStepWater = 20
 MaxCourantSupFlowLand = 0.1 
 MinSupWaterDepthLand = 1 
 MinTimeStepSupFlow = 1 
 HeatEqTol = 1.E-4 
 HeatEqMaxIter = 200 
-!MaxTimesHalvingTimeStepEnergy = 5 keyword does not exist
+MaxTimesHalvingTimeStepEnergy = 5 
 CanopyMaxIter = 2
 BusingerMaxIter = 2 
 TsMaxIter = 2
@@ -127,10 +127,10 @@ LocMaxIter = 2
 !======================================= 
 ! SNOW AND GLACIERS 
 !======================================= 
-!NumMaxSnowLayers = 5 keyword does not exist
-!InfiniteSnowLayer = 2 keyword does not exist
-!MinLayerThicknessSnow = 5,120,30,5,5 keyword does not exist
-!MaxLayerThicknessSnow = 20,1.E10,150,50,10 keyword does not exist
+NumMaxSnowLayers = 5
+InfiniteSnowLayer = 2
+MinLayerThicknessSnow = 5,120,30,5,5
+MaxLayerThicknessSnow = 20,1.E10,150,50,10
  
 !======================================= 
 ! SOIL 
@@ -138,7 +138,7 @@ LocMaxIter = 2
 PointSoilType = 1
 SoilLayerTypes = 1
 ! [mm] 
-!InitWaterTableHeightOverTopoSurface = -2000 keyword does not exist
+InitWaterTableHeightOverTopoSurface = -2000
 ! [C] 
 InitSoilTemp = 4 
 ThermalConductivitySoilSolids = 1.9
