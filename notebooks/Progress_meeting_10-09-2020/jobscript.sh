@@ -25,7 +25,7 @@ DATE=$(date +%F_%H-%M)
 OUTPUT_DIR=$WORKING_DIR/outputs
 
 OPTIONS="--no-progress-bar -p basename $OUTPUT_DIR/$DATE -f $PARAMETERS_FILE --cwd $WORKING_DIR"
-COMMAND="pipenv run papermill $OPTIONS $WORKING_DIR/notebook.ipynb $OUTPUT/$DATE.ipynb"
+COMMAND="pipenv run papermill $OPTIONS $WORKING_DIR/notebook.ipynb $OUTPUT_DIR/$DATE.ipynb"
 
 mkdir -p $OUTPUT_DIR
 srun $COMMAND
