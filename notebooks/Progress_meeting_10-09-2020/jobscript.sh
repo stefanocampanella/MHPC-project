@@ -21,9 +21,11 @@ export OMP_NUM_THREADS=1
 ROOT=$HOME/MHPC-project
 WORKING_DIR=$ROOT/notebooks/Progress_meeting_10-09-2020
 PARAMETERS_FILE=$WORKING_DIR/parameters.yaml
-OUTPUT=$ROOT/outputs/notebook.ipynb
+DATE=$(date +%F_%H-%M)
+OUTPUT_DIR=$WORKING_DIR/outputs
 
-OPTIONS="--no-progress-bar -f $PARAMETERS_FILE --cwd $WORKING_DIR"
-COMMAND="pipenv run papermill $OPTIONS $WORKING_DIR/notebook.ipynb $OUTPUT"
+OPTIONS="--no-progress-bar -p basename $OUTPUT_DIR/$DATE -f $PARAMETERS_FILE --cwd $WORKING_DIR"
+COMMAND="pipenv run papermill $OPTIONS $WORKING_DIR/notebook.ipynb $OUTPUT/$DATE.ipynb"
 
+mkdir -p $OUTPUT_DIR
 srun $COMMAND

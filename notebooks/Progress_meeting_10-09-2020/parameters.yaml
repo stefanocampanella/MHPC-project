@@ -1,7 +1,7 @@
 systmpfs : '/dev/shm'
 num_workers : 32
-budget : 4096
-SASampleN : 512
+budget : 1024
+SASampleN : 256
 algorithm : 'TwoPointsDE'
 timeout : 60
 target : 'soil_moisture_content_50'
