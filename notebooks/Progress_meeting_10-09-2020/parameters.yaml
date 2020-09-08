@@ -1,15 +1,15 @@
 systmpfs : '/dev/shm'
 num_workers : 32
-budget : 2048
-SASampleN : 256
+budget : 128
+SASampleN : 16
 algorithm : 'TwoPointsDE'
 timeout : 60
-monitor_interval : 5
+monitor_interval : 10
 target : 'soil_moisture_content_50'
 params : 
     NVanGenuchten : [1.15, 2, 1.5, 'gaussian']
     AlphaVanGenuchten : [0.0005, 0.008, 0.002, 'logarithmic']
     ThetaSat : [0.4, 0.7, 0.5, 'gaussian']
-    ThetaRes : [0.05, 0.08, 0.06, 'gaussian']
+    ThetaRes : [0.05, 0.3, 0.1, 'gaussian']
     NormalHydrConductivity : [0.0001, 1, 0.01, 'logarithmic']
     
