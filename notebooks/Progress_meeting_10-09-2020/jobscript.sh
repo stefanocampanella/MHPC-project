@@ -22,7 +22,7 @@ ROOT=$HOME/MHPC-project
 WORKING_DIR=$ROOT/notebooks/Progress_meeting_10-09-2020
 OUTPUT_DIR=$WORKING_DIR/data/outputs/$(date +%F_%H-%M)
 
-OPTIONS="--no-progress-bar -p output_path $OUTPUT_DIR -f $WORKING_DIR/parameters.yaml --cwd $WORKING_DIR"
+OPTIONS="--no-progress-bar -p output_dir $OUTPUT_DIR -f $WORKING_DIR/parameters.yaml --cwd $WORKING_DIR"
 
 mkdir -p $OUTPUT_DIR
 
