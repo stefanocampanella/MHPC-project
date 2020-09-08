@@ -2,8 +2,8 @@
 #
 #SBATCH --job-name=mhpc_progress_meeting
 #SBATCH --partition regular2
-#SBATCH --time=10:00
-#SBATCH --time-min=5:00
+#SBATCH --time=1:30:00
+#SBATCH --time-min=1:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=32

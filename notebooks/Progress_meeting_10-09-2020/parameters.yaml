@@ -1,7 +1,7 @@
 systmpfs : '/dev/shm'
 num_workers : 32
-budget : 128
-SASampleN : 16
+budget : 2048
+SASampleN : 256
 algorithm : 'TwoPointsDE'
 timeout : 60
 monitor_interval : 10
