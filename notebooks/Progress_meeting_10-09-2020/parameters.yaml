@@ -4,6 +4,7 @@ budget : 2048
 SASampleN : 256
 algorithm : 'TwoPointsDE'
 timeout : 60
+monitor_interval : 5
 target : 'soil_moisture_content_50'
 params : 
     NVanGenuchten : [1.15, 2, 1.5, 'gaussian']
