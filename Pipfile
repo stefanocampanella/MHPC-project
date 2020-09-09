@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 jupyterlab = "*"
 rise = "*"
-hiplot = "*"
 
 [packages]
 pandas = "*"
@@ -16,8 +15,8 @@ nevergrad = {extras = ["benchmark"], version = "*"}
 salib = "*"
 geotopy = ">=0.0.8"
 jupyter = "*"
-tqdm = "*"
 papermill = "*"
+hiplot = "*"
 psutil = "*"
 
 [requires]

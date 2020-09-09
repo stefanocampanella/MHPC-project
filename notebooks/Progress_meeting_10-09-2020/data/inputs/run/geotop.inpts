@@ -58,7 +58,7 @@ HeaderWindY = "WindY"
 HeaderRH = "RelHum"
 HeaderAirTemp = "AirT" 
 HeaderDewTemp = "DewT"
-HeaderAirPress = "AirP"
+!HeaderAirPress = "AirP"
 HeaderSWglobal = "Swglobal" 
 HeaderCloudSWTransmissivity = "CloudTrans" 
 HeaderLWin = "LWin"
@@ -127,10 +127,10 @@ LocMaxIter = 2
 !======================================= 
 ! SNOW AND GLACIERS 
 !======================================= 
-NumMaxSnowLayers = 5
-InfiniteSnowLayer = 2
-MinLayerThicknessSnow = 5,120,30,5,5
-MaxLayerThicknessSnow = 20,1.E10,150,50,10
+!NumMaxSnowLayers = 5
+!InfiniteSnowLayer = 2
+!MinLayerThicknessSnow = 5,120,30,5,5
+!MaxLayerThicknessSnow = 20,1.E10,150,50,10
  
 !======================================= 
 ! SOIL 
