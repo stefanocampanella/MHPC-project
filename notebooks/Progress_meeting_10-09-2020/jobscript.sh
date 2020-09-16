@@ -1,9 +1,9 @@
 #! /usr/bin/env bash
 #
-#SBATCH --job-name=mhpc_progress_meeting
+#SBATCH --job-name=geotop_calibration
 #SBATCH --partition regular2
-#SBATCH --time=1:30:00
-#SBATCH --time-min=1:00:00
+#SBATCH --time=3:00:00
+#SBATCH --time-min=2:30:00
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=32
@@ -23,5 +23,6 @@ WORKING_DIR=$ROOT/notebooks/Progress_meeting_10-09-2020
 OUTPUT_DIR=$WORKING_DIR/data/outputs
 OPTIONS="--no-progress-bar -f $WORKING_DIR/parameters.yaml --cwd $WORKING_DIR"
 
+cd $ROOT
 mkdir -p $OUTPUT_DIR
 srun pipenv run papermill $OPTIONS $WORKING_DIR/notebook.ipynb $OUTPUT_DIR/$(date +%F_%H-%M).ipynb
