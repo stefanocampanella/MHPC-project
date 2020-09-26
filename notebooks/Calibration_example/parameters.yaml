@@ -1,6 +1,0 @@
-systmpfs : '/dev/shm'
-num_workers : 32
-budget : 512
-algorithm : 'TwoPointsDE'
-timeout : 180
-

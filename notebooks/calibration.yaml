@@ -1,0 +1,7 @@
+systmpfs : '/dev/shm'
+num_workers : 32
+budget : 1024
+algorithm : 'TwoPointsDE'
+timeout : 180
+monitor_interval : 30
+target : 'soil_moisture_content_50'
