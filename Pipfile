@@ -13,7 +13,7 @@ tables = "*"
 seaborn = "*"
 nevergrad = {extras = ["benchmark"], version = "*"}
 salib = "*"
-geotopy = ">=0.0.8"
+geotopy = ">=0.0.9"
 jupyter = "*"
 papermill = "*"
 hiplot = "*"

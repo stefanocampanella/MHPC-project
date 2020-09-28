@@ -14,6 +14,9 @@ import geotopy as gtp
 
 systmpfs = '/tmp'
 
+def date_parser(x):
+    return datetime.strptime(x, "%d/%m/%Y %H:%M")
+
 class GEOtopRun(gtp.GEOtop):
 
     def preprocess(self, working_dir, *args, **kwargs):
@@ -65,8 +68,8 @@ class GEOtopRun(gtp.GEOtop):
                           skiprows=1,
                           header=0, 
                           names=['datetime', 'soil_moisture_content_50', 'soil_moisture_content_200'],
-                          parse_dates=True, 
-                          infer_datetime_format=True,
+                          parse_dates=[0], 
+                          date_parser=date_parser,
                           index_col=0)
         
         ice_path = joinpath(working_dir, 'theta_ice.txt')
@@ -76,8 +79,8 @@ class GEOtopRun(gtp.GEOtop):
                           skiprows=1,
                           header=0, 
                           names=['datetime', 'soil_moisture_content_50', 'soil_moisture_content_200'],
-                          parse_dates=True, 
-                          infer_datetime_format=True,
+                          parse_dates=[0], 
+                          date_parser=date_parser,
                           index_col=0)
         
         sim = ice + liq
@@ -89,14 +92,12 @@ class observations(Mapping):
     def __init__(self, path):
         
         self.data = pd.read_csv(path, 
-                                na_values=['-9999'], 
-                                parse_dates=True, 
-                                infer_datetime_format=True,
+                                na_values=['-9999'],
+                                parse_dates=[0], 
+                                date_parser=date_parser,
                                 index_col=0)
         
         self.data.index.rename('datetime', inplace=True)
-        
-        self.squared_mean = (self.data * self.data).mean()
         
     def __getitem__(self, key):
         
@@ -110,13 +111,13 @@ class observations(Mapping):
         
         return iter(self.data)
 
-    def compare(self, target, simulation, periods=None, name=None, unit=None, rel=False, figsize=(16,9), dpi=100):
+    def compare(self, target, simulation, scales=None, name=None, unit=None, rel=False, figsize=(16,9), dpi=100):
 
-        if not periods:
-            periods = {'Daily': 'D', 'Weekly': 'W', 'Monthly': 'M'}
+        if not scales:
+            scales = {'Daily': 'D', 'Weekly': 'W', 'Monthly': 'M'}
 
         fig, axes = plt.subplots(ncols=3, 
-                                 nrows=len(periods),
+                                 nrows=len(scales),
                                  figsize=figsize,
                                  dpi=dpi,
                                  constrained_layout=True)
@@ -124,7 +125,7 @@ class observations(Mapping):
         if name:
             fig.suptitle(name)
 
-        for i, (Tstr, T) in enumerate(periods.items()):
+        for i, (Tstr, T) in enumerate(scales.items()):
             comp_plot, diff_plot, hist_plot = axes[i, :]
             
             obs_resampled = self[target].resample(T).mean()
@@ -160,12 +161,14 @@ class observations(Mapping):
         
         return fig
     
-    def metric(self, target, simulation):
-
-        diff = (self[target] - simulation[target])
-        diff_squared = diff * diff
-
-        return np.sqrt(diff_squared.mean() / self.squared_mean[target])
+    def metric(self, target, simulation, scale='D'):
+        
+        y_obs = self[target].resample(scale).mean()
+        y_sim = simulation[target].resample(scale).mean()
+        diff_squared = (y_obs - y_sim) * (y_obs - y_sim)
+        y_obs_squared = y_obs * y_obs
+        
+        return np.sqrt(diff_squared.mean() / y_obs_squared.mean())
 
     
 class monitor:

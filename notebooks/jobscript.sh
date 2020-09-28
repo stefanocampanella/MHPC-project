@@ -30,5 +30,5 @@ fi
 cd $ROOT
 mkdir -p $OUTPUT_DIR
 srun pipenv run papermill $OPTIONS $INPUT $OUTPUT
-srun pipenv run jupyter nbconvert $OUTPUT --output-dir $OUTPUT_DIR
+srun pipenv run jupyter nbconvert $OUTPUT --to html --output-dir $OUTPUT_DIR
 rm $OUTPUT 
