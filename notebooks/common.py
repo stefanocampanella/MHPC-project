@@ -12,8 +12,6 @@ import matplotlib.ticker as mtick
 import psutil
 import geotopy as gtp
 
-systmpfs = '/tmp'
-
 def date_parser(x):
     return datetime.strptime(x, "%d/%m/%Y %H:%M")
 
