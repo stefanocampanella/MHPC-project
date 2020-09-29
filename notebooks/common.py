@@ -13,7 +13,7 @@ import psutil
 import geotopy as gtp
 
 def date_parser(x):
-    return datetime.strptime(x, "%d/%m/%Y %H:%M")
+    return datetime.strptime(x, '%d/%m/%Y %H:%M')
 
 class GEOtopRun(gtp.GEOtop):
 
@@ -120,15 +120,18 @@ class GEOtopRun(gtp.GEOtop):
 
 class observations(Mapping):
     
-    def __init__(self, path, scale='D', start=None, end=None):
+    def __init__(self, source, scale='D', start=None, end=None):
         
         self.scale = scale
         
-        obs = pd.read_csv(path, 
-                                na_values=['-9999', '-99.99'],
-                                parse_dates=[0], 
-                                date_parser=date_parser,
-                                index_col=0)
+        if isinstance(source, pd.DataFrame):
+            obs = source
+        else:
+            obs = pd.read_csv(source, 
+                              na_values=['-9999', '-99.99'],
+                              parse_dates=[0], 
+                              date_parser=date_parser,
+                              index_col=0)
         
         obs.index.rename('datetime', inplace=True)
         

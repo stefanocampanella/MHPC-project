@@ -22,9 +22,9 @@ OUTPUT_DIR=$WORKING_DIR/outputs
 INPUT=$WORKING_DIR/$1.ipynb
 OUTPUT=$OUTPUT_DIR/$1_$(date +%F_%H-%M).ipynb
 OPTIONS="--no-progress-bar --cwd $WORKING_DIR"
-if [[ -f $WORKING_DIR/$1.yaml ]]
+if [[ -z "$2" ]]
 then
-  OPTIONS="$OPTIONS -f $WORKING_DIR/$1.yaml"
+  OPTIONS="$OPTIONS -f $WORKING_DIR/$2.yaml"
 fi
 
 cd $ROOT
