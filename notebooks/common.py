@@ -70,7 +70,8 @@ class GEOtopRun(gtp.GEOtop):
                           names=['datetime', 'soil_moisture_content_50', 'soil_moisture_content_200'],
                           parse_dates=[0], 
                           date_parser=date_parser,
-                          index_col=0)
+                          index_col=0,
+                          low_memory=False)
         
         ice_path = joinpath(working_dir, 'theta_ice.txt')
         ice = pd.read_csv(ice_path, 
@@ -81,23 +82,69 @@ class GEOtopRun(gtp.GEOtop):
                           names=['datetime', 'soil_moisture_content_50', 'soil_moisture_content_200'],
                           parse_dates=[0], 
                           date_parser=date_parser,
-                          index_col=0)
+                          index_col=0,
+                          low_memory=False)
         
-        sim = ice + liq
+        point_path = joinpath(working_dir, 'point.txt')
+        point = pd.read_csv(point_path, 
+                          na_values=['-9999'],
+                          parse_dates=[0], 
+                          date_parser=date_parser,
+                          index_col=0,
+                          low_memory=False)
+        point.index.rename('datetime', inplace=True)
+        
+        sim = pd.DataFrame(index=point.index)
+        
+        sim['rainfall_amount'] = point['Prain_over_canopy[mm]'] + point['Psnow_over_canopy[mm]']
+        
+        sim['wind_speed'] = point['Wind_speed[m/s]']
+        
+        sim['relative_humidity'] = point['Relative_Humidity[-]']
+        
+        sim['air_temperature'] = point['Tair[C]']
+        
+        sim['surface_downwelling_shortwave_flux'] = point['SWin[W/m2]']
+        
+        sim['soil_moisture_content_50'] = ice['soil_moisture_content_50'] + liq['soil_moisture_content_50']
+        
+        sim['soil_moisture_content_200'] = ice['soil_moisture_content_200'] + liq['soil_moisture_content_200']
+        
+        sim['latent_heat_flux_in_air'] = \
+            point['Canopy_fraction[-]'] * (point['LEg_veg[W/m2]'] + point['LEv[W/m2]']) + \
+            (1 - point['Canopy_fraction[-]']) * point['LEg_unveg[W/m2]']
+        
+        sim['sensible_heat_flux_in_air'] = \
+            point['Canopy_fraction[-]'] * (point['Hg_veg[W/m2]'] + point['Hv[W/m2]']) + \
+            (1 - point['Canopy_fraction[-]']) * point['Hg_unveg[W/m2]']
         
         return sim
 
 class observations(Mapping):
     
-    def __init__(self, path):
+    def __init__(self, path, scale='D', start=None, end=None):
         
-        self.data = pd.read_csv(path, 
-                                na_values=['-9999'],
+        self.scale = scale
+        
+        obs = pd.read_csv(path, 
+                                na_values=['-9999', '-99.99'],
                                 parse_dates=[0], 
                                 date_parser=date_parser,
                                 index_col=0)
         
-        self.data.index.rename('datetime', inplace=True)
+        obs.index.rename('datetime', inplace=True)
+        
+        if start and end:
+            obs = obs[date_parser(start):date_parser(end)]
+        elif start:
+            obs = obs[date_parser(start):]
+        elif end:
+            obs = obs[:date_parser(end)]
+        
+        self.data = obs.resample(scale).mean()
+        
+        self.mean_square = (self.data * self.data).mean()
+        
         
     def __getitem__(self, key):
         
@@ -111,7 +158,7 @@ class observations(Mapping):
         
         return iter(self.data)
 
-    def compare(self, target, simulation, scales=None, name=None, unit=None, rel=False, figsize=(16,9), dpi=100):
+    def compare(self, target, simulation, scales=None, desc=None, unit=None, rel=False, figsize=(16,9), dpi=100):
 
         if not scales:
             scales = {'Daily': 'D', 'Weekly': 'W', 'Monthly': 'M'}
@@ -122,8 +169,8 @@ class observations(Mapping):
                                  dpi=dpi,
                                  constrained_layout=True)
 
-        if name:
-            fig.suptitle(name)
+        if desc:
+            fig.suptitle(desc)
 
         for i, (Tstr, T) in enumerate(scales.items()):
             comp_plot, diff_plot, hist_plot = axes[i, :]
@@ -161,14 +208,11 @@ class observations(Mapping):
         
         return fig
     
-    def metric(self, target, simulation, scale='D'):
+    def metric(self, target, simulation):
         
-        y_obs = self[target].resample(scale).mean()
-        y_sim = simulation[target].resample(scale).mean()
-        diff_squared = (y_obs - y_sim) * (y_obs - y_sim)
-        y_obs_squared = y_obs * y_obs
+        diff = self[target] - simulation[target].resample(self.scale).mean()
         
-        return np.sqrt(diff_squared.mean() / y_obs_squared.mean())
+        return np.sqrt((diff * diff).mean() / self.mean_square[target])
 
     
 class monitor:
