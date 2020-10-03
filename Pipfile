@@ -5,19 +5,17 @@ verify_ssl = true
 
 [dev-packages]
 jupyterlab = "*"
-rise = "*"
 
 [packages]
+geotopy = ">0.0.9"
 pandas = "*"
-tables = "*"
 seaborn = "*"
-nevergrad = {extras = ["benchmark"], version = "*"}
 salib = "*"
-geotopy = ">=0.0.9"
+nevergrad = {extras = ["benchmark"], version = "*"}
+hiplot = "*"
+ray = "*"
 jupyter = "*"
 papermill = "*"
-hiplot = "*"
-psutil = "*"
 
 [requires]
 python_version = "3.8"
