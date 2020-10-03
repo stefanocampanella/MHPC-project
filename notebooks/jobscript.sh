@@ -1,12 +1,10 @@
 #! /usr/bin/env bash
 #SBATCH --partition regular2
-#SBATCH --nodes=2
-#SBATCH --tasks-per-node=1
-#SBATCH --cpus-per-task=20
+#SBATCH --ntasks = 40
+#SBATCH --cpus-per-task=1
 #SBATCH --mem-per-cpu=1GB
 #SBATCH --hint=nomultithread
 #SBATCH --hint=compute_bound
-#SBATCH --exclusive=user
 #SBATCH --mail-type=ALL
 #SBATCH --verbose
 
@@ -41,6 +39,6 @@ srun --nodes=1 --ntasks=1 --cpus-per-task=${SLURM_CPUS_PER_TASK} --nodelist=`hos
 srun --nodes=${worker_num} --ntasks=${worker_num} --cpus-per-task=${SLURM_CPUS_PER_TASK} --exclude=`hostname` pipenv run ray start --address $ip_head --num-cpus ${SLURM_CPUS_PER_TASK}
 
 mkdir -p $OUTPUT_DIR
-pipenv run papermill $OPTIONS -p address $ip_head $INPUT $OUTPUT
+pipenv run papermill $OPTIONS -p num_workers ${SLURM_NTASKS} -p address $ip_head $INPUT $OUTPUT
 pipenv run jupyter nbconvert $OUTPUT --to html --output-dir $OUTPUT_DIR
 rm $OUTPUT 
