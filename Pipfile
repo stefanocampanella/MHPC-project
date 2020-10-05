@@ -13,7 +13,7 @@ seaborn = "*"
 salib = "*"
 nevergrad = {extras = ["benchmark"], version = "*"}
 hiplot = "*"
-ray = "*"
+mpi4py = "*"
 jupyter = "*"
 papermill = "*"
 
