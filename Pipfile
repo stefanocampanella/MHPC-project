@@ -11,7 +11,7 @@ geotopy = ">0.0.9"
 pandas = "*"
 seaborn = "*"
 salib = "*"
-nevergrad = {extras = ["benchmark"], version = "*"}
+nevergrad = "*"
 hiplot = "*"
 ray = "*"
 jupyter = "*"

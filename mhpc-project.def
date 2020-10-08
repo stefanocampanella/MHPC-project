@@ -9,8 +9,8 @@ From: ubuntu:20.04
     apt-get -y update
     apt-get -y install software-properties-common
     add-apt-repository universe
-    apt-get -y install git meson ninja-build pipenv
 
+    apt-get -y install git build-essential meson ninja-build
     cd /opt
     git clone --single-branch --branch v3.0_paper https://github.com/stefanocampanella/geotop.git
     cd geotop
@@ -20,9 +20,15 @@ From: ubuntu:20.04
     meson configure -DMUTE_GEOLOG=true -DMUTE_GEOTIMER=true -Db_lto=true
     ninja geotop
     install geotop /usr/bin/geotop
-    
+   
+    apt-get -y install pipenv
     cd /opt
     pipenv install --system
+    
+    rm -r /opt/geotop
+    apt-get -y remove git meson ninja-build 
+    apt-get -y autoremove
+
 
 %environment
     export NUMEXPR_NUM_THREADS=1
@@ -30,10 +36,11 @@ From: ubuntu:20.04
     export OMP_NUM_THREADS=1
 
 %startscript
-    if [[ $1 == head ]]
+    if [ "$1" = "head" ]
     then
       ray start --head --block --dashboard-host 0.0.0.0 --port=$2 --num-cpus $3
-    elif [[ $1 == worker ]]
+    elif [ "$1" = "worker" ]
+    then
       ray start --block --address $2 --num-cpus $3
     fi
 
@@ -45,7 +52,7 @@ From: ubuntu:20.04
     PARAMETERS_FILE=$5
     
     OPTIONS="--no-progress-bar --cwd $(dirname $INPUT) --report-mode -p num_workers $TOTAL_CORES -p address $ADDRESS"
-    if [[ ! -z $PARAMETERS_FILE ]]
+    if [ ! -z "$PARAMETERS_FILE" ]
     then
       OPTIONS="$OPTIONS -f $PARAMETERS_FILE"
     fi
