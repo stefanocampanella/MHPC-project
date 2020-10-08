@@ -1,0 +1,53 @@
+BootStrap: library
+From: ubuntu:20.04
+
+%files
+    Pipfile /opt/Pipfile
+    Pipfile.lock /opt/Pipfile.lock
+
+%post
+    apt-get -y update
+    apt-get -y install software-properties-common
+    add-apt-repository universe
+    apt-get -y install git meson ninja-build pipenv
+
+    cd /opt
+    git clone --single-branch --branch v3.0_paper https://github.com/stefanocampanella/geotop.git
+    cd geotop
+    mkdir build
+    meson build
+    cd build
+    meson configure -DMUTE_GEOLOG=true -DMUTE_GEOTIMER=true -Db_lto=true
+    ninja geotop
+    install geotop /usr/bin/geotop
+    
+    cd /opt
+    pipenv install --system
+
+%environment
+    export NUMEXPR_NUM_THREADS=1
+    export NUMEXPR_MAX_THREADS=1
+    export OMP_NUM_THREADS=1
+
+%startscript
+    if [[ $1 == head ]]
+    then
+      ray start --head --block --dashboard-host 0.0.0.0 --port=$2 --num-cpus $3
+    elif [[ $1 == worker ]]
+      ray start --block --address $2 --num-cpus $3
+    fi
+
+%runscript
+    INPUT=$1
+    OUTPUT=$2
+    TOTAL_CORES=$3
+    ADDRESS=$4
+    PARAMETERS_FILE=$5
+    
+    OPTIONS="--no-progress-bar --cwd $(dirname $INPUT) --report-mode -p num_workers $TOTAL_CORES -p address $ADDRESS"
+    if [[ ! -z $PARAMETERS_FILE ]]
+    then
+      OPTIONS="$OPTIONS -f $PARAMETERS_FILE"
+    fi
+
+    papermill $OPTIONS $INPUT $OUTPUT
