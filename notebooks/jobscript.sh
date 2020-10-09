@@ -1,13 +1,13 @@
 #! /usr/bin/env bash
-#SBATCH --partition regular2
-#SBATCH --nodes 2
-#SBATCH --tasks-per-node 1
-#SBATCH --cpus-per-task 32
-#SBATCH --mem-per-cpu 1GB
-#SBATCH --exclusive user
-#SBATCH --hint nomultithread
-#SBATCH --hint compute_bound
-#SBATCH --mail-type ALL
+#SBATCH --partition=regular2
+#SBATCH --nodes=2
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=32
+#SBATCH --mem-per-cpu=1GB
+#SBATCH --exclusive=user
+#SBATCH --hint=nomultithread
+#SBATCH --hint=compute_bound
+#SBATCH --mail-type=ALL
 #SBATCH --verbose
 
 let "WORKER_NUM=($SLURM_NTASKS - 1)"
@@ -21,12 +21,12 @@ OUTPUT=$2
 CONTAINER=$3
 PARAMETERS_FILE=$4
 
-singularity instance start $CONTAINER head $PORT $SLURM_CPUS_PER_TASK
+singularity instance start $CONTAINER headnode head $PORT $SLURM_CPUS_PER_TASK
 
 if [[ $SLURM_JOB_NUM_NODES -gt 1 ]]
 then
   srun --nodes=$WORKER_NUM --exclude=`hostname` \
-    singularity instance start $CONTAINER worker $ADDRESS $SLURM_CPUS_PER_TASK
+    singularity instance start $CONTAINER workernode worker $ADDRESS $SLURM_CPUS_PER_TASK
 fi
 
 mkdir -p $(dirname $OUTPUT)
