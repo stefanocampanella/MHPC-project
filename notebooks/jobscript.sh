@@ -3,12 +3,13 @@
 #SBATCH --nodes=2
 #SBATCH --tasks-per-node=1
 #SBATCH --cpus-per-task=32
-#SBATCH --mem-per-cpu=1GB
 #SBATCH --exclusive=user
 #SBATCH --hint=nomultithread
 #SBATCH --hint=compute_bound
 #SBATCH --mail-type=ALL
 #SBATCH --verbose
+
+module load singularity
 
 let "WORKER_NUM=($SLURM_NTASKS - 1)"
 let "TOTAL_CORES=$SLURM_NTASKS * $SLURM_CPUS_PER_TASK"
@@ -22,11 +23,13 @@ CONTAINER=$3
 PARAMETERS_FILE=$4
 
 singularity instance start $CONTAINER headnode head $PORT $SLURM_CPUS_PER_TASK
+sleep 30
 
 if [[ $SLURM_JOB_NUM_NODES -gt 1 ]]
 then
   srun --nodes=$WORKER_NUM --exclude=`hostname` \
     singularity instance start $CONTAINER workernode worker $ADDRESS $SLURM_CPUS_PER_TASK
+  sleep 30
 fi
 
 mkdir -p $(dirname $OUTPUT)
