@@ -38,10 +38,10 @@ From: ubuntu:20.04
 %startscript
     if [ "$1" = "head" ]
     then
-      ray start --head --block --dashboard-host 0.0.0.0 --port $2 --num-cpus $3
+      ray start --head --port $2 --num-cpus $3
     elif [ "$1" = "worker" ]
     then
-      ray start --block --address $2 --num-cpus $3
+      ray start --address $2 --num-cpus $3
     fi
 
 %runscript
