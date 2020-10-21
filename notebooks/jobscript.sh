@@ -33,6 +33,6 @@ then
 fi
 
 mkdir -p $(dirname $OUTPUT)
-singularity run $CONTAINER $INPUT $OUTPUT $TOTAL_CORES $ADDRESSS $PARAMETERS_FILE
+singularity run $CONTAINER $INPUT $OUTPUT $TOTAL_CORES $ADDRESS $PARAMETERS_FILE
 singularity instance stop --all
 
