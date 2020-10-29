@@ -13,7 +13,7 @@ seaborn = "*"
 salib = "*"
 nevergrad = "*"
 hiplot = "*"
-ray = "*"
+dask = {extras = ["distributed"], version = "*"}
 jupyter = "*"
 papermill = "*"
 
