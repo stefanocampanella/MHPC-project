@@ -14,6 +14,7 @@ salib = "*"
 nevergrad = "*"
 hiplot = "*"
 dask = {extras = ["distributed"], version = "*"}
+bokeh = ">=0.13"
 jupyter = "*"
 papermill = "*"
 

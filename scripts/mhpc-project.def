@@ -1,0 +1,40 @@
+BootStrap: library
+From: ubuntu:20.04
+
+%setup
+    pipenv lock -r > ${SINGULARITY_ROOTFS}/opt/requirements.txt
+
+%files
+    geotop /opt
+
+%post
+    apt-get -y update
+    
+    apt-get -y install software-properties-common && add-apt-repository universe
+    
+    apt-get -y install python3-pip
+    pip3 install -r /opt/requirements.txt
+   
+    apt-get -y install git build-essential meson ninja-build
+   
+    cd /opt/geotop
+    if [ -d build ]
+    then 
+      rm -rf build
+    fi
+    mkdir build
+
+    meson build
+    cd build
+    meson configure -DMUTE_GEOLOG=true -DMUTE_GEOTIMER=true -Db_lto=true
+    ninja geotop
+    install geotop /usr/bin/geotop
+   
+    rm -r /opt/geotop
+    apt-get -y remove git meson ninja-build 
+    apt-get -y autoremove
+
+%environment
+    export NUMEXPR_NUM_THREADS=1
+    export NUMEXPR_MAX_THREADS=1
+    export OMP_NUM_THREADS=1

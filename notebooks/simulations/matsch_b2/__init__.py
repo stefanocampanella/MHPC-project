@@ -9,8 +9,11 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
-import psutil
 import geotopy as gtp
+import pkg_resources
+
+inputs_path = pkg_resources.resource_filename(__name__, 'geotop')
+obs_path = pkg_resources.resource_filename(__name__, 'obs.csv')
 
 def date_parser(x):
     return datetime.strptime(x, '%d/%m/%Y %H:%M')
@@ -214,44 +217,3 @@ class observations(Mapping):
         diff = self[target] - simulation[target].resample(self.scale).mean()
         
         return np.sqrt((diff * diff).mean() / self.mean_square[target])
-
-    
-class monitor:
-    def __init__(self, interval):
-        self.datetime = []
-        self.cpu_usage = []
-        self.memory_usage = []
-        self.interval = interval
-        self.running = False
-        
-        self.thread = Thread(target=self.run, args=())
-        self.thread.daemon = True
-        self.start()
-
-    def sample(self):
-        self.datetime.append(datetime.now())
-        self.cpu_usage.append(psutil.cpu_percent())
-        self.memory_usage.append(psutil.virtual_memory().percent)
-        
-    def run(self):
-        while self.running:
-            self.sample()
-            sleep(self.interval)
-    
-    def start(self):
-        self.running = True
-        self.thread.start()
-        
-    def stop(self):
-        self.running = False
-        self.thread.join()
-        
-    def plot(self, figsize=(16,9), dpi=100):
-        self.stop()
-        stats = pd.DataFrame({'CPU': self.cpu_usage, 'Memory': self.memory_usage}, index=self.datetime)
-        fig = plt.figure(figsize=figsize, dpi=dpi)
-        axes = fig.add_subplot()
-        axes.set_title('Resource Monitor')
-        axes.set_xlabel('Time')
-        axes.set_ylabel('Usage [%]')
-        sns.lineplot(data=stats, ax=axes)
