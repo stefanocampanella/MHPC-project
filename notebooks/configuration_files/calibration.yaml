@@ -1,8 +1,0 @@
-systmpfs : '/dev/shm'
-num_workers : 32
-budget : 4096
-algorithm : 'TwoPointsDE'
-timeout : 180
-scale : '4D'
-targets : ['soil_moisture_content_50', 'soil_moisture_content_200', 'sensible_heat_flux_in_air']
-weights : [1.0, 1.0, 1.0]

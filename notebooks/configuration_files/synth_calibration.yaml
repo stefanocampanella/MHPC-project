@@ -1,4 +1,0 @@
-systmpfs : '/dev/shm'
-budget : 1024
-algorithm : 'TwoPointsDE'
-timeout : 240
