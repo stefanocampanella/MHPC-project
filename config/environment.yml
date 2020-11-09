@@ -1,5 +1,6 @@
 name: mhpc-project
 channels:
+  - default
   - conda-forge
 dependencies:
   - python
@@ -12,20 +13,24 @@ dependencies:
   - seaborn
   - dask
   - dask-jobqueue
+  - joblib
   - jupyterlab
   - nodejs
   - geotop
   - pip:
     - nevergrad
+    - salib
     - hiplot
     - geotopy
     - git+https://github.com/AIworx-Labs/chocolate@master
     - tqdm
     - papermill
     - scrapbook
+    - jupyter-book
 variables:
   NUMEXPR_NUM_THREADS: 1
   NUMEXPR_MAX_THREADS: 1
   OMP_NUM_THREADS: 1
+  TMPDIR: '/dev/shm'
 
 
