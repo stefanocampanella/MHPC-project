@@ -1,0 +1,31 @@
+name: mhpc-project
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - pip
+  - numpy
+  - scipy
+  - scikit-learn
+  - pandas
+  - matplotlib
+  - seaborn
+  - dask
+  - dask-jobqueue
+  - jupyterlab
+  - nodejs
+  - geotop
+  - pip:
+    - nevergrad
+    - hiplot
+    - geotopy
+    - git+https://github.com/AIworx-Labs/chocolate@master
+    - tqdm
+    - papermill
+    - scrapbook
+variables:
+  NUMEXPR_NUM_THREADS: 1
+  NUMEXPR_MAX_THREADS: 1
+  OMP_NUM_THREADS: 1
+
+

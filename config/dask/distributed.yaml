@@ -1,0 +1,26 @@
+distributed:
+  worker:
+    use-file-locking: false
+    memory:
+      target: false
+      spill: false
+      pause: 0.80
+      terminate: 0.95
+  comm:
+    compression: null
+
+jobqueue:
+  slurm:
+    name: dask-worker
+    queue: regular2
+    walltime: '00:20:00'
+    cores: 2
+    processes: 2
+    memory: 1GB
+    interface: ib0
+    local-directory: $TMPDIR
+    job-extra: 
+      - '--hint=nomultithread'
+      - '--hint=compute_bound'
+      - '--output=/dev/null'
+      - '--error=/dev/null'
