@@ -184,8 +184,8 @@ HorizonMeteoStationFile = "horizon"
  
 ! Output files 
 
-PointAll = 1
-PointOutputFileWriteEnd = "point"
+!PointAll = 1
+!PointOutputFileWriteEnd = "point"
 
 SoilAll = 1
 SoilPlotDepths = 0.5, 2

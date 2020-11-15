@@ -21,7 +21,7 @@ dependencies:
     - nevergrad
     - salib
     - hiplot
-    - geotopy
+    - git+https://github.com/stefanocampanella/GEOtoPy@master
     - git+https://github.com/AIworx-Labs/chocolate@master
     - tqdm
     - papermill
@@ -32,5 +32,6 @@ variables:
   NUMEXPR_MAX_THREADS: 1
   OMP_NUM_THREADS: 1
   TMPDIR: '/dev/shm'
+  PYTHONPATH: '$PYTHONPATH:$MHPCPROJECT_ROOT'
 
 
