@@ -2,6 +2,7 @@ name: mhpc-project
 channels:
   - default
   - conda-forge
+  - stefanocampanella
 dependencies:
   - python
   - pip
