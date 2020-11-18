@@ -14,8 +14,8 @@ jobqueue:
     name: dask-worker
     queue: regular2
     walltime: '00:20:00'
-    cores: 2
-    processes: 2
+    cores: 4
+    processes: 1
     memory: 1GB
     interface: ib0
     local-directory: $TMPDIR

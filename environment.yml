@@ -23,6 +23,7 @@ dependencies:
     - hiplot
     - git+https://github.com/stefanocampanella/GEOtoPy@master
     - git+https://github.com/AIworx-Labs/chocolate@master
+    - joblib
     - tqdm
     - papermill
     - scrapbook
@@ -32,6 +33,5 @@ variables:
   NUMEXPR_MAX_THREADS: 1
   OMP_NUM_THREADS: 1
   TMPDIR: '/dev/shm'
-  PYTHONPATH: '$PYTHONPATH:$MHPCPROJECT_ROOT'
 
 

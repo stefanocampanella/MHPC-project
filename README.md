@@ -9,7 +9,7 @@ The code developed for the project consist of a GEOtop wrapper ([GEOtoPy](https:
 
 At present, the content of this repository is somewhat provisional and exploratory in nature. It contains preliminary analysis and experiments with the interface and the optimizer(s). At the end of the project, it will host an application to a case study and reports.  
 
-Nonetheless, since the very beginning, a special effort has been made to provide the code and documentation to set-up an easily reproducible environment. Once you have `conda` on your system, you can install the environment with just `conda env create -f config/environment.yaml` from the root of this repository.
+Nonetheless, since the very beginning, a special effort has been made to provide the code and documentation to set-up an easily reproducible environment. Once you have `conda` on your system, you can install the environment with just `conda env create -f environment.yaml` from the root of this repository.
 
 ## License
 

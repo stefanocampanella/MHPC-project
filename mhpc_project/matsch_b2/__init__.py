@@ -1,11 +1,50 @@
 from os.path import join as joinpath
 
 import geotopy.optim as gto
+from geotopy.utils import date_parser
 import nevergrad as ng
 import pandas as pd
 
 
+class CalibrationModel(gto.GEOtopRun):
+
+    def postprocess(self, working_dir):
+        liq_path = joinpath(working_dir, 'theta_liq.txt')
+        liq = pd.read_csv(liq_path,
+                          na_values=['-9999'],
+                          usecols=[0, 6],
+                          skiprows=1,
+                          header=0,
+                          names=['datetime', 'soil_moisture_content_50'],
+                          parse_dates=[0],
+                          date_parser=date_parser,
+                          index_col=0,
+                          low_memory=False,
+                          squeeze=True)
+
+        ice_path = joinpath(working_dir, 'theta_ice.txt')
+        ice = pd.read_csv(ice_path,
+                          na_values=['-9999'],
+                          usecols=[0, 6],
+                          skiprows=1,
+                          header=0,
+                          names=['datetime', 'soil_moisture_content_50'],
+                          parse_dates=[0],
+                          date_parser=date_parser,
+                          index_col=0,
+                          low_memory=False,
+                          squeeze=True)
+
+        return ice + liq
+
+
 class FullModel(gto.GEOtopRun):
+
+    def preprocess(self, working_dir, *args, **kwargs):
+        self.settings['PointAll'] = True
+        self.settings['PointOutputFileWriteEnd'] = '"point"'
+
+        super().preprocess(working_dir, *args, **kwargs)
 
     def postprocess(self, working_dir):
         liq_path = joinpath(working_dir, 'theta_liq.txt')
@@ -16,7 +55,7 @@ class FullModel(gto.GEOtopRun):
                           header=0,
                           names=['datetime', 'soil_moisture_content_50', 'soil_moisture_content_200'],
                           parse_dates=[0],
-                          date_parser=FullModel.date_parser,
+                          date_parser=date_parser,
                           index_col=0,
                           low_memory=False)
 
@@ -28,7 +67,7 @@ class FullModel(gto.GEOtopRun):
                           header=0,
                           names=['datetime', 'soil_moisture_content_50', 'soil_moisture_content_200'],
                           parse_dates=[0],
-                          date_parser=FullModel.date_parser,
+                          date_parser=date_parser,
                           index_col=0,
                           low_memory=False)
 
@@ -36,7 +75,7 @@ class FullModel(gto.GEOtopRun):
         point = pd.read_csv(point_path,
                             na_values=['-9999'],
                             parse_dates=[0],
-                            date_parser=FullModel.date_parser,
+                            date_parser=date_parser,
                             index_col=0,
                             low_memory=False)
         point.index.rename('datetime', inplace=True)
@@ -66,38 +105,6 @@ class FullModel(gto.GEOtopRun):
             (1 - point['Canopy_fraction[-]']) * point['Hg_unveg[W/m2]']
 
         return sim
-
-
-class FastModel(gto.GEOtopRun):
-
-    def postprocess(self, working_dir):
-        liq_path = joinpath(working_dir, 'theta_liq.txt')
-        liq = pd.read_csv(liq_path,
-                          na_values=['-9999'],
-                          usecols=[0, 6],
-                          skiprows=1,
-                          header=0,
-                          names=['datetime', 'soil_moisture_content_50'],
-                          parse_dates=[0],
-                          date_parser=FastModel.date_parser,
-                          index_col=0,
-                          low_memory=False,
-                          squeeze=True)
-
-        ice_path = joinpath(working_dir, 'theta_ice.txt')
-        ice = pd.read_csv(ice_path,
-                          na_values=['-9999'],
-                          usecols=[0, 6],
-                          skiprows=1,
-                          header=0,
-                          names=['datetime', 'soil_moisture_content_50'],
-                          parse_dates=[0],
-                          date_parser=FastModel.date_parser,
-                          index_col=0,
-                          low_memory=False,
-                          squeeze=True)
-
-        return ice + liq
 
 
 class Variables(gto.Variables):
@@ -140,15 +147,13 @@ class Loss(gto.Loss):
 class Calibration(gto.Calibration):
 
     def __init__(self, loss, settings):
-
         super().__init__(loss, settings)
         budget = self.settings['optimizer']['budget']
         num_workers = self.settings['optimizer']['num_workers']
-        self._optimizer_istance = ng.optimizers.Shiwa(self.parametrization, budget=budget, num_workers=num_workers)
+        self._optimizer_istance = ng.optimizers.NGO(self.parametrization, budget=budget, num_workers=num_workers)
 
     @property
     def parametrization(self):
-
         shape = (self.loss.variables.num_vars,)
         mutable_sigma = self.settings['parametrization']['mutable_sigma']
         lower = self.settings['parametrization']['lower']
@@ -157,21 +162,19 @@ class Calibration(gto.Calibration):
 
         array = ng.p.Array(shape=shape,
                            mutable_sigma=mutable_sigma)
-        array.set_bounds(lower=lower, upper=upper)
         array.set_mutation(sigma=sigma)
+        array.set_bounds(lower=lower, upper=upper)
 
         return array
 
     @property
     def optimizer(self):
-
         return self._optimizer_istance
 
     def __call__(self, *args, **kwargs):
-
         recommendation = self.optimizer.minimize(self.loss, *args, **kwargs)
         _, settings = self.loss.massage(*recommendation.args)
-        return recommendation.loss, settings
+        return settings, recommendation.loss
 
 # Do a sensitivity analysis and calculate the metric
 # Instanciate the hyperoptimizer
