@@ -6,6 +6,7 @@ distributed:
       spill: false
       pause: 0.80
       terminate: 0.95
+    allowed-failures: 32
   comm:
     compression: null
 
@@ -16,7 +17,7 @@ jobqueue:
     walltime: '00:20:00'
     cores: 4
     processes: 1
-    memory: 1GB
+    memory: 2GB
     interface: ib0
     local-directory: $TMPDIR
     job-extra: 
@@ -24,3 +25,7 @@ jobqueue:
       - '--hint=compute_bound'
       - '--output=/dev/null'
       - '--error=/dev/null'
+    extra:
+      - '--lifetime 26m'
+      - '--lifetime-stagger 2m'
+

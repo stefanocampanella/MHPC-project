@@ -147,39 +147,36 @@ class Loss(gto.Loss):
 class Calibration(gto.Calibration):
 
     def __init__(self, loss, settings):
+
         super().__init__(loss, settings)
-        budget = self.settings['optimizer']['budget']
-        num_workers = self.settings['optimizer']['num_workers']
-        self._optimizer_istance = ng.optimizers.NGO(self.parametrization, budget=budget, num_workers=num_workers)
+        budget = self.settings['budget']
+        num_workers = self.settings['num_workers']
+        self._optimizer_istance = ng.optimizers.NGO(self.parametrization,
+                                                    budget=budget,
+                                                    num_workers=num_workers)
 
     @property
     def parametrization(self):
-        shape = (self.loss.variables.num_vars,)
-        mutable_sigma = self.settings['parametrization']['mutable_sigma']
-        lower = self.settings['parametrization']['lower']
-        upper = self.settings['parametrization']['upper']
-        sigma = self.settings['parametrization']['init_sigma']
 
-        array = ng.p.Array(shape=shape,
-                           mutable_sigma=mutable_sigma)
-        array.set_mutation(sigma=sigma)
-        array.set_bounds(lower=lower, upper=upper)
+        shape = (self.loss.variables.num_vars,)
+
+        array = ng.p.Array(shape=shape, mutable_sigma=True)
+        array.set_mutation(sigma=1/6)
+        array.set_bounds(lower=0.0, upper=1.0)
 
         return array
 
     @property
     def optimizer(self):
+
         return self._optimizer_istance
 
     def __call__(self, *args, **kwargs):
-        recommendation = self.optimizer.minimize(self.loss, *args, **kwargs)
-        _, settings = self.loss.massage(*recommendation.args)
-        return settings, recommendation.loss
 
-# Do a sensitivity analysis and calculate the metric
-# Instanciate the hyperoptimizer
-# ask                                                    |
-# run some calibrations and average <== must be async    | <== must be async
-# tell                                                   |
-# back to ask, until the budget is exausted
-# do a calibration report with the best settings
+        self.optimizer.minimize(self.loss, *args, **kwargs)
+        best = self.optimizer.current_bests['pessimistic']
+        recommendation = best.parameter
+        _, recommendation = self.loss.massage(*recommendation.args)
+        loss = best.mean
+        return recommendation, loss
+
