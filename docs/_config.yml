@@ -1,0 +1,6 @@
+title: "Experiments in Global Optimization: GEOtop Calibration"
+author: Stefano Campanella
+copyright: "2020"
+logo: assets/logo.png
+execute:
+  execute_notebooks: "off"

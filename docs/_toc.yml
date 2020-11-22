@@ -1,0 +1,52 @@
+- file: landing-page
+  numbered: true
+
+- part: Frontmatter
+  chapters:
+  - file: frontmatter/foreword
+
+- part: Introduction
+  chapters:
+    - file: intro/hydrology
+    - file: intro/hydrological_modeling
+    - file: intro/geotop
+
+- part: Motivations
+  chapters:
+    - file: motivations/calibration
+    - file: motivations/hyperparameter_optimization
+    - file: motivations/hpc
+
+- part: Problem
+  chapters:
+    - file: problem/problem
+
+- part: Approach
+  chapters:
+    - file: approach/tools
+    - file: approach/deployment
+    - file: approach/libraries
+      sections:
+        - file: approach/libs/jupyter
+        - file: approach/libs/nevergrad
+        - file: approach/libs/salib
+        - file: approach/libs/dask
+        - file: approach/libs/chocolate
+        - file: approach/libs/geotopy
+        - file: approach/libs/mhpc-project
+    - file: approach/examples
+      sections:
+        - file: approach/examples/plots
+        - file: approach/examples/sensitivity_analysis
+        - file: approach/examples/calibration
+  
+- part: Results
+  chapters:
+    - file: results/study
+    - file: results/discussion
+    - file: results/conclusions
+
+- part: Backmatter
+  chapters:
+  - file: backmatter/acknowledgements
+    
