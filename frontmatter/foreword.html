@@ -1,0 +1,415 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1. Foreword &#8212; Experiments in Global Optimization: GEOtop Calibration</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="1. Brief Introduction to Hydrology" href="../intro/hydrology.html" />
+    <link rel="prev" title="Experiments in Global Optimization: GEOtop Calibration" href="../landing-page.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Experiments in Global Optimization: GEOtop Calibration</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../landing-page.html">
+   Experiments in Global Optimization: GEOtop Calibration
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Frontmatter
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   1. Foreword
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro/hydrology.html">
+   1. Brief Introduction to Hydrology
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro/hydrological_modeling.html">
+   2. Brief Introduction to Hydrological Modeling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro/geotop.html">
+   3. Brief Introduction to GEOtop
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Motivations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../motivations/calibration.html">
+   1. Calibration of a GEOtop
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../motivations/hyperparameter_optimization.html">
+   2. Hyperparameter Optimization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../motivations/hpc.html">
+   3. The Need for HPC
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Problem
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../problem/problem.html">
+   1. Formal Statement
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Approach
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../approach/tools.html">
+   1. Tools
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../approach/deployment.html">
+   2. Deployment
+  </a>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../approach/libraries.html">
+   3. Libraries used
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/jupyter.html">
+     3.1. JupyterLab, Papermills and Scrapbook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/nevergrad.html">
+     3.2. Nevergrad
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/salib.html">
+     3.3. SALib
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/dask.html">
+     3.4. Dask
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/chocolate.html">
+     3.5. Chocolate
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/geotopy.html">
+     3.6. GEOtoPy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/mhpc-project.html">
+     3.7. Matsch B2
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../approach/examples.html">
+   4. Examples
+  </a>
+  <ul class="simple collapse-ul">
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Results
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/study.html">
+   1. Study
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/discussion.html">
+   2. Discussion
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/conclusions.html">
+   3. Conclusions
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Backmatter
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../backmatter/acknowledgements.html">
+   1. Acknowledgements
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/frontmatter/foreword.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="foreword">
+<h1><span class="section-number">1. </span>Foreword<a class="headerlink" href="#foreword" title="Permalink to this headline">¶</a></h1>
+<p>In this brief thesis, I will discuss my final project for the 2019/20 edition of the Master in High-Performance Computing held by SISSA and ICTP.</p>
+<p>The topic of this project is the exploitation of HPC for finding the best optimization strategy for the calibration of the GEOtop hydrological model and finally performing a calibration on a case study of hydrological relevance. It must be noted that the experimental procedure developed in this project could be applied in principle to any statistical or physical model, even outside environmental sciences. However, the focus of this project will be on GEOtop, in accord with statement of the fellowship sponsoring this work: “development of a High-Performance hydological model”.</p>
+<p>Being in its essence a report of experimental research, although of the kind of experiments which are done on a computer, its structure will resemble the customary one for such documents:</p>
+<ol class="simple">
+<li><p><strong>Introduction.</strong> Here I give some key concepts to make the reader without a background on the subject acquainted with the topics of hydrology, hydrological modeling, and the GEOtop model.</p></li>
+<li><p><strong>Motivations.</strong> In this part, I discuss the problem of calibrating an environmental model, and more specifically GEOtop. I also  present the analogies with hyperparameter optimization in Machine Learning and the need for High-Performance Computing. I will try to answer both questions “why is HPC needed for this research?” And “how is this research relevant for HPC?”</p></li>
+<li><p><strong>Problem.</strong> In this part, I give a formal statement of the problem, in mathematical terms but without mathematical rigor.</p></li>
+<li><p><strong>Approach and procedure.</strong> Where I discuss the implementation details and motivate them. Here I also try to explain how to reproduce my research and adapt it to your case study.</p></li>
+<li><p><strong>Results and conclusions.</strong> Where I present the results of the numerical experiments and discuss them, both from the hydrological and the HPC viewpoint.</p></li>
+</ol>
+<p>This simple premise must be followed by some further considerations.</p>
+<p>The first one is that the interest in this project is faceted. Indeed, It could be considered interesting both technically (or technologically) and scientificly. Within its scientific interest one could account for both its applied hydrological value and theoretical optimization one. This diversity is not a merit of this particular work or of its author, but its specific of enabling technologies, in this case High-Performance Computing resources, and their use in applied science.</p>
+<p>The second consideration regards the purpose of this document, as I would like it to be a documentation for the code with which is bundled. Indeed, in many research fields, articles, reviews and records of conferences account only for a part of the writing duty of the researchers, the other being computer programs, something for which they are not always given the right credit. However, if programming is really theory building (cite Naur), then we need to consider code as literature and write correct, clear, reusable and extensively documented code to make real scientific progress and not waste our collective efforts.</p>
+<p>However, the issue is not just the consideration we have for programming as a research activity. If one wants to apply the scientific method to numerical experiments, he has to attain to the same standards used for the experiments done in laboratories. In other words, these must be reproducible. Therefore, the purpose of this document is to enable the reader to reproduce the results obtained and to extend them to his own case study. Also, although briefly, some general aspects of the choices made in the writing and deployment of the code will be discussed; such that this document could be useful also for similar research.</p>
+<p>One last consideration is needed. Given the diversity of topics involved, the vastity of material, the time assigned to this project and its focus on HPC, and finally the background of the author, it was necessary to <em>use</em> some tools (algorithms, concepts, etc.) without fully mastering them. This unavoidable fact is reflected in the frugality of the bibliography and in their presentation, which occasionally could be sloppy or contain plain errors. It goes without saying that the responsability for those is mine and mine only. However, my hope is that the material presented here, if not the subject for deeper and broader research by the author, will be at least a prompt for more expert readers.</p>
+<p>A few more words on this last point. The growth of complexity in science, to which specialism was the universal response, is not going to decline; but maybe the compartmentalization of specialism will. When we will seek for systematic answers to the problems posed by this Cambrian explosion, one place to look will be Computer Science, which under many regards is the art of managing complexity by the human mind through abstractions. The simplest and most ubiquitous abstraction is the black box, and hence there is no shame in using black boxes when dealing with problems outside of our competence. However, in order to make scientific statements on them, neglecting the implementation details, one needs the strictest rigor on the assumptions, that is on their inputs and outputs.</p>
+<p>This was the spirit of the thesis I would have liked to write, I fear unfortunately without success.</p>
+<p>In my opinion, this is also the reason why there is little chance to see the rise of scientific programmers, but I am sure that good scientists will be also good programmers, i.e. will be able to express elegantly their thougths both in declarative form by means of equations and in procedural form, with the help of a computer.</p>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./frontmatter"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../landing-page.html" title="previous page">Experiments in Global Optimization: GEOtop Calibration</a>
+    <a class='right-next' id="next-link" href="../intro/hydrology.html" title="next page"><span class="section-number">1. </span>Brief Introduction to Hydrology</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stefano Campanella<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

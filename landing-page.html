@@ -1,0 +1,529 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Experiments in Global Optimization: GEOtop Calibration</title>
+    
+  <link rel="stylesheet" href="_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="_static/togglebutton.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-2 bd-sidebar site-navigation show single-page" id="site-navigation">
+    
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="experiments-in-global-optimization-geotop-calibration">
+<h1>Experiments in Global Optimization: GEOtop Calibration<a class="headerlink" href="#experiments-in-global-optimization-geotop-calibration" title="Permalink to this headline">¶</a></h1>
+<p>Stefano Campanella</p>
+<p>Supervisors: Giacomo Bertoldi, Alberto Sartori</p>
+<div class="toctree-wrapper compound">
+<span id="document-frontmatter/foreword"></span><div class="section" id="foreword">
+<h2><span class="section-number">1. </span>Foreword<a class="headerlink" href="#foreword" title="Permalink to this headline">¶</a></h2>
+<p>In this brief thesis, I will discuss my final project for the 2019/20 edition of the Master in High-Performance Computing held by SISSA and ICTP.</p>
+<p>The topic of this project is the exploitation of HPC for finding the best optimization strategy for the calibration of the GEOtop hydrological model and finally performing a calibration on a case study of hydrological relevance. It must be noted that the experimental procedure developed in this project could be applied in principle to any statistical or physical model, even outside environmental sciences. However, the focus of this project will be on GEOtop, in accord with statement of the fellowship sponsoring this work: “development of a High-Performance hydological model”.</p>
+<p>Being in its essence a report of experimental research, although of the kind of experiments which are done on a computer, its structure will resemble the customary one for such documents:</p>
+<ol class="simple">
+<li><p><strong>Introduction.</strong> Here I give some key concepts to make the reader without a background on the subject acquainted with the topics of hydrology, hydrological modeling, and the GEOtop model.</p></li>
+<li><p><strong>Motivations.</strong> In this part, I discuss the problem of calibrating an environmental model, and more specifically GEOtop. I also  present the analogies with hyperparameter optimization in Machine Learning and the need for High-Performance Computing. I will try to answer both questions “why is HPC needed for this research?” And “how is this research relevant for HPC?”</p></li>
+<li><p><strong>Problem.</strong> In this part, I give a formal statement of the problem, in mathematical terms but without mathematical rigor.</p></li>
+<li><p><strong>Approach and procedure.</strong> Where I discuss the implementation details and motivate them. Here I also try to explain how to reproduce my research and adapt it to your case study.</p></li>
+<li><p><strong>Results and conclusions.</strong> Where I present the results of the numerical experiments and discuss them, both from the hydrological and the HPC viewpoint.</p></li>
+</ol>
+<p>This simple premise must be followed by some further considerations.</p>
+<p>The first one is that the interest in this project is faceted. Indeed, It could be considered interesting both technically (or technologically) and scientificly. Within its scientific interest one could account for both its applied hydrological value and theoretical optimization one. This diversity is not a merit of this particular work or of its author, but its specific of enabling technologies, in this case High-Performance Computing resources, and their use in applied science.</p>
+<p>The second consideration regards the purpose of this document, as I would like it to be a documentation for the code with which is bundled. Indeed, in many research fields, articles, reviews and records of conferences account only for a part of the writing duty of the researchers, the other being computer programs, something for which they are not always given the right credit. However, if programming is really theory building (cite Naur), then we need to consider code as literature and write correct, clear, reusable and extensively documented code to make real scientific progress and not waste our collective efforts.</p>
+<p>However, the issue is not just the consideration we have for programming as a research activity. If one wants to apply the scientific method to numerical experiments, he has to attain to the same standards used for the experiments done in laboratories. In other words, these must be reproducible. Therefore, the purpose of this document is to enable the reader to reproduce the results obtained and to extend them to his own case study. Also, although briefly, some general aspects of the choices made in the writing and deployment of the code will be discussed; such that this document could be useful also for similar research.</p>
+<p>One last consideration is needed. Given the diversity of topics involved, the vastity of material, the time assigned to this project and its focus on HPC, and finally the background of the author, it was necessary to <em>use</em> some tools (algorithms, concepts, etc.) without fully mastering them. This unavoidable fact is reflected in the frugality of the bibliography and in their presentation, which occasionally could be sloppy or contain plain errors. It goes without saying that the responsability for those is mine and mine only. However, my hope is that the material presented here, if not the subject for deeper and broader research by the author, will be at least a prompt for more expert readers.</p>
+<p>A few more words on this last point. The growth of complexity in science, to which specialism was the universal response, is not going to decline; but maybe the compartmentalization of specialism will. When we will seek for systematic answers to the problems posed by this Cambrian explosion, one place to look will be Computer Science, which under many regards is the art of managing complexity by the human mind through abstractions. The simplest and most ubiquitous abstraction is the black box, and hence there is no shame in using black boxes when dealing with problems outside of our competence. However, in order to make scientific statements on them, neglecting the implementation details, one needs the strictest rigor on the assumptions, that is on their inputs and outputs.</p>
+<p>This was the spirit of the thesis I would have liked to write, I fear unfortunately without success.</p>
+<p>In my opinion, this is also the reason why there is little chance to see the rise of scientific programmers, but I am sure that good scientists will be also good programmers, i.e. will be able to express elegantly their thougths both in declarative form by means of equations and in procedural form, with the help of a computer.</p>
+</div>
+</div>
+<div class="toctree-wrapper compound">
+<span id="document-intro/hydrology"></span><div class="section" id="brief-introduction-to-hydrology">
+<h2><span class="section-number">1. </span>Brief Introduction to Hydrology<a class="headerlink" href="#brief-introduction-to-hydrology" title="Permalink to this headline">¶</a></h2>
+</div>
+<span id="document-intro/hydrological_modeling"></span><div class="section" id="brief-introduction-to-hydrological-modeling">
+<h2><span class="section-number">2. </span>Brief Introduction to Hydrological Modeling<a class="headerlink" href="#brief-introduction-to-hydrological-modeling" title="Permalink to this headline">¶</a></h2>
+</div>
+<span id="document-intro/geotop"></span><div class="section" id="brief-introduction-to-geotop">
+<h2><span class="section-number">3. </span>Brief Introduction to GEOtop<a class="headerlink" href="#brief-introduction-to-geotop" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+<div class="toctree-wrapper compound">
+<span id="document-motivations/calibration"></span><div class="section" id="calibration-of-a-geotop">
+<h2><span class="section-number">1. </span>Calibration of a GEOtop<a class="headerlink" href="#calibration-of-a-geotop" title="Permalink to this headline">¶</a></h2>
+</div>
+<span id="document-motivations/hyperparameter_optimization"></span><div class="section" id="hyperparameter-optimization">
+<h2><span class="section-number">2. </span>Hyperparameter Optimization<a class="headerlink" href="#hyperparameter-optimization" title="Permalink to this headline">¶</a></h2>
+</div>
+<span id="document-motivations/hpc"></span><div class="section" id="the-need-for-hpc">
+<h2><span class="section-number">3. </span>The Need for HPC<a class="headerlink" href="#the-need-for-hpc" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+<div class="toctree-wrapper compound">
+<span id="document-problem/problem"></span><div class="section" id="formal-statement">
+<h2><span class="section-number">1. </span>Formal Statement<a class="headerlink" href="#formal-statement" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+<div class="toctree-wrapper compound">
+<span id="document-approach/tools"></span><div class="section" id="tools">
+<h2><span class="section-number">1. </span>Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h2>
+</div>
+<span id="document-approach/deployment"></span><div class="section" id="deployment">
+<h2><span class="section-number">2. </span>Deployment<a class="headerlink" href="#deployment" title="Permalink to this headline">¶</a></h2>
+</div>
+<span id="document-approach/libraries"></span><div class="section" id="libraries-used">
+<h2><span class="section-number">3. </span>Libraries used<a class="headerlink" href="#libraries-used" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<span id="document-approach/libs/jupyter"></span><div class="section" id="jupyterlab-papermills-and-scrapbook">
+<h3><span class="section-number">3.1. </span>JupyterLab, Papermills and Scrapbook<a class="headerlink" href="#jupyterlab-papermills-and-scrapbook" title="Permalink to this headline">¶</a></h3>
+</div>
+<span id="document-approach/libs/nevergrad"></span><div class="section" id="nevergrad">
+<h3><span class="section-number">3.2. </span>Nevergrad<a class="headerlink" href="#nevergrad" title="Permalink to this headline">¶</a></h3>
+</div>
+<span id="document-approach/libs/salib"></span><div class="section" id="salib">
+<h3><span class="section-number">3.3. </span>SALib<a class="headerlink" href="#salib" title="Permalink to this headline">¶</a></h3>
+</div>
+<span id="document-approach/libs/dask"></span><div class="section" id="dask">
+<h3><span class="section-number">3.4. </span>Dask<a class="headerlink" href="#dask" title="Permalink to this headline">¶</a></h3>
+</div>
+<span id="document-approach/libs/chocolate"></span><div class="section" id="chocolate">
+<h3><span class="section-number">3.5. </span>Chocolate<a class="headerlink" href="#chocolate" title="Permalink to this headline">¶</a></h3>
+</div>
+<span id="document-approach/libs/geotopy"></span><div class="section" id="geotopy">
+<h3><span class="section-number">3.6. </span>GEOtoPy<a class="headerlink" href="#geotopy" title="Permalink to this headline">¶</a></h3>
+</div>
+<span id="document-approach/libs/mhpc-project"></span><div class="section" id="matsch-b2">
+<h3><span class="section-number">3.7. </span>Matsch B2<a class="headerlink" href="#matsch-b2" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+<span id="document-approach/examples"></span><div class="section" id="examples">
+<h2><span class="section-number">4. </span>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<span id="document-approach/examples/plots"></span><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Markdown</span>
+
+<span class="kn">from</span> <span class="nn">mhpc_project.matsch_b2</span> <span class="kn">import</span> <span class="n">FullModel</span>
+<span class="kn">from</span> <span class="nn">geotopy.utils</span> <span class="kn">import</span> <span class="n">date_parser</span><span class="p">,</span> <span class="n">comparison_plot</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">targets</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s1">&#39;rainfall_amount&#39;</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="s1">&#39;Rainfall Amount&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;m/s&#39;</span><span class="p">,</span> <span class="s1">&#39;Wind Speed&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;relative_humidity&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Relative Humidity&#39;</span><span class="p">),</span>
+     <span class="p">(</span><span class="s1">&#39;air_temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;Air Temperature&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;surface_downwelling_shortwave_flux&#39;</span><span class="p">,</span> <span class="s1">&#39;W/m2&#39;</span><span class="p">,</span> <span class="s1">&#39;Downwelling Shortwave Flux&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;soil_moisture_content_50&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Soil Moisture at 50mm&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;soil_moisture_content_200&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Soil Moisture at 200mm&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;latent_heat_flux_in_air&#39;</span><span class="p">,</span> <span class="s1">&#39;W/m2&#39;</span><span class="p">,</span> <span class="s1">&#39;Latent Heat Flux&#39;</span><span class="p">),</span>
+    <span class="p">(</span><span class="s1">&#39;sensible_heat_flux_in_air&#39;</span><span class="p">,</span> <span class="s1">&#39;W/m2&#39;</span><span class="p">,</span> <span class="s1">&#39;Sensible Heat Flux&#39;</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="n">observations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/obs.csv&#39;</span><span class="p">,</span>
+                           <span class="n">na_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-9999&#39;</span><span class="p">,</span> <span class="s1">&#39;-99.99&#39;</span><span class="p">],</span>
+                           <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                           <span class="n">date_parser</span><span class="o">=</span><span class="n">date_parser</span><span class="p">,</span>
+                           <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">observations</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">FullModel</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/geotop&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simulation</span> <span class="o">=</span> <span class="n">model</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+    <span class="n">comparison_plot</span><span class="p">(</span><span class="n">observations</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+                    <span class="n">simulation</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+                    <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span>
+                    <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/plots_2_1.png" src="_images/plots_2_1.png" />
+<img alt="_images/plots_2_3.png" src="_images/plots_2_3.png" />
+<img alt="_images/plots_2_5.png" src="_images/plots_2_5.png" />
+<img alt="_images/plots_2_7.png" src="_images/plots_2_7.png" />
+<img alt="_images/plots_2_9.png" src="_images/plots_2_9.png" />
+<img alt="_images/plots_2_11.png" src="_images/plots_2_11.png" />
+<img alt="_images/plots_2_13.png" src="_images/plots_2_13.png" />
+<img alt="_images/plots_2_15.png" src="_images/plots_2_15.png" />
+<img alt="_images/plots_2_17.png" src="_images/plots_2_17.png" />
+</div>
+</div>
+<span id="document-approach/examples/sensitivity_analysis"></span><div class="cell tag_parameters docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defaults</span>
+<span class="n">n</span> <span class="o">=</span> <span class="mi">512</span>
+<span class="n">cores</span> <span class="o">=</span> <span class="mi">256</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">dask_jobqueue</span> <span class="kn">import</span> <span class="n">SLURMCluster</span> <span class="k">as</span> <span class="n">Cluster</span>
+
+<span class="kn">from</span> <span class="nn">SALib.sample</span> <span class="kn">import</span> <span class="n">latin</span>
+<span class="kn">from</span> <span class="nn">SALib.analyze</span> <span class="kn">import</span> <span class="n">delta</span> <span class="k">as</span> <span class="n">delta_mim</span>
+<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span><span class="p">,</span> <span class="n">parallel_backend</span>
+
+<span class="kn">from</span> <span class="nn">mhpc_project.matsch_b2</span> <span class="kn">import</span> <span class="n">Variables</span><span class="p">,</span> <span class="n">CalibrationModel</span>
+<span class="kn">from</span> <span class="nn">geotopy.optim</span> <span class="kn">import</span> <span class="n">Loss</span>
+<span class="kn">from</span> <span class="nn">geotopy.measures</span> <span class="kn">import</span> <span class="n">KGE</span>
+<span class="kn">from</span> <span class="nn">geotopy.utils</span> <span class="kn">import</span> <span class="n">date_parser</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">Cluster</span><span class="p">()</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">cores</span><span class="o">=</span><span class="n">cores</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">observations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/obs.csv&#39;</span><span class="p">,</span>
+                           <span class="n">na_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-9999&#39;</span><span class="p">,</span> <span class="s1">&#39;-99.99&#39;</span><span class="p">],</span>
+                           <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+                           <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                           <span class="n">date_parser</span><span class="o">=</span><span class="n">date_parser</span><span class="p">,</span>
+                           <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">squeeze</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">observations</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CalibrationModel</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/geotop&#39;</span><span class="p">,</span> <span class="n">run_args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;timeout&#39;</span><span class="p">:</span> <span class="mi">120</span><span class="p">})</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">Variables</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/variables.csv&#39;</span><span class="p">)</span>
+<span class="n">measure</span> <span class="o">=</span> <span class="n">KGE</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">Loss</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">measure</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">problem</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;num_vars&#39;</span><span class="p">:</span> <span class="n">variables</span><span class="o">.</span><span class="n">num_vars</span><span class="p">,</span>
+           <span class="s1">&#39;names&#39;</span><span class="p">:</span> <span class="n">variables</span><span class="o">.</span><span class="n">names</span><span class="p">,</span>
+           <span class="s1">&#39;bounds&#39;</span><span class="p">:</span> <span class="n">variables</span><span class="o">.</span><span class="n">bounds</span><span class="p">}</span>
+
+<span class="n">samples</span> <span class="o">=</span> <span class="n">latin</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="n">parallel_backend</span><span class="p">(</span><span class="s1">&#39;dask&#39;</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">):</span>
+    <span class="n">losses</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="mi">10</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">loss</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">)</span>
+<span class="n">losses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
+
+<span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
+<span class="n">good_samples</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+<span class="n">good_losses</span> <span class="o">=</span> <span class="n">losses</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+
+<span class="n">SA</span> <span class="o">=</span> <span class="n">delta_mim</span><span class="o">.</span><span class="n">analyze</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">good_samples</span><span class="p">,</span> <span class="n">good_losses</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SA</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;S1&#39;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<span id="document-approach/examples/calibration"></span><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
+<span class="kn">from</span> <span class="nn">dask_jobqueue</span> <span class="kn">import</span> <span class="n">SLURMCluster</span>
+
+<span class="kn">import</span> <span class="nn">nevergrad</span> <span class="k">as</span> <span class="nn">ng</span>
+<span class="kn">from</span> <span class="nn">mhpc_project.matsch_b2</span> <span class="kn">import</span> <span class="n">CalibrationModel</span><span class="p">,</span> <span class="n">Variables</span><span class="p">,</span> <span class="n">Loss</span><span class="p">,</span> <span class="n">Calibration</span>
+<span class="kn">from</span> <span class="nn">geotopy.utils</span> <span class="kn">import</span> <span class="n">date_parser</span><span class="p">,</span> <span class="n">comparison_plot</span><span class="p">,</span> <span class="n">DataFrameLogger</span>
+<span class="kn">from</span> <span class="nn">geotopy.measures</span> <span class="kn">import</span> <span class="n">KGE</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;parametrization&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;mutable_sigma&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s1">&#39;init_sigma&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="s1">&#39;lower&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="s1">&#39;upper&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;budget&#39;</span><span class="p">:</span> <span class="mi">4096</span><span class="p">,</span>
+        <span class="s1">&#39;num_workers&#39;</span><span class="p">:</span> <span class="mi">256</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">SLURMCluster</span><span class="p">()</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">cores</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;optimizer&#39;</span><span class="p">][</span><span class="s1">&#39;num_workers&#39;</span><span class="p">])</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">observations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/obs.csv&#39;</span><span class="p">,</span>
+                           <span class="n">na_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-9999&#39;</span><span class="p">,</span> <span class="s1">&#39;-99.99&#39;</span><span class="p">],</span>
+                           <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+                           <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                           <span class="n">date_parser</span><span class="o">=</span><span class="n">date_parser</span><span class="p">,</span>
+                           <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                           <span class="n">squeeze</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">observations</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">CalibrationModel</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/geotop&#39;</span><span class="p">,</span> <span class="n">run_args</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;timeout&#39;</span><span class="p">:</span> <span class="mi">120</span><span class="p">})</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">Variables</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/variables.csv&#39;</span><span class="p">)</span>
+<span class="n">measure</span> <span class="o">=</span> <span class="n">KGE</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+<span class="n">loss</span> <span class="o">=</span> <span class="n">Loss</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">measure</span><span class="p">)</span>
+<span class="n">calibration</span> <span class="o">=</span> <span class="n">Calibration</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simulation</span> <span class="o">=</span> <span class="n">model</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Before optimization loss is </span><span class="si">{</span><span class="n">measure</span><span class="p">(</span><span class="n">simulation</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">comparison_plot</span><span class="p">(</span><span class="n">observations</span><span class="p">,</span>
+                <span class="n">simulation</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Soil moisture content @ 5cm&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">calibration</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="s1">&#39;tell&#39;</span><span class="p">,</span> <span class="n">ng</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">ProgressBar</span><span class="p">())</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">DataFrameLogger</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+<span class="n">calibration</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="s1">&#39;tell&#39;</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loss</span><span class="p">,</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">calibration</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experiment</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">experiment</span>
+<span class="n">experiment</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simulation</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">settings</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After optimization loss is </span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">comparison_plot</span><span class="p">(</span><span class="n">observations</span><span class="p">,</span>
+                <span class="n">simulation</span><span class="p">,</span>
+                <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Soil moisture content @ 5cm&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="toctree-wrapper compound">
+<span id="document-results/study"></span><div class="section" id="study">
+<h2><span class="section-number">1. </span>Study<a class="headerlink" href="#study" title="Permalink to this headline">¶</a></h2>
+</div>
+<span id="document-results/discussion"></span><div class="section" id="discussion">
+<h2><span class="section-number">2. </span>Discussion<a class="headerlink" href="#discussion" title="Permalink to this headline">¶</a></h2>
+</div>
+<span id="document-results/conclusions"></span><div class="section" id="conclusions">
+<h2><span class="section-number">3. </span>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+<div class="toctree-wrapper compound">
+<span id="document-backmatter/acknowledgements"></span><div class="section" id="acknowledgements">
+<h2><span class="section-number">1. </span>Acknowledgements<a class="headerlink" href="#acknowledgements" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stefano Campanella<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>
