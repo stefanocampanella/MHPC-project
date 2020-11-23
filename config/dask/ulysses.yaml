@@ -28,6 +28,4 @@ jobqueue:
     job-extra:
       - '--hint=nomultithread'
       - '--hint=compute_bound'
-      - '--output=/dev/null'
-      - '--error=/dev/null'
-    log-directory: $TMPDIR
+    log-directory: /dev/shm
