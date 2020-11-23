@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&lt;no title&gt;</title>
+    <title>Example of Calibration</title>
     
   <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -57,7 +57,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Study" href="../../results/study.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="sensitivity_analysis.html" />
+    <link rel="prev" title="Example of Sensitivity Analysis" href="sensitivity_analysis.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -66,8 +66,8 @@
 <!-- Opengraph tags -->
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/approach/examples/calibration.html" />
 <meta property="og:type"        content="article" />
-<meta property="og:title"       content="&lt;no title&gt;" />
-<meta property="og:description" content="" />
+<meta property="og:title"       content="Example of Calibration" />
+<meta property="og:description" content="Example of Calibration  Import stuff  import warnings  import pandas as pd import matplotlib.pyplot as plt  from dask.distributed import Client from dask_jobque" />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -162,7 +162,7 @@
   Approach
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../tools.html">
    Tools
@@ -217,11 +217,26 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
- <li class="toctree-l1 collapsible-parent">
+ <li class="toctree-l1 current active collapsible-parent">
   <a class="reference internal" href="../examples.html">
    Examples
   </a>
-  <ul class="simple collapse-ul">
+  <ul class="current collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="plots.html">
+     Example of Plots using GEOtoPy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="sensitivity_analysis.html">
+     Example of Sensitivity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Example of Calibration
+    </a>
+   </li>
   </ul>
   <i class="fas fa-chevron-down">
   </i>
@@ -330,15 +345,6 @@
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
-        <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
-        </div>
-        <nav id="bd-toc-nav">
-            <ul class="simple nav section-nav flex-column">
-</ul>
-
-        </nav>
-        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -346,49 +352,39 @@
         
               <div>
                 
-  <div class="cell docutils container">
+  <div class="section" id="example-of-calibration">
+<h1>Example of Calibration<a class="headerlink" href="#example-of-calibration" title="Permalink to this headline">¶</a></h1>
+<p>Import stuff</p>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
 <span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
 <span class="kn">from</span> <span class="nn">dask_jobqueue</span> <span class="kn">import</span> <span class="n">SLURMCluster</span>
 
 <span class="kn">import</span> <span class="nn">nevergrad</span> <span class="k">as</span> <span class="nn">ng</span>
-<span class="kn">from</span> <span class="nn">mhpc_project.matsch_b2</span> <span class="kn">import</span> <span class="n">CalibrationModel</span><span class="p">,</span> <span class="n">Variables</span><span class="p">,</span> <span class="n">Loss</span><span class="p">,</span> <span class="n">Calibration</span>
-<span class="kn">from</span> <span class="nn">geotopy.utils</span> <span class="kn">import</span> <span class="n">date_parser</span><span class="p">,</span> <span class="n">comparison_plot</span><span class="p">,</span> <span class="n">DataFrameLogger</span>
+<span class="kn">from</span> <span class="nn">mhpc_project.matsch_b2</span> <span class="kn">import</span> <span class="n">CalibrationModel</span><span class="p">,</span> <span class="n">Variables</span><span class="p">,</span> <span class="n">Loss</span><span class="p">,</span> <span class="n">NGO</span>
+<span class="kn">from</span> <span class="nn">geotopy.utils</span> <span class="kn">import</span> <span class="n">date_parser</span><span class="p">,</span> <span class="n">comparison_plot</span><span class="p">,</span> <span class="n">ProgressBar</span><span class="p">,</span> <span class="n">ParameterLogger</span>
 <span class="kn">from</span> <span class="nn">geotopy.measures</span> <span class="kn">import</span> <span class="n">KGE</span>
 </pre></div>
 </div>
 </div>
 </div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">settings</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;parametrization&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;mutable_sigma&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="s1">&#39;init_sigma&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
-        <span class="s1">&#39;lower&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
-        <span class="s1">&#39;upper&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-    <span class="p">},</span>
-    <span class="s1">&#39;optimizer&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;budget&#39;</span><span class="p">:</span> <span class="mi">4096</span><span class="p">,</span>
-        <span class="s1">&#39;num_workers&#39;</span><span class="p">:</span> <span class="mi">256</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</div>
-</div>
+<p>Launch Dask cluster using <code class="docutils literal notranslate"><span class="pre">dask-jobqueue</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">SLURMCluster</span><span class="p">()</span>
-<span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">cores</span><span class="o">=</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;optimizer&#39;</span><span class="p">][</span><span class="s1">&#39;num_workers&#39;</span><span class="p">])</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">maximum_jobs</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>Load observations, model, loss function and calibration strategy</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">observations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/obs.csv&#39;</span><span class="p">,</span>
@@ -403,57 +399,191 @@
 <span class="n">variables</span> <span class="o">=</span> <span class="n">Variables</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/variables.csv&#39;</span><span class="p">)</span>
 <span class="n">measure</span> <span class="o">=</span> <span class="n">KGE</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
 <span class="n">loss</span> <span class="o">=</span> <span class="n">Loss</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">measure</span><span class="p">)</span>
-<span class="n">calibration</span> <span class="o">=</span> <span class="n">Calibration</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+<span class="n">calibration</span> <span class="o">=</span> <span class="n">NGO</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">budget</span><span class="o">=</span><span class="mi">4096</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">512</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+<p>Evaluate the model and plot the risults</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simulation</span> <span class="o">=</span> <span class="n">model</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Before optimization loss is </span><span class="si">{</span><span class="n">measure</span><span class="p">(</span><span class="n">simulation</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">comparison_plot</span><span class="p">(</span><span class="n">observations</span><span class="p">,</span>
                 <span class="n">simulation</span><span class="p">,</span>
-                <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Soil moisture content @ 5cm&#39;</span><span class="p">)</span>
+                <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Soil moisture content @ 5cm&#39;</span><span class="p">,</span>
+                <span class="n">rel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Before optimization loss is -0.2476496401298781
+</pre></div>
 </div>
+<img alt="../../_images/calibration_8_1.png" src="../../_images/calibration_8_1.png" />
+</div>
+</div>
+<p>Run calibration</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">calibration</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="s1">&#39;tell&#39;</span><span class="p">,</span> <span class="n">ng</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">ProgressBar</span><span class="p">())</span>
-<span class="n">logger</span> <span class="o">=</span> <span class="n">DataFrameLogger</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">ParameterLogger</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">massage</span><span class="p">)</span>
+
 <span class="n">calibration</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="s1">&#39;tell&#39;</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
+
+<span class="n">calibration</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="s1">&#39;tell&#39;</span><span class="p">,</span> <span class="n">ProgressBar</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="n">calibration</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">budget</span><span class="p">))</span>
+
+<span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+    
+    <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+    <span class="n">recommendation</span><span class="p">,</span> <span class="n">best_loss</span> <span class="o">=</span> <span class="n">calibration</span><span class="p">(</span><span class="n">executor</span><span class="o">=</span><span class="n">client</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">
+{"model_id": "0b1258df34c5474e953a6eb0087f65ea", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(256_w,512)-aCMA-ES (mu_w=131.7,w_1=2%) in dimension 21 (seed=&lt;module &#39;time&#39; (built-in)&gt;, Fri Nov 20 19:27:39 2020)
 </pre></div>
 </div>
 </div>
 </div>
+<p>Plot results and show table of calibrated values</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">loss</span><span class="p">,</span> <span class="n">settings</span> <span class="o">=</span> <span class="n">calibration</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">experiment</span> <span class="o">=</span> <span class="n">logger</span><span class="o">.</span><span class="n">experiment</span>
-<span class="n">experiment</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simulation</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">settings</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After optimization loss is </span><span class="si">{</span><span class="n">loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simulation</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="o">**</span><span class="n">recommendation</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;After optimization loss is </span><span class="si">{</span><span class="n">best_loss</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="n">comparison_plot</span><span class="p">(</span><span class="n">observations</span><span class="p">,</span>
                 <span class="n">simulation</span><span class="p">,</span>
-                <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Soil moisture content @ 5cm&#39;</span><span class="p">)</span>
+                <span class="n">desc</span><span class="o">=</span><span class="s1">&#39;Soil moisture content @ 5cm&#39;</span><span class="p">,</span>
+                <span class="n">rel</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>After optimization loss is -0.5021433797788915
+</pre></div>
+</div>
+<img alt="../../_images/calibration_12_1.png" src="../../_images/calibration_12_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">recommendation</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>NVanGenuchten</th>
+      <td>1.254999</td>
+    </tr>
+    <tr>
+      <th>AlphaVanGenuchten</th>
+      <td>0.000575</td>
+    </tr>
+    <tr>
+      <th>ThetaSat</th>
+      <td>0.542819</td>
+    </tr>
+    <tr>
+      <th>ThetaRes</th>
+      <td>0.040146</td>
+    </tr>
+    <tr>
+      <th>NormalHydrConductivity</th>
+      <td>0.000728</td>
+    </tr>
+    <tr>
+      <th>SoilRoughness</th>
+      <td>267.444065</td>
+    </tr>
+    <tr>
+      <th>LSAI</th>
+      <td>0.315429</td>
+    </tr>
+    <tr>
+      <th>CanopyFraction</th>
+      <td>0.023877</td>
+    </tr>
+    <tr>
+      <th>DecayCoeffCanopy</th>
+      <td>19.949009</td>
+    </tr>
+    <tr>
+      <th>RootDepth</th>
+      <td>316.808135</td>
+    </tr>
+    <tr>
+      <th>MinStomatalRes</th>
+      <td>15.213440</td>
+    </tr>
+    <tr>
+      <th>VegReflectVis</th>
+      <td>0.082214</td>
+    </tr>
+    <tr>
+      <th>VegReflNIR</th>
+      <td>0.072452</td>
+    </tr>
+    <tr>
+      <th>VegTransVis</th>
+      <td>0.036180</td>
+    </tr>
+    <tr>
+      <th>VegTransNIR</th>
+      <td>0.421136</td>
+    </tr>
+    <tr>
+      <th>CanDensSurface</th>
+      <td>0.682989</td>
+    </tr>
+    <tr>
+      <th>SoilAlbVisDry</th>
+      <td>0.222783</td>
+    </tr>
+    <tr>
+      <th>SoilAlbNIRDry</th>
+      <td>0.186163</td>
+    </tr>
+    <tr>
+      <th>SoilAlbVisWet</th>
+      <td>0.317674</td>
+    </tr>
+    <tr>
+      <th>SoilAlbNIRWet</th>
+      <td>0.428613</td>
+    </tr>
+    <tr>
+      <th>SoilEmissiv</th>
+      <td>0.915356</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
 </div>
 </div>
 
@@ -485,7 +615,7 @@
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="sensitivity_analysis.html" title="previous page">&lt;no title&gt;</a>
+    <a class='left-prev' id="prev-link" href="sensitivity_analysis.html" title="previous page">Example of Sensitivity Analysis</a>
     <a class='right-next' id="next-link" href="../../results/study.html" title="next page">Study</a>
 
     </div>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>&lt;no title&gt;</title>
+    <title>Example of Sensitivity Analysis</title>
     
   <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -56,8 +56,8 @@
     <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/approach/examples/sensitivity_analysis.html" />
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="calibration.html" />
-    <link rel="prev" title="&lt;no title&gt;" href="plots.html" />
+    <link rel="next" title="Example of Calibration" href="calibration.html" />
+    <link rel="prev" title="Example of Plots using GEOtoPy" href="plots.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -66,8 +66,8 @@
 <!-- Opengraph tags -->
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/approach/examples/sensitivity_analysis.html" />
 <meta property="og:type"        content="article" />
-<meta property="og:title"       content="&lt;no title&gt;" />
-<meta property="og:description" content="" />
+<meta property="og:title"       content="Example of Sensitivity Analysis" />
+<meta property="og:description" content="Example of Sensitivity Analysis  # Defaults n_samples = 1024 * 21 maximum_jobs = 256  from itertools import repeat  import numpy as np import pandas as pd  impo" />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -162,7 +162,7 @@
   Approach
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../tools.html">
    Tools
@@ -217,11 +217,26 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
- <li class="toctree-l1 collapsible-parent">
+ <li class="toctree-l1 current active collapsible-parent">
   <a class="reference internal" href="../examples.html">
    Examples
   </a>
-  <ul class="simple collapse-ul">
+  <ul class="current collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="plots.html">
+     Example of Plots using GEOtoPy
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Example of Sensitivity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="calibration.html">
+     Example of Calibration
+    </a>
+   </li>
   </ul>
   <i class="fas fa-chevron-down">
   </i>
@@ -330,15 +345,6 @@
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
-        <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
-        </div>
-        <nav id="bd-toc-nav">
-            <ul class="simple nav section-nav flex-column">
-</ul>
-
-        </nav>
-        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -346,39 +352,34 @@
         
               <div>
                 
-  <div class="cell tag_parameters docutils container">
+  <div class="section" id="example-of-sensitivity-analysis">
+<h1>Example of Sensitivity Analysis<a class="headerlink" href="#example-of-sensitivity-analysis" title="Permalink to this headline">¶</a></h1>
+<div class="cell tag_parameters docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defaults</span>
-<span class="n">n</span> <span class="o">=</span> <span class="mi">512</span>
-<span class="n">cores</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">n_samples</span> <span class="o">=</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">21</span>
+<span class="n">maximum_jobs</span> <span class="o">=</span> <span class="mi">256</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">repeat</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">import</span> <span class="nn">dask.bag</span> <span class="k">as</span> <span class="nn">db</span>
 <span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span>
 <span class="kn">from</span> <span class="nn">dask_jobqueue</span> <span class="kn">import</span> <span class="n">SLURMCluster</span> <span class="k">as</span> <span class="n">Cluster</span>
 
 <span class="kn">from</span> <span class="nn">SALib.sample</span> <span class="kn">import</span> <span class="n">latin</span>
 <span class="kn">from</span> <span class="nn">SALib.analyze</span> <span class="kn">import</span> <span class="n">delta</span> <span class="k">as</span> <span class="n">delta_mim</span>
-<span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">Parallel</span><span class="p">,</span> <span class="n">delayed</span><span class="p">,</span> <span class="n">parallel_backend</span>
 
-<span class="kn">from</span> <span class="nn">mhpc_project.matsch_b2</span> <span class="kn">import</span> <span class="n">Variables</span><span class="p">,</span> <span class="n">CalibrationModel</span>
-<span class="kn">from</span> <span class="nn">geotopy.optim</span> <span class="kn">import</span> <span class="n">Loss</span>
+<span class="kn">from</span> <span class="nn">mhpc_project.matsch_b2</span> <span class="kn">import</span> <span class="n">Variables</span><span class="p">,</span> <span class="n">CalibrationModel</span><span class="p">,</span> <span class="n">Loss</span>
 <span class="kn">from</span> <span class="nn">geotopy.measures</span> <span class="kn">import</span> <span class="n">KGE</span>
 <span class="kn">from</span> <span class="nn">geotopy.utils</span> <span class="kn">import</span> <span class="n">date_parser</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">Cluster</span><span class="p">()</span>
-<span class="n">cluster</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">cores</span><span class="o">=</span><span class="n">cores</span><span class="p">)</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -403,16 +404,35 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">Cluster</span><span class="p">()</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">maximum_jobs</span><span class="o">=</span><span class="n">maximum_jobs</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">problem</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;num_vars&#39;</span><span class="p">:</span> <span class="n">variables</span><span class="o">.</span><span class="n">num_vars</span><span class="p">,</span>
            <span class="s1">&#39;names&#39;</span><span class="p">:</span> <span class="n">variables</span><span class="o">.</span><span class="n">names</span><span class="p">,</span>
-           <span class="s1">&#39;bounds&#39;</span><span class="p">:</span> <span class="n">variables</span><span class="o">.</span><span class="n">bounds</span><span class="p">}</span>
+           <span class="s1">&#39;bounds&#39;</span><span class="p">:</span> <span class="nb">list</span><span class="p">(</span><span class="n">repeat</span><span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="n">variables</span><span class="o">.</span><span class="n">num_vars</span><span class="p">))}</span>
 
-<span class="n">samples</span> <span class="o">=</span> <span class="n">latin</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
-
-<span class="k">with</span> <span class="n">parallel_backend</span><span class="p">(</span><span class="s1">&#39;dask&#39;</span><span class="p">,</span> <span class="n">client</span><span class="o">=</span><span class="n">client</span><span class="p">):</span>
-    <span class="n">losses</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="mi">10</span><span class="p">)(</span><span class="n">delayed</span><span class="p">(</span><span class="n">loss</span><span class="p">)(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">samples</span><span class="p">)</span>
-<span class="n">losses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
-
+<span class="n">samples</span> <span class="o">=</span> <span class="n">latin</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">problem</span><span class="p">,</span> <span class="n">n_samples</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bag</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">from_sequence</span><span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">npartitions</span><span class="o">=</span><span class="n">maximum_jobs</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">loss</span><span class="p">)</span>
+<span class="n">losses</span> <span class="o">=</span> <span class="n">bag</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">losses</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
 <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">losses</span><span class="p">)</span>
 <span class="n">good_samples</span> <span class="o">=</span> <span class="n">samples</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
 <span class="n">good_losses</span> <span class="o">=</span> <span class="n">losses</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
@@ -424,8 +444,9 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SA</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;S1&#39;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">SA</span><span class="o">.</span><span class="n">to_df</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -458,8 +479,8 @@
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="plots.html" title="previous page">&lt;no title&gt;</a>
-    <a class='right-next' id="next-link" href="calibration.html" title="next page">&lt;no title&gt;</a>
+    <a class='left-prev' id="prev-link" href="plots.html" title="previous page">Example of Plots using GEOtoPy</a>
+    <a class='right-next' id="next-link" href="calibration.html" title="next page">Example of Calibration</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
