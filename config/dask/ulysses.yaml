@@ -19,10 +19,10 @@ jobqueue:
       - '--lifetime 18m'
       - '--lifetime-stagger 1m'
     env-extra:
-      - 'NUMEXPR_NUM_THREADS=1'
-      - 'NUMEXPR_MAX_THREADS=1'
-      - 'OMP_NUM_THREADS=1'
-      - 'TMPDIR=/dev/shm'
+      - 'export NUMEXPR_NUM_THREADS=1'
+      - 'export NUMEXPR_MAX_THREADS=1'
+      - 'export OMP_NUM_THREADS=1'
+      - 'export TMPDIR=/dev/shm'
     job-cpu: 4
     job-mem: 2GB
     job-extra:
