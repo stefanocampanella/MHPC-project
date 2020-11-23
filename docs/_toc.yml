@@ -1,8 +1,8 @@
 - file: landing-page
 
-- part: Frontmatter
+- part:
   chapters:
-  - file: frontmatter/foreword
+  - file: frontmatter/prologue
 
 - part: Introduction
   chapters:
@@ -44,8 +44,3 @@
     - file: results/study
     - file: results/discussion
     - file: results/conclusions
-
-- part: Backmatter
-  chapters:
-  - file: backmatter/acknowledgements
-    

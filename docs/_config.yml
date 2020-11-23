@@ -1,6 +1,11 @@
-title: "Experiments in Global Optimization: GEOtop Calibration"
+title: ""
 author: Stefano Campanella
 copyright: "2020"
 logo: assets/logo.png
+
 execute:
   execute_notebooks: "off"
+
+html:
+  home_page_in_navbar: false
+  baseurl: https://stefanocampanella.github.io/MHPC-project

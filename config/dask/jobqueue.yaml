@@ -1,0 +1,19 @@
+jobqueue:
+  slurm:
+    name: dask-worker
+    queue: regular2
+    walltime: '00:20:00'
+    cores: 4
+    processes: 1
+    memory: 2GB
+    interface: ib0
+    local-directory: $TMPDIR
+    job-extra: 
+      - '--hint=nomultithread'
+      - '--hint=compute_bound'
+      - '--output=/dev/null'
+      - '--error=/dev/null'
+    extra:
+      - '--lifetime 26m'
+      - '--lifetime-stagger 2m'
+
