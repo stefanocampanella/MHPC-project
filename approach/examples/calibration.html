@@ -46,6 +46,8 @@
     <script src="../../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.18.0/dist/embed-amd.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -367,7 +369,7 @@
 
 <span class="kn">import</span> <span class="nn">nevergrad</span> <span class="k">as</span> <span class="nn">ng</span>
 <span class="kn">from</span> <span class="nn">mhpc_project.matsch_b2</span> <span class="kn">import</span> <span class="n">CalibrationModel</span><span class="p">,</span> <span class="n">Variables</span><span class="p">,</span> <span class="n">Loss</span><span class="p">,</span> <span class="n">NGO</span>
-<span class="kn">from</span> <span class="nn">geotopy.utils</span> <span class="kn">import</span> <span class="n">date_parser</span><span class="p">,</span> <span class="n">comparison_plot</span><span class="p">,</span> <span class="n">ProgressBar</span><span class="p">,</span> <span class="n">ParameterLogger</span>
+<span class="kn">from</span> <span class="nn">geotopy.utils</span> <span class="kn">import</span> <span class="n">date_parser</span><span class="p">,</span> <span class="n">comparison_plot</span><span class="p">,</span> <span class="n">ProgressBar</span><span class="p">,</span> <span class="n">ParametersLogger</span>
 <span class="kn">from</span> <span class="nn">geotopy.measures</span> <span class="kn">import</span> <span class="n">KGE</span>
 </pre></div>
 </div>
@@ -377,9 +379,37 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cluster</span> <span class="o">=</span> <span class="n">SLURMCluster</span><span class="p">()</span>
-<span class="n">cluster</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">maximum_jobs</span><span class="o">=</span><span class="mi">256</span><span class="p">)</span>
+<span class="n">cluster</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">maximum_jobs</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">cluster</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">cluster</span><span class="o">.</span><span class="n">job_script</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>#!/usr/bin/env bash
+
+#SBATCH -J dask-worker
+#SBATCH -e /dev/shm/dask-worker-%J.err
+#SBATCH -o /dev/shm/dask-worker-%J.out
+#SBATCH -p regular2
+#SBATCH -n 1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=2GB
+#SBATCH -t 00:20:00
+#SBATCH --hint=nomultithread
+#SBATCH --hint=compute_bound
+export NUMEXPR_NUM_THREADS=1
+export NUMEXPR_MAX_THREADS=1
+export OMP_NUM_THREADS=1
+export TMPDIR=/dev/shm
+/home/scampane/scratch/MHPC-project/.env/bin/python -m distributed.cli.dask_worker tcp://10.6.0.4:44908 --nthreads 4 --memory-limit 2.00GB --name name --nanny --death-timeout 60 --local-directory $TMPDIR --lifetime 18m --lifetime-stagger 1m --interface ib0
 </pre></div>
 </div>
 </div>
@@ -418,16 +448,16 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Before optimization loss is -0.2476496401298781
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Before optimization loss is 0.7523503598701219
 </pre></div>
 </div>
-<img alt="../../_images/calibration_8_1.png" src="../../_images/calibration_8_1.png" />
+<img alt="../../_images/calibration_9_1.png" src="../../_images/calibration_9_1.png" />
 </div>
 </div>
 <p>Run calibration</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">ParameterLogger</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">massage</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">logger</span> <span class="o">=</span> <span class="n">ParametersLogger</span><span class="p">(</span><span class="n">loss</span><span class="o">.</span><span class="n">massage</span><span class="p">)</span>
 
 <span class="n">calibration</span><span class="o">.</span><span class="n">optimizer</span><span class="o">.</span><span class="n">register_callback</span><span class="p">(</span><span class="s1">&#39;tell&#39;</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
 
@@ -442,8 +472,8 @@
 </div>
 <div class="cell_output docutils container">
 <script type="application/vnd.jupyter.widget-view+json">
-{"model_id": "0b1258df34c5474e953a6eb0087f65ea", "version_major": 2, "version_minor": 0}
-</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(256_w,512)-aCMA-ES (mu_w=131.7,w_1=2%) in dimension 21 (seed=&lt;module &#39;time&#39; (built-in)&gt;, Fri Nov 20 19:27:39 2020)
+{"model_id": "157067df4dbd443b8dd9b7dd7ea46ea2", "version_major": 2, "version_minor": 0}
+</script><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(256_w,512)-aCMA-ES (mu_w=131.7,w_1=2%) in dimension 21 (seed=&lt;module &#39;time&#39; (built-in)&gt;, Mon Nov 23 20:49:04 2020)
 </pre></div>
 </div>
 </div>
@@ -462,10 +492,10 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>After optimization loss is -0.5021433797788915
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>After optimization loss is 0.49543280856944705
 </pre></div>
 </div>
-<img alt="../../_images/calibration_12_1.png" src="../../_images/calibration_12_1.png" />
+<img alt="../../_images/calibration_13_1.png" src="../../_images/calibration_13_1.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -493,99 +523,106 @@
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>0</th>
+      <th>value</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>NVanGenuchten</th>
-      <td>1.254999</td>
+      <td>1.296519</td>
     </tr>
     <tr>
       <th>AlphaVanGenuchten</th>
-      <td>0.000575</td>
+      <td>0.001035</td>
     </tr>
     <tr>
       <th>ThetaSat</th>
-      <td>0.542819</td>
+      <td>0.562008</td>
     </tr>
     <tr>
       <th>ThetaRes</th>
-      <td>0.040146</td>
+      <td>0.054583</td>
     </tr>
     <tr>
       <th>NormalHydrConductivity</th>
-      <td>0.000728</td>
+      <td>0.000701</td>
     </tr>
     <tr>
       <th>SoilRoughness</th>
-      <td>267.444065</td>
+      <td>338.577047</td>
     </tr>
     <tr>
       <th>LSAI</th>
-      <td>0.315429</td>
+      <td>3.222929</td>
     </tr>
     <tr>
       <th>CanopyFraction</th>
-      <td>0.023877</td>
+      <td>0.256034</td>
     </tr>
     <tr>
       <th>DecayCoeffCanopy</th>
-      <td>19.949009</td>
+      <td>57.303975</td>
     </tr>
     <tr>
       <th>RootDepth</th>
-      <td>316.808135</td>
+      <td>156.372730</td>
     </tr>
     <tr>
       <th>MinStomatalRes</th>
-      <td>15.213440</td>
+      <td>70.129593</td>
     </tr>
     <tr>
       <th>VegReflectVis</th>
-      <td>0.082214</td>
+      <td>0.185024</td>
     </tr>
     <tr>
       <th>VegReflNIR</th>
-      <td>0.072452</td>
+      <td>0.052530</td>
     </tr>
     <tr>
       <th>VegTransVis</th>
-      <td>0.036180</td>
+      <td>0.050332</td>
     </tr>
     <tr>
       <th>VegTransNIR</th>
-      <td>0.421136</td>
+      <td>0.481585</td>
     </tr>
     <tr>
       <th>CanDensSurface</th>
-      <td>0.682989</td>
+      <td>4.303592</td>
     </tr>
     <tr>
       <th>SoilAlbVisDry</th>
-      <td>0.222783</td>
+      <td>0.265017</td>
     </tr>
     <tr>
       <th>SoilAlbNIRDry</th>
-      <td>0.186163</td>
+      <td>0.293665</td>
     </tr>
     <tr>
       <th>SoilAlbVisWet</th>
-      <td>0.317674</td>
+      <td>0.269567</td>
     </tr>
     <tr>
       <th>SoilAlbNIRWet</th>
-      <td>0.428613</td>
+      <td>0.351398</td>
     </tr>
     <tr>
       <th>SoilEmissiv</th>
-      <td>0.915356</td>
+      <td>0.977188</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
 </div>
+<p>pd.DataFrame.from_dict(recommendation, orient=’index’, columns=[‘value’])</p>
 </div>
+
+
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"0e32b0c7cfec44b286051dd81ea34c10": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "FloatProgressModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "FloatProgressModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "ProgressView", "bar_style": "", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_62f7876ae86a4c28beb3d1d7c3f0f4b8", "max": 4096.0, "min": 0.0, "orientation": "horizontal", "style": "IPY_MODEL_d970101e82cd4e329d4fdae5d7f14945", "value": 4096.0}}, "157067df4dbd443b8dd9b7dd7ea46ea2": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HBoxModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HBoxModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HBoxView", "box_style": "", "children": ["IPY_MODEL_3e7e888269514a64a144376d45302baa", "IPY_MODEL_0e32b0c7cfec44b286051dd81ea34c10", "IPY_MODEL_444e53d53b274d41b9afbb203c536548"], "layout": "IPY_MODEL_39df715115014eb4a69a4fa5a1f89ec0"}}, "30e11b538eaf4832800d8f52ee6230d6": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "39df715115014eb4a69a4fa5a1f89ec0": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "3e7e888269514a64a144376d45302baa": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_30e11b538eaf4832800d8f52ee6230d6", "placeholder": "\u200b", "style": "IPY_MODEL_b95e99af4d834292bc3d37052aa6a211", "value": "(Current loss: 0.4954): 100%"}}, "444e53d53b274d41b9afbb203c536548": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "HTMLModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "HTMLModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "1.5.0", "_view_name": "HTMLView", "description": "", "description_tooltip": null, "layout": "IPY_MODEL_7fd33a507bed4eeeb0b480e800e07cd6", "placeholder": "\u200b", "style": "IPY_MODEL_caf4faaf575043959220fca7d5dd4aa7", "value": " 4096/4096 [19:01&lt;00:00,  3.77s/it]"}}, "62f7876ae86a4c28beb3d1d7c3f0f4b8": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "7fd33a507bed4eeeb0b480e800e07cd6": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "b95e99af4d834292bc3d37052aa6a211": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "caf4faaf575043959220fca7d5dd4aa7": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "DescriptionStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "DescriptionStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "description_width": ""}}, "d970101e82cd4e329d4fdae5d7f14945": {"model_module": "@jupyter-widgets/controls", "model_module_version": "1.5.0", "model_name": "ProgressStyleModel", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_model_name": "ProgressStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "StyleView", "bar_color": null, "description_width": ""}}}, "version_major": 2, "version_minor": 0}
+</script>
+
 
     <script type="text/x-thebe-config">
     {
