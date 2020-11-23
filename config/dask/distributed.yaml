@@ -1,4 +1,6 @@
 distributed:
+  scheduler:
+    allowed-failures: 32
   worker:
     use-file-locking: false
     memory:
@@ -8,4 +10,6 @@ distributed:
       terminate: 0.95
     allowed-failures: 32
   comm:
+    timeouts:
+      connect: 20
     compression: null
