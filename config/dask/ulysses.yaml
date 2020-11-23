@@ -15,7 +15,9 @@ jobqueue:
     queue: regular2
     project: null
     walltime: '00:20:00'
-    extra: []
+    extra:
+      - '--lifetime 26m'
+      - '--lifetime-stagger 2m'
     env-extra:
       - 'NUMEXPR_NUM_THREADS=1'
       - 'NUMEXPR_MAX_THREADS=1'
