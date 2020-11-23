@@ -144,16 +144,13 @@ class Loss(gto.Loss):
         return (), settings
 
 
-class Calibration(gto.Calibration):
+class NGO(gto.Calibration):
 
-    def __init__(self, loss, settings):
+    def __init__(self, loss, **kwargs):
 
-        super().__init__(loss, settings)
-        budget = self.settings['budget']
-        num_workers = self.settings['num_workers']
-        self._optimizer_istance = ng.optimizers.NGO(self.parametrization,
-                                                    budget=budget,
-                                                    num_workers=num_workers)
+        super().__init__(loss)
+
+        self._optimizer_istance = ng.optimizers.NGO(self.parametrization, **kwargs)
 
     @property
     def parametrization(self):
@@ -178,5 +175,6 @@ class Calibration(gto.Calibration):
         recommendation = best.parameter
         _, recommendation = self.loss.massage(*recommendation.args)
         loss = best.mean
+
         return recommendation, loss
 
