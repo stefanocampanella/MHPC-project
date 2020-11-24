@@ -9,6 +9,7 @@ import pandas as pd
 class CalibrationModel(gto.GEOtopRun):
 
     def postprocess(self, working_dir):
+
         liq_path = joinpath(working_dir, 'theta_liq.txt')
         liq = pd.read_csv(liq_path,
                           na_values=['-9999'],
@@ -22,31 +23,21 @@ class CalibrationModel(gto.GEOtopRun):
                           low_memory=False,
                           squeeze=True)
 
-        ice_path = joinpath(working_dir, 'theta_ice.txt')
-        ice = pd.read_csv(ice_path,
-                          na_values=['-9999'],
-                          usecols=[0, 6],
-                          skiprows=1,
-                          header=0,
-                          names=['datetime', 'soil_moisture_content_50'],
-                          parse_dates=[0],
-                          date_parser=date_parser,
-                          index_col=0,
-                          low_memory=False,
-                          squeeze=True)
-
-        return ice + liq
+        return liq
 
 
 class FullModel(gto.GEOtopRun):
 
     def preprocess(self, working_dir, *args, **kwargs):
+
+        self.settings['SoilIceContentProfileFileWriteEnd'] = '"theta_ice"'
         self.settings['PointAll'] = True
         self.settings['PointOutputFileWriteEnd'] = '"point"'
 
         super().preprocess(working_dir, *args, **kwargs)
 
     def postprocess(self, working_dir):
+
         liq_path = joinpath(working_dir, 'theta_liq.txt')
         liq = pd.read_csv(liq_path,
                           na_values=['-9999'],
