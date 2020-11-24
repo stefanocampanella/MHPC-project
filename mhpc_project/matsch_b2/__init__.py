@@ -162,11 +162,9 @@ class NGO(gto.Calibration):
 
     def __call__(self, *args, **kwargs):
 
-        self.optimizer.minimize(self.loss, *args, **kwargs)
-        best = self.optimizer.current_bests['pessimistic']
-        recommendation = best.parameter
+        recommendation = self.optimizer.minimize(self.loss, *args, **kwargs)
         _, recommendation = self.loss.massage(*recommendation.args)
-        loss = best.mean
+        loss = self.loss(**recommendation)
 
         return recommendation, loss
 
@@ -174,8 +172,8 @@ class NGO(gto.Calibration):
 
         bounds = self.loss.variables.bounds
         massage = self.loss.massage
-        lower = pd.DataFrame(massage([x for (x, _) in bounds]), orient='index', columns=['lower'])
-        upper = pd.DataFrame(massage([x for (_, x) in bounds]), orient='index', columns=['upper'])
+        lower = pd.DataFrame.from_dict(massage([x for (x, _) in bounds]), orient='index', columns=['lower'])
+        upper = pd.DataFrame.from_dict(massage([x for (_, x) in bounds]), orient='index', columns=['upper'])
         best = pd.DataFrame.from_dict(recommendation, orient='index', columns=['best'])
 
         return best.append([lower, upper], sort=False)
