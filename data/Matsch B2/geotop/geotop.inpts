@@ -188,6 +188,7 @@ HorizonMeteoStationFile = "horizon"
 !PointOutputFileWriteEnd = "point"
 
 SoilAll = 1
-SoilPlotDepths = 0.5, 2
+!SoilPlotDepths = 0.5, 2
+SoilPlotDepths = 0.5
 SoilLiqContentProfileFileWriteEnd = "theta_liq"
 !SoilIceContentProfileFileWriteEnd = "theta_ice"
