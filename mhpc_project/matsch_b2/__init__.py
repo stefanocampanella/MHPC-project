@@ -169,3 +169,14 @@ class NGO(gto.Calibration):
 
         return recommendation, loss
 
+    def to_dataframe(self, recommendation):
+
+        bounds = self.loss.variables.bounds
+        massage = self.loss.massage
+        lower = pd.DataFrame(massage([x for (x, _) in bounds]), orient='index', columns=['lower'])
+        upper = pd.DataFrame(massage([x for (_, x) in bounds]), orient='index', columns=['upper'])
+        best = pd.DataFrame.from_dict(recommendation, orient='index', columns=['best'])
+
+        return best.append([lower, upper], sort=False)
+
+
