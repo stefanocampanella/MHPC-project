@@ -66,27 +66,27 @@ DtPlotPoint = 1
 ! ====
 
 ! Inputs
-ThresSnowSoilRough = 10
-ThresSnowVegUp = 1000
-ThresSnowVegDown = 1000
+ThresSnowSoilRough = 100.0
+ThresSnowVegUp = 50
+ThresSnowVegDown = 10
 
 ! Vegetation
 ! ==========
 
 ! Inputs
-VegHeight = 1000
+VegHeight = 400.0
 LSAI = 1
-CanopyFraction = 0.0
-DecayCoeffCanopy = 2.5
+CanopyFraction = 1.0
+DecayCoeffCanopy = 2.0
 VegSnowBurying = 1 
-RootDepth = 300
-MinStomatalRes = 60
-VegReflectVis = 0.2
-VegReflNIR = 0.2
-VegTransVis = 0.2
-VegTransNIR = 0.2
+RootDepth = 250.0
+MinStomatalRes = 25.0
+VegReflectVis = 0.1
+VegReflNIR = 0.25
+VegTransVis = 0.07
+VegTransNIR = 0.25
 LeafAngles = 0 
-CanDensSurface = 2
+CanDensSurface = 0.5
 ! Numerics
 CanopyMaxIter = 2
 LocMaxIter = 2
@@ -101,11 +101,11 @@ BusingerMaxIter = 2
 LWinParameterization = 4
 MoninObukhov = 2
 NumLandCoverTypes = 1 
-SoilRoughness = 10
-SoilAlbVisDry = 0.2
-SoilAlbNIRDry = 0.2
-SoilAlbVisWet = 0.2
-SoilAlbNIRWet = 0.2
+SoilRoughness = 100.0
+SoilAlbVisDry = 0.15
+SoilAlbNIRDry = 0.25
+SoilAlbVisWet = 0.15
+SoilAlbNIRWet = 0.25
 SoilEmissiv = 0.96
 
 ! Soil infiltration
