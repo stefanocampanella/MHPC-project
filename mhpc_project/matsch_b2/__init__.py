@@ -1,16 +1,16 @@
 from os.path import join as joinpath
 
+import nevergrad as ng
+import numpy as np
+import pandas as pd
+
 import geotopy.optim as gto
 from geotopy.utils import date_parser
-import nevergrad as ng
-import pandas as pd
-import numpy as np
 
 
 class CalibrationModel(gto.GEOtopRun):
 
     def postprocess(self, working_dir):
-
         liq_path = joinpath(working_dir, 'theta_liq.txt')
         liq = pd.read_csv(liq_path,
                           na_values=['-9999'],
@@ -30,7 +30,6 @@ class CalibrationModel(gto.GEOtopRun):
 class FullModel(gto.GEOtopRun):
 
     def preprocess(self, working_dir, *args, **kwargs):
-
         self.settings['SoilPlotDepths'] = [50, 200]
         self.settings['SoilIceContentProfileFileWriteEnd'] = '"theta_ice"'
         self.settings['PointAll'] = True
@@ -39,7 +38,6 @@ class FullModel(gto.GEOtopRun):
         super().preprocess(working_dir, *args, **kwargs)
 
     def postprocess(self, working_dir):
-
         liq_path = joinpath(working_dir, 'theta_liq.txt')
         liq = pd.read_csv(liq_path,
                           na_values=['-9999'],
@@ -103,7 +101,6 @@ class FullModel(gto.GEOtopRun):
 class Variables(gto.Variables):
 
     def __init__(self, *paths):
-
         data = pd.DataFrame()
         for path in paths:
             data = data.append(pd.read_csv(path, index_col='name'))
@@ -145,36 +142,31 @@ class Loss(gto.Loss):
 class NGO(gto.Calibration):
 
     def __init__(self, loss, **kwargs):
-
         super().__init__(loss)
 
         self._optimizer_istance = ng.optimizers.NGO(self.parametrization, **kwargs)
 
     @property
     def parametrization(self):
-
         shape = (self.loss.variables.num_vars,)
 
         array = ng.p.Array(shape=shape, mutable_sigma=True)
-        array.set_mutation(sigma=1/6)
+        array.set_mutation(sigma=1 / 6)
         array.set_bounds(lower=0.0, upper=1.0)
 
         return array
 
     @property
     def optimizer(self):
-
         return self._optimizer_istance
 
     def __call__(self, *args, **kwargs):
-
         recommendation = self.optimizer.minimize(self.loss, *args, **kwargs)
         _, recommendation = self.loss.massage(*recommendation.args)
 
         return recommendation
 
     def to_dataframe(self, recommendation):
-
         num_vars = self.loss.variables.num_vars
         massage = self.loss.massage
         _, lower = massage(np.zeros(num_vars))
