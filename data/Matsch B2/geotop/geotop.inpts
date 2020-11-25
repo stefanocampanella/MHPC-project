@@ -5,12 +5,11 @@
 ! Author: Stefano Campanella
 ! ---
 
-
 ! Domain definition
 ! =================
 
 ! Inputs
-SoilLayerThicknesses = 20, 60, 240, 480, 1200, 3000, 5000, 12000, 28000
+SoilLayerThicknesses = 5, 15, 20, 40, 80, 160, 320, 640, 1280, 2440, 5000
 PointSoilType = 1
 PointElevation = 1480
 PointSlope = 15
@@ -62,27 +61,19 @@ HeaderLWin = "LWin"
 ! Outputs
 DtPlotPoint = 1
 
-! Snow
-! ====
-
-! Inputs
-ThresSnowSoilRough = 100.0
-ThresSnowVegUp = 50
-ThresSnowVegDown = 10
-
 ! Vegetation
 ! ==========
 
 ! Inputs
 VegHeight = 400.0
-LSAI = 1
+LSAI = 4
 CanopyFraction = 1.0
 DecayCoeffCanopy = 2.0
 VegSnowBurying = 1 
 RootDepth = 250.0
 MinStomatalRes = 25.0
 VegReflectVis = 0.1
-VegReflNIR = 0.25
+VegReflNIR = 0.2
 VegTransVis = 0.07
 VegTransNIR = 0.25
 LeafAngles = 0 
@@ -125,7 +116,7 @@ RichardTol = 1.E-7
 RichardMaxIter = 100 
 ! Outputs
 SoilAll = 1
-SoilPlotDepths = 0.5
+SoilPlotDepths = 50
 SoilLiqContentProfileFileWriteEnd = "theta_liq"
 
 ! Soil temperature
@@ -138,23 +129,6 @@ HeatEqTol = 1.E-4
 HeatEqMaxIter = 200 
 
 
-! Discharge at the outlet
-! =======================
-
-! Inputs
-SurFlowResLand = 0.5 
-SurFlowResExp = 0.67
-MinSupWaterDepthLand = 1 
-MinTimeStepSupFlow = 1 
-! Outputs
-DtPlotDischarge = 1
-
-! Basin synthetic outputs
-! =======================
-
-! Outputs
-DtPlotBasin = 1
-
 ! Boundary Conditions
 ! ===================
 
@@ -162,10 +136,4 @@ DtPlotBasin = 1
 FreeDrainageAtBottom = 1
 InitSoilTemp = 4 
 
-! Undocumented
-! ============
-
-!MinTimeStep=400
-!MinLambdaWater = 1.E-7 
-!MaxCourantSupFlowLand = 0.1 
 

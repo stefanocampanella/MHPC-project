@@ -1,5 +1,5 @@
 name,suggested,lower,upper,type
-LSAI,1.0,0.0,1.0,scalar
+LSAI,1.0,0.0,5.0,scalar
 CanopyFraction,0.0,0.0,1.0,scalar
 DecayCoeffCanopy,2.5,0,12.5,scalar
 VegSnowBurying,1.0,0.0,5.0,scalar

@@ -31,7 +31,7 @@ class FullModel(gto.GEOtopRun):
 
     def preprocess(self, working_dir, *args, **kwargs):
 
-        self.settings['SoilPlotDepths'] = [0.5, 2]
+        self.settings['SoilPlotDepths'] = [50, 200]
         self.settings['SoilIceContentProfileFileWriteEnd'] = '"theta_ice"'
         self.settings['PointAll'] = True
         self.settings['PointOutputFileWriteEnd'] = '"point"'
