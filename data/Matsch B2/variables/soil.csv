@@ -1,0 +1,7 @@
+name,suggested,lower,upper,type
+SoilRoughness,10,0.0,1000.0,scalar
+SoilAlbVisDry,0.2,0.0,1.0,scalar
+SoilAlbNIRDry,0.2,0.0,1.0,scalar
+SoilAlbVisWet,0.2,0.0,1.0,scalar
+SoilAlbNIRWet,0.2,0.0,1.0,scalar
+SoilEmissiv,0.96,0.0,1.0,scalar

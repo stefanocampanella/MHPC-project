@@ -4,6 +4,7 @@ import geotopy.optim as gto
 from geotopy.utils import date_parser
 import nevergrad as ng
 import pandas as pd
+import numpy as np
 
 
 class CalibrationModel(gto.GEOtopRun):
@@ -101,8 +102,11 @@ class FullModel(gto.GEOtopRun):
 
 class Variables(gto.Variables):
 
-    def __init__(self, path):
-        data = pd.read_csv(path, index_col='name')
+    def __init__(self, *paths):
+
+        data = pd.DataFrame()
+        for path in paths:
+            data = data.append(pd.read_csv(path, index_col='name'))
         self.data = data
 
     @property
@@ -131,7 +135,9 @@ class Loss(gto.Loss):
         settings = {}
         for x, name, (a, b), t in zip(xs, names, bounds, types):
             y = a + x * (b - a)
-            settings[name] = y if t != 'log' else 10 ** y
+            if t == 'log':
+                y = 10 ** y
+            settings[name] = y
 
         return (), settings
 
@@ -169,12 +175,12 @@ class NGO(gto.Calibration):
 
     def to_dataframe(self, recommendation):
 
-        bounds = self.loss.variables.bounds
+        num_vars = self.loss.variables.num_vars
         massage = self.loss.massage
-        lower = pd.DataFrame.from_dict(massage([x for (x, _) in bounds]), orient='index', columns=['lower'])
-        upper = pd.DataFrame.from_dict(massage([x for (_, x) in bounds]), orient='index', columns=['upper'])
+        _, lower = massage(np.zeros(num_vars))
+        lower = pd.DataFrame.from_dict(lower, orient='index', columns=['lower'])
+        _, upper = massage(np.ones(num_vars))
+        upper = pd.DataFrame.from_dict(upper, orient='index', columns=['upper'])
         best = pd.DataFrame.from_dict(recommendation, orient='index', columns=['best'])
 
-        return best.append([lower, upper], sort=False)
-
-
+        return pd.concat([lower, upper, best], axis=1)
