@@ -164,9 +164,8 @@ class NGO(gto.Calibration):
 
         recommendation = self.optimizer.minimize(self.loss, *args, **kwargs)
         _, recommendation = self.loss.massage(*recommendation.args)
-        loss = self.loss(**recommendation)
 
-        return recommendation, loss
+        return recommendation
 
     def to_dataframe(self, recommendation):
 
