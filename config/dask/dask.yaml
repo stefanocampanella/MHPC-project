@@ -1,0 +1,2 @@
+dask:
+  temporary-directory: /scratch/$USER/dask-worker-space

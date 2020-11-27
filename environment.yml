@@ -14,18 +14,17 @@ dependencies:
   - seaborn
   - dask
   - dask-jobqueue
-  - joblib
   - jupyterlab
   - nodejs
   - geotop
+  - pyarrow
   - pip:
-      - nevergrad
-      - salib
-      - hiplot
       - git+https://github.com/stefanocampanella/GEOtoPy@master
+      - nevergrad
       - git+https://github.com/AIworx-Labs/chocolate@master
-      - joblib
-      - tqdm
+      - salib
       - papermill
-      - scrapbook
+      - nteract-scrapbook
       - jupyter-book
+      - tqdm
+      - hiplot

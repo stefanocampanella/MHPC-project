@@ -1,6 +1,14 @@
 distributed:
+
+  logging:
+    distributed: info
+    bokeh: critical
+    tornado: critical
+
   scheduler:
-    allowed-failures: 32
+    allowed-failures: 8 # really depends on if using jobqueue or not
+    idle-timeout: 1h
+
   worker:
     use-file-locking: false
     memory:
@@ -10,6 +18,10 @@ distributed:
       terminate: 0.95
     allowed-failures: 32
   comm:
+    offload: False
+    socket-backlog: 4096
     timeouts:
       connect: 20
     compression: null
+
+

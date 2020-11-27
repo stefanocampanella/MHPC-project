@@ -73,14 +73,6 @@ class FullModel(gto.GEOtopRun):
 
         sim = pd.DataFrame(index=point.index)
 
-        sim['rainfall_amount'] = point['Prain_over_canopy[mm]'] + point['Psnow_over_canopy[mm]']
-
-        sim['wind_speed'] = point['Wind_speed[m/s]']
-
-        sim['relative_humidity'] = point['Relative_Humidity[-]']
-
-        sim['air_temperature'] = point['Tair[C]']
-
         sim['surface_downwelling_shortwave_flux'] = point['SWin[W/m2]']
 
         sim['soil_moisture_content_50'] = ice['soil_moisture_content_50'] + liq['soil_moisture_content_50']
@@ -166,13 +158,13 @@ class NGO(gto.Calibration):
 
         return recommendation
 
-    def to_dataframe(self, recommendation):
+    def to_dataframe(self, recommendation, name='recommendation'):
         num_vars = self.loss.variables.num_vars
         massage = self.loss.massage
         _, lower = massage(np.zeros(num_vars))
         lower = pd.DataFrame.from_dict(lower, orient='index', columns=['lower'])
         _, upper = massage(np.ones(num_vars))
         upper = pd.DataFrame.from_dict(upper, orient='index', columns=['upper'])
-        best = pd.DataFrame.from_dict(recommendation, orient='index', columns=['best'])
+        best = pd.DataFrame.from_dict(recommendation, orient='index', columns=[name])
 
         return pd.concat([lower, upper, best], axis=1)

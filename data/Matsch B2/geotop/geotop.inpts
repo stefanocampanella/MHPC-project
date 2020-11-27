@@ -6,7 +6,6 @@
 
 ! Inputs
 SoilLayerThicknesses = 5, 15, 20, 40, 80, 160, 320, 640, 1280, 2440, 5000
-PointSoilType = 1
 PointElevation = 1480
 PointSlope = 15
 PointAspect = 225
@@ -18,21 +17,20 @@ PointLongitude = 10.579
 
 ! Inputs
 FlagSkyViewFactor = 1
-TimeStepEnergyAndWater = 900
-InitDateDDMMYYYYhhmm = 01/10/2009 23:00 
-EndDateDDMMYYYYhhmm = 11/01/2016 07:00
+TimeStepEnergyAndWater = 600
+InitDateDDMMYYYYhhmm = 02/10/2009 01:00
+EndDateDDMMYYYYhhmm = 11/01/2016 06:00
 StandardTimeSimulation = 1
 PointSim = 1
 RecoverSim = 0
 WaterBalance = 1
 EnergyBalance = 1
-SoilLayerTypes = 1
 
 ! Meteo forcings
 ! ==============
 
 ! Inputs
-MeteoFile = "meteoB2_irr_"
+MeteoFile = "meteo"
 HorizonMeteoStationFile = "horizon" 
 NumberOfMeteoStations = 1
 MeteoStationCoordinateX = 620815
@@ -41,19 +39,12 @@ MeteoStationElevation = 1480
 MeteoStationWindVelocitySensorHeight = 2.5
 MeteoStationTemperatureSensorHeight = 2
 ! Headers
-HeaderDateDDMMYYYYhhmmMeteo = "Date"
-HeaderJulianDayfrom0Meteo = "JDfrom0"
-HeaderIPrec = "Iprec"
-HeaderWindVelocity = "WindSp"
-HeaderWindDirection = "WindDir"
-HeaderWindX = "WindX" 
-HeaderWindY = "WindY"
-HeaderRH = "RelHum"
-HeaderAirTemp = "AirT" 
-HeaderDewTemp = "DewT"
-HeaderSWglobal = "Swglobal" 
-HeaderCloudSWTransmissivity = "CloudTrans" 
-HeaderLWin = "LWin"
+HeaderDateDDMMYYYYhhmmMeteo = "datetime"
+HeaderIPrec = "rainfall_amount"
+HeaderWindVelocity = "wind_speed"
+HeaderRH = "relative_humidity"
+HeaderAirTemp = "air_temperature" 
+HeaderSWglobal = "shortwave_global" 
 ! Outputs
 DtPlotPoint = 1
 
@@ -74,20 +65,11 @@ VegTransVis = 0.07
 VegTransNIR = 0.25
 LeafAngles = 0 
 CanDensSurface = 0.5
-! Numerics
-CanopyMaxIter = 2
-LocMaxIter = 2
-TsMaxIter = 2
-CanopyStabCorrection = 1
-BusingerMaxIter = 2 
 
 ! Surface fluxes
 ! ==============
 
 ! Inputs
-LWinParameterization = 4
-MoninObukhov = 2
-NumLandCoverTypes = 1 
 SoilRoughness = 100.0
 SoilAlbVisDry = 0.15
 SoilAlbNIRDry = 0.25
@@ -106,27 +88,14 @@ FieldCapacity = 0.25
 ThetaSat = 0.5
 AlphaVanGenuchten = 0.004
 NVanGenuchten = 1.3
-VMualem = 0.5
-SpecificStorativity = 1e-7
-RichardTol = 1.E-7 
-RichardMaxIter = 100 
 ! Outputs
 SoilAll = 1
 SoilPlotDepths = 50
 SoilLiqContentProfileFileWriteEnd = "theta_liq"
-
-! Soil temperature
-! ================
-
-! Inputs
-ThermalConductivitySoilSolids = 1.9
-ThermalCapacitySoilSolids = 2.16E+06
-HeatEqTol = 1.E-4 
-HeatEqMaxIter = 200 
 
 ! Boundary Conditions
 ! ===================
 
 ! Inputs
 FreeDrainageAtBottom = 1
-InitSoilTemp = 4
+

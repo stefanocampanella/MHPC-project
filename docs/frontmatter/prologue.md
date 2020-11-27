@@ -1,5 +1,12 @@
 # Prologue
 
+```{epigraph}
+It just happended to be an unusual experience. By training I was a scientist: by vocation I was a writer.
+
+-- C. P. Snow, _The Two Cultures_
+```
+
+
 In this brief thesis, I will discuss my final project for the 2019/20 edition of the Master in High-Performance Computing held by SISSA and ICTP. 
 
 ## Outline of the Thesis
