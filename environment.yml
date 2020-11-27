@@ -19,13 +19,13 @@ dependencies:
   - nodejs
   - geotop
   - pip:
-    - nevergrad
-    - salib
-    - hiplot
-    - git+https://github.com/stefanocampanella/GEOtoPy@master
-    - git+https://github.com/AIworx-Labs/chocolate@master
-    - joblib
-    - tqdm
-    - papermill
-    - scrapbook
-    - jupyter-book
+      - nevergrad
+      - salib
+      - hiplot
+      - git+https://github.com/stefanocampanella/GEOtoPy@master
+      - git+https://github.com/AIworx-Labs/chocolate@master
+      - joblib
+      - tqdm
+      - papermill
+      - scrapbook
+      - jupyter-book

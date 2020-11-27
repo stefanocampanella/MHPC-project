@@ -1,9 +1,5 @@
-! ---
 ! Station B2 in Montecini
-! 
-! Last revision: 25/11/2020
-! Author: Stefano Campanella
-! ---
+! ========================
 
 ! Domain definition
 ! =================
@@ -128,12 +124,9 @@ ThermalCapacitySoilSolids = 2.16E+06
 HeatEqTol = 1.E-4 
 HeatEqMaxIter = 200 
 
-
 ! Boundary Conditions
 ! ===================
 
 ! Inputs
 FreeDrainageAtBottom = 1
-InitSoilTemp = 4 
-
-
+InitSoilTemp = 4

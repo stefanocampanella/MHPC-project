@@ -2,7 +2,7 @@
 
 - part:
   chapters:
-  - file: frontmatter/prologue
+    - file: frontmatter/prologue
 
 - part: Introduction
   chapters:
@@ -38,7 +38,7 @@
         - file: approach/examples/plots
         - file: approach/examples/sensitivity_analysis
         - file: approach/examples/calibration
-  
+
 - part: Results
   chapters:
     - file: results/study
