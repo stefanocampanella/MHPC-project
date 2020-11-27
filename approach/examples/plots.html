@@ -364,45 +364,42 @@
 
 <span class="kn">from</span> <span class="nn">mhpc_project.matsch_b2</span> <span class="kn">import</span> <span class="n">FullModel</span>
 <span class="kn">from</span> <span class="nn">geotopy.utils</span> <span class="kn">import</span> <span class="n">date_parser</span><span class="p">,</span> <span class="n">comparison_plot</span>
+
+<span class="kn">import</span> <span class="nn">scrapbook</span> <span class="k">as</span> <span class="nn">sb</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">targets</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">(</span><span class="s1">&#39;rainfall_amount&#39;</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="s1">&#39;Rainfall Amount&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;m/s&#39;</span><span class="p">,</span> <span class="s1">&#39;Wind Speed&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;relative_humidity&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Relative Humidity&#39;</span><span class="p">),</span>
-     <span class="p">(</span><span class="s1">&#39;air_temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;Air Temperature&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;surface_downwelling_shortwave_flux&#39;</span><span class="p">,</span> <span class="s1">&#39;W/m2&#39;</span><span class="p">,</span> <span class="s1">&#39;Downwelling Shortwave Flux&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;soil_moisture_content_50&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Soil Moisture at 50mm&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;soil_moisture_content_200&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Soil Moisture at 200mm&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;latent_heat_flux_in_air&#39;</span><span class="p">,</span> <span class="s1">&#39;W/m2&#39;</span><span class="p">,</span> <span class="s1">&#39;Latent Heat Flux&#39;</span><span class="p">),</span>
-    <span class="p">(</span><span class="s1">&#39;sensible_heat_flux_in_air&#39;</span><span class="p">,</span> <span class="s1">&#39;W/m2&#39;</span><span class="p">,</span> <span class="s1">&#39;Sensible Heat Flux&#39;</span><span class="p">)</span>
-<span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">FullModel</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/geotop&#39;</span><span class="p">)</span>
+<span class="n">simulation</span> <span class="o">=</span> <span class="n">model</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">meteo_targets</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;rainfall_amount&#39;</span><span class="p">,</span> <span class="s1">&#39;mm&#39;</span><span class="p">,</span> <span class="s1">&#39;Rainfall Amount&#39;</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s1">&#39;wind_speed&#39;</span><span class="p">,</span> <span class="s1">&#39;m/s&#39;</span><span class="p">,</span> <span class="s1">&#39;Wind Speed&#39;</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s1">&#39;relative_humidity&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Relative Humidity&#39;</span><span class="p">),</span>
+                 <span class="p">(</span><span class="s1">&#39;air_temperature&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;Air Temperature&#39;</span><span class="p">)]</span>
 
-<span class="n">observations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/obs.csv&#39;</span><span class="p">,</span>
-                           <span class="n">na_values</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;-9999&#39;</span><span class="p">,</span> <span class="s1">&#39;-99.99&#39;</span><span class="p">],</span>
+<span class="n">meteo</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/geotop/meteo0001.txt&#39;</span><span class="p">,</span>
                            <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
                            <span class="n">date_parser</span><span class="o">=</span><span class="n">date_parser</span><span class="p">,</span>
+                           <span class="n">na_values</span><span class="o">=-</span><span class="mi">9999</span><span class="p">,</span>
                            <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">observations</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;datetime&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">FullModel</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/geotop&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">simulation</span> <span class="o">=</span> <span class="n">model</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">targets</span><span class="p">:</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">meteo_targets</span><span class="p">:</span>
     <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
-    <span class="n">comparison_plot</span><span class="p">(</span><span class="n">observations</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
-                    <span class="n">simulation</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
-                    <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span>
-                    <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">comparison_plot</span><span class="p">(</span><span class="n">meteo</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+                          <span class="mi">100</span> <span class="o">*</span> <span class="n">simulation</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;relative_humidity&#39;</span> <span class="k">else</span> <span class="n">simulation</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+                          <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span>
+                          <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">)</span>
+    
+    <span class="n">sb</span><span class="o">.</span><span class="n">glue</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="s1">&#39;display&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -411,11 +408,39 @@
 <img alt="../../_images/plots_3_3.png" src="../../_images/plots_3_3.png" />
 <img alt="../../_images/plots_3_5.png" src="../../_images/plots_3_5.png" />
 <img alt="../../_images/plots_3_7.png" src="../../_images/plots_3_7.png" />
-<img alt="../../_images/plots_3_9.png" src="../../_images/plots_3_9.png" />
-<img alt="../../_images/plots_3_11.png" src="../../_images/plots_3_11.png" />
-<img alt="../../_images/plots_3_13.png" src="../../_images/plots_3_13.png" />
-<img alt="../../_images/plots_3_15.png" src="../../_images/plots_3_15.png" />
-<img alt="../../_images/plots_3_17.png" src="../../_images/plots_3_17.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">obs_targets</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;surface_downwelling_shortwave_flux&#39;</span><span class="p">,</span> <span class="s1">&#39;W/m2&#39;</span><span class="p">,</span> <span class="s1">&#39;Downwelling Shortwave Flux&#39;</span><span class="p">),</span>
+           <span class="p">(</span><span class="s1">&#39;soil_moisture_content_50&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Soil Moisture at 50mm&#39;</span><span class="p">),</span>
+           <span class="p">(</span><span class="s1">&#39;soil_moisture_content_200&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Soil Moisture at 200mm&#39;</span><span class="p">),</span>
+           <span class="p">(</span><span class="s1">&#39;latent_heat_flux_in_air&#39;</span><span class="p">,</span> <span class="s1">&#39;W/m2&#39;</span><span class="p">,</span> <span class="s1">&#39;Latent Heat Flux&#39;</span><span class="p">),</span>
+           <span class="p">(</span><span class="s1">&#39;sensible_heat_flux_in_air&#39;</span><span class="p">,</span> <span class="s1">&#39;W/m2&#39;</span><span class="p">,</span> <span class="s1">&#39;Sensible Heat Flux&#39;</span><span class="p">)]</span>
+
+<span class="n">observations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/Matsch B2/observations/obs.csv&#39;</span><span class="p">,</span>
+                           <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                           <span class="n">date_parser</span><span class="o">=</span><span class="n">date_parser</span><span class="p">,</span>
+                           <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">unit</span><span class="p">,</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">obs_targets</span><span class="p">:</span>
+    <span class="n">display</span><span class="p">(</span><span class="n">Markdown</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;# </span><span class="si">{</span><span class="n">desc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">comparison_plot</span><span class="p">(</span><span class="n">observations</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+                          <span class="n">simulation</span><span class="p">[</span><span class="n">name</span><span class="p">],</span>
+                          <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span>
+                          <span class="n">unit</span><span class="o">=</span><span class="n">unit</span><span class="p">)</span>
+    
+    <span class="n">sb</span><span class="o">.</span><span class="n">glue</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="s1">&#39;display&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/plots_4_1.png" src="../../_images/plots_4_1.png" />
+<img alt="../../_images/plots_4_3.png" src="../../_images/plots_4_3.png" />
+<img alt="../../_images/plots_4_5.png" src="../../_images/plots_4_5.png" />
+<img alt="../../_images/plots_4_7.png" src="../../_images/plots_4_7.png" />
+<img alt="../../_images/plots_4_9.png" src="../../_images/plots_4_9.png" />
 </div>
 </div>
 </div>
