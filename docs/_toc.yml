@@ -2,18 +2,16 @@
 
 - part:
   chapters:
-    - file: frontmatter/prologue
+    - file: prologue
 
 - part: Introduction
   chapters:
     - file: intro/hydrology
-    - file: intro/hydrological_modeling
     - file: intro/geotop
 
 - part: Motivations
   chapters:
     - file: motivations/calibration
-    - file: motivations/hyperparameter_optimization
     - file: motivations/hpc
 
 - part: Problem

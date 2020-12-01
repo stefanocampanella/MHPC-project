@@ -1,4 +1,4 @@
-# GEOtop Calibration or Finding a Needle in the Haystack
+# GEOtop calibration or finding the needle in the haystack
 
 As previously discussed, GEOtop has many parameters. Their large number is the result of assembling many different submodels of statistical, physical (i.e. from first principles) and phenomenological nature. Not all of these parameters can be directly measured with an instrument or inferred in some other way than calibration. This fact is especially actual for the ones found in phenomenological relations, think for example to the Van Genuchten equation for soil retention. Furthermore, even when there is a straightforward experimental procedure to determine them, their value is affected by uncertainties, which could be large.
 
