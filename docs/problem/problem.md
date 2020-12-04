@@ -1,14 +1,5 @@
 # Formalish definition of the problem
 
-```{epigraph}
-From a modern perspective, it's a miracle that so many gothic structures had been successfully completed without the help of modern material science, computer modelling, finite element analysis, and general math and physics. I hope future generations will be as admiring of the programming skills we've been
-displaying in building complex operating systems, web servers, and the
-internet infrastructure. And, frankly, they should, because we've done
-all this based on very flimsy theoretical foundations.
-
--- Bartosz Milewski, _Category Theory for Programmers_
-```
-
 In this chapter, I would like to pinpoint in mathematical terms the ideas behind the numerical experiments with which this thesis is concerned. The following is far from a rigorous treatment, may seem pretentious or naive, and probably it is. Nonetheless, I think it's helpful to have a mental model of the computations that are going to be performed.
 
 As more thoroughly explained in the previous chapters, we are concerned with the calibration of the GEOtop hydrological model. Calibration means to find the values of the input parameters that one has to set to obtain the best possible overlapping between the outputs of a simulation and the experimental data. 
