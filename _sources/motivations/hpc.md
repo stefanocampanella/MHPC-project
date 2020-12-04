@@ -1,7 +1,9 @@
 # The need for HPC
 
 ```{epigraph}
-HPC is the art of taking a CPU-bound computation and making it I/O bound
+The old joke is "HPC is the art of taking a CPU-bound computation and making it I/O bound"
+
+-- dnautics, comment on Hacker News
 ```
 
 I anticipated that the calibration process is time-consuming. What does this mean exactly? 
