@@ -1,4 +1,4 @@
-# The Need for HPC
+# The need for HPC
 
 ```{epigraph}
 HPC is the art of taking a CPU-bound computation and making it I/O bound

@@ -16,7 +16,8 @@
 
 - part: Problem
   chapters:
-    - file: problem/problem
+    - file: problem
+    - file: hyperopt
 
 - part: Approach
   chapters:
