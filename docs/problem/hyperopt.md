@@ -19,7 +19,7 @@ Then, the expected value $\mathbf{E}\left[ F'_\lambda \right]$ is an estimate of
 $$F_\lambda = \frac{ \lVert X_\lambda - x_\text{min}\rVert}{\mathbf{E} \left[ \lVert X_\text{rand} - x_\text{min}\rVert \right]} \, .$$
 
 ```{admonition} To Do
-In the case that the domain is a hypercube of side length 1 $D = [0, 1]^n$ the denominator in the previous expression is an analytic function of the number of parameters $n$. Find the formula.
+In the case that the domain $D$ is a hypercube of unit side length $[0, 1]^n$, the denominator in the previous expression is a function of the number of parameters $n$ only. Find a closed formula.
 ``` 
 
 The nice thing is that now our ranking is wholly detached from the original cost function. Remember that there was a little bit of hand waving in the definition of the cost function. Indeed, the output of the model is a collection of time series that must be compared with another one, the experimental data. However, there isn't a single way of measuring the discrepancy between these two. We can choose to compare the time series for a single observable quantity, a target, or aggregate more than one target by linear combination or some other mean. We can use different functions to compare the single time series, each of which may depend on parameters such as the time scale at which make the comparison.
