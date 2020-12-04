@@ -26,7 +26,7 @@ The nice thing is that now our ranking is wholly detached from the original cost
 
 Provided that all these possible cost functions share the same unique global minimum, which is true by the assumption previously discussed, the ranking $F$ is immune to the particular choice and tell us which optimizer makes the better guess of $x_\text{min}$. We can therefore include the cost function among the other hyperparameters of the optimizers $\lambda$ (however there is also an implicit dependency).
 
-That's all very good, but there is a teeny-weeny problem: we don't know where $x_\text{min}$ is. Before going "hands to the sky crying, why, oh why?" (as in a song of the glorious band Tool) let's consider the options. For example, we could go on the field and measure the parameters, or we could use the values from a previous calibration which we trust. Here there is a third option. 
+That's all very good, but there is a teeny-weeny problem: we don't know where $x_\text{min}$ is. Before going "hands to the sky crying, why, oh why?" (as in a song of the glorious band Tool), let's consider the options. For example, we could go on the field and measure the parameters, or we could use the values from a previous calibration which we trust. Here there is a third option. 
 
 For the previous assumption, the experimental data is equal to the output of a simulation with the right values of the parameters. By reading backwards the last statement, we conclude that the output is equal to experimental data for all matter and purpose. That solves the problem because now we have both the data and the location of the minimum $x_\text{min}$.
 
