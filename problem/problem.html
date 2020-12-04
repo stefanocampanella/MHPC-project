@@ -1,0 +1,419 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formalish definition of the problem &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/problem/problem.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Hyperparameter optimization" href="hyperopt.html" />
+    <link rel="prev" title="The need for HPC" href="../motivations/hpc.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/problem/problem.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Formalish definition of the problem" />
+<meta property="og:description" content="Formalish definition of the problem  From a modern perspective, it’s a miracle that so many gothic structures had been successfully completed without the help o" />
+<meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">An empirical study on the calibration of the GEOtop model using supercomputers</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../prologue.html">
+   Prologue
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro/hydrology.html">
+   Brief Introduction to Hydrology
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro/geotop.html">
+   Brief Introduction to GEOtop
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Motivations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../motivations/calibration.html">
+   GEOtop calibration or finding the needle in the haystack
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../motivations/hpc.html">
+   The need for HPC
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Problem
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Formalish definition of the problem
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="hyperopt.html">
+   Hyperparameter optimization
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Approach
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../approach/tools.html">
+   Tools
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../approach/deployment.html">
+   Deployment
+  </a>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../approach/libraries.html">
+   Libraries used
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/jupyter.html">
+     JupyterLab, Papermills and Scrapbook
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/nevergrad.html">
+     Nevergrad
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/salib.html">
+     SALib
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/dask.html">
+     Dask
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/chocolate.html">
+     Chocolate
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/geotopy.html">
+     GEOtoPy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/libs/mhpc-project.html">
+     Matsch B2
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../approach/examples.html">
+   Examples
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/examples/plots.html">
+     Example of Plots using GEOtoPy
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/examples/sensitivity_analysis.html">
+     Example of Sensitivity Analysis
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../approach/examples/calibration.html">
+     Example of Calibration
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Results
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/study.html">
+   Study
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/discussion.html">
+   Discussion
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/conclusions.html">
+   Conclusions
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/problem/problem.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="formalish-definition-of-the-problem">
+<h1>Formalish definition of the problem<a class="headerlink" href="#formalish-definition-of-the-problem" title="Permalink to this headline">¶</a></h1>
+<blockquote class="epigraph">
+<div><p>From a modern perspective, it’s a miracle that so many gothic structures had been successfully completed without the help of modern material science, computer modelling, finite element analysis, and general math and physics. I hope future generations will be as admiring of the programming skills we’ve been
+displaying in building complex operating systems, web servers, and the
+internet infrastructure. And, frankly, they should, because we’ve done
+all this based on very flimsy theoretical foundations.</p>
+<p class="attribution">—Bartosz Milewski, <em>Category Theory for Programmers</em></p>
+</div></blockquote>
+<p>In this chapter, I would like to pinpoint in mathematical terms the ideas behind the numerical experiments with which this thesis is concerned. The following is far from a rigorous treatment, may seem pretentious or naive, and probably it is. Nonetheless, I think it’s helpful to have a mental model of the computations that are going to be performed.</p>
+<p>As more thoroughly explained in the previous chapters, we are concerned with the calibration of the GEOtop hydrological model. Calibration means to find the values of the input parameters that one has to set to obtain the best possible overlapping between the outputs of a simulation and the experimental data.</p>
+<p>“Overlapping” is not a precise term, but for the moment let’s suppose that we have a pure function, the cost function, which takes the value of the parameters as arguments, runs a simulation, and returns a real number representing the discrepancy with observations: higher values mean worst overlap, and 0 means perfection. We will consider only continuous parameters, and suppose that you can get arbitrarily small differences by evaluating the cost function with “close enough” arguments, which we can image as points of the parameter/search space.</p>
+<p>Therefore, we can model our cost function as lower bounded, continuous function <span class="math notranslate nohighlight">\(f: D \subseteq \mathbb{R}^n \mapsto [0, +\infty)\)</span>, where the search space <span class="math notranslate nohighlight">\(D\)</span> is compact such that we know that there exist one or more global minima. We should consider an extension of <span class="math notranslate nohighlight">\([0, +\infty)\)</span> that includes failing computations, when the model crashes or fails to converge, something like bottom in Haskell. Let’s forget about it though, and consider this information encoded in the domain <span class="math notranslate nohighlight">\(D\)</span>, within which our computation acts like a real mathematical function.</p>
+<p>A black box optimizer is an iterator that at each step returns the approximate location of the minimum (referred to as recommendation or candidate), with increasing precision as the iterations go by. In this innocent statement lingers the assumption that it exists only one global minimum, assumption which for the moment we will ignore. In particular, we will consider only randomized algorithms which return a different sequence of points at each execution.</p>
+<p>Therefore, we can define an optimizer as a random process <span class="math notranslate nohighlight">\(X_i: \Omega \mapsto D\)</span> that gives better and better recommendations, that is <span class="math notranslate nohighlight">\(\forall \omega \in \Omega. \: f\left(X_i(\omega)\right) \leq f\left(X_{i-1}(\omega)\right)\)</span>.</p>
+<p>The first optimizer we consider is random search, in which we sample the search space uniformly at each step and recommend the best result to that point. Let <span class="math notranslate nohighlight">\(U_i: \Omega \mapsto D\)</span> a sequence of iid random variables uniformly distributed on <span class="math notranslate nohighlight">\(D\)</span> (that is compact, hence has finite Lebesgue measure), then we can define the random search <span class="math notranslate nohighlight">\(X_i\)</span> as follows</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} \forall \omega \in \Omega. \: X_0(\omega) = U_0(\omega), \, X_i(\omega) = \begin{cases} U_i &amp; \text{if } f(U_i(\omega)) \leq f(X_{i-1}(\omega)) \\ X_{i-1}(\omega) &amp; \text{otherwise} \end{cases}.\end{split}\]</div>
+<p>In this way, the sequence of losses <span class="math notranslate nohighlight">\(Y_i = f(X_i)\)</span> (which are random variables themselves) is point-wise monotonically decreasing, so it converges point-wise to a random variable <span class="math notranslate nohighlight">\(Y = \lim\limits_{i \rightarrow \infty} Y_i\)</span>.</p>
+<div class="admonition-to-do admonition">
+<p class="admonition-title">To Do</p>
+<p>It should be possible, leveraging the uniform distribution of the <span class="math notranslate nohighlight">\(X_i\)</span> and the continuity of <span class="math notranslate nohighlight">\(f\)</span>, to prove that <span class="math notranslate nohighlight">\(Y = \min\limits_{x \in D} f(x)\)</span> almost everywhere.</p>
+</div>
+<p>The random search doesn’t perform poorly at all in the long run, and, if we could wait forever and sample infinite points of the search space, it would be a good option. Therefore, when we ask another optimizer <span class="math notranslate nohighlight">\(X'_i\)</span> to “outperform random search” what we mean is that, on average, we want smaller losses <span class="math notranslate nohighlight">\(Y'_i\)</span> after a finite number of steps: <span class="math notranslate nohighlight">\(\mathbf{E}[Y'_i] \leq \mathbf{E}[Y_i]\)</span>.</p>
+<p>To this purpose, other optimizers use a more refined strategy. At each step, they sample from random variables <span class="math notranslate nohighlight">\(U'_i\)</span> whose distribution is inferred from previous steps, and which usually converge to some a posteriori <span class="math notranslate nohighlight">\(U'\)</span>. In this way, these algorithms super-sample the region of the search space where, based on their assumptions, it is more probable to find a global minimum and accelerate the convergence of the best candidate <span class="math notranslate nohighlight">\(X'_i\)</span>. It is crucial to note that while they focus on a particular minimum (global or local), they subsample the rest of the search space.</p>
+<p>In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space (e.g. the population size in evolutionary algorithms), but which slows convergence: exploration vs exploitation.</p>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./problem"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../motivations/hpc.html" title="previous page">The need for HPC</a>
+    <a class='right-next' id="next-link" href="hyperopt.html" title="next page">Hyperparameter optimization</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stefano Campanella<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>
