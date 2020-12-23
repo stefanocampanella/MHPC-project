@@ -1,4 +1,4 @@
-datetime,surface_downwelling_shortwave_flux,soil_moisture_50,soil_moisture_200,latent_heat,sensible_heat
+datetime,surface_downwelling_shortwave_flux,soil_moisture_content_50,soil_moisture_content_200,latent_heat_flux_in_air,sensible_heat_flux_in_air
 02/10/2009 01:00,0,,,,
 02/10/2009 02:00,0,,,,
 02/10/2009 03:00,0,,,,

@@ -1,27 +1,27 @@
-! Station B2 in Montecini
+! Station P2 in Montecini
 ! ========================
 
 ! Domain definition
 ! =================
 
 ! Inputs
-SoilLayerThicknesses = 20, 60, 240, 480, 1200, 3000, 5000, 12000, 28000
-PointElevation = 1480
-PointSlope = 15
-PointAspect = 225
+SoilLayerThicknesses = 10, 10, 15, 30, 75, 120, 240, 500
+PointElevation = 1549
+PointSlope = 21.4
+PointAspect = 221.6
 PointLatitude = 46.668
 PointLongitude = 10.579
-CoordinatePointX = 620815
-CoordinatePointY = 5171506
+CoordinatePointX = 621227
+CoordinatePointY = 5171306
 
 ! General features
 ! ================
 
 ! Inputs
 FlagSkyViewFactor = 1
-TimeStepEnergyAndWater = 600
-InitDateDDMMYYYYhhmm = 01/10/2009 23:00
-EndDateDDMMYYYYhhmm = 11/01/2016 06:00
+TimeStepEnergyAndWater = 900
+InitDateDDMMYYYYhhmm	=	09/04/2014 18:00  
+EndDateDDMMYYYYhhmm	=	01/01/2016 00:00
 StandardTimeSimulation = 1
 PointSim = 1
 RecoverSim = 0
@@ -35,9 +35,9 @@ EnergyBalance = 1
 MeteoFile = "meteo/meteo"
 HorizonMeteoStationFile = "horizon/horizon" 
 NumberOfMeteoStations = 1
-MeteoStationCoordinateX = 620815
-MeteoStationCoordinateY = 5171506
-MeteoStationElevation = 1480
+MeteoStationCoordinateX = 621227 
+MeteoStationCoordinateY = 5171306
+MeteoStationElevation = 1549
 MeteoStationWindVelocitySensorHeight = 2.5
 MeteoStationTemperatureSensorHeight = 2
 ! Headers
@@ -64,9 +64,9 @@ ThresSnowVegDown = 10
 ! ==========
 
 ! Inputs
-VegHeight = 400.0
-LSAI = 4
-CanopyFraction = 1.0
+VegHeight = 200.0
+LSAI = 2
+CanopyFraction = 0.8
 DecayCoeffCanopy = 2.0
 RootDepth = 250.0
 MinStomatalRes = 25.0
@@ -90,13 +90,14 @@ SoilAlbNIRWet = 0.25
 ! =================
 
 ! Inputs
-NormalHydrConductivity = 0.021
-ThetaRes = 0.06
-WiltingPoint = 0.11
-FieldCapacity = 0.21
-ThetaSat = 0.51
-AlphaVanGenuchten = 0.0021
-NVanGenuchten = 1.4
+NormalHydrConductivity = 1e-4
+ThetaRes = 0.04
+WiltingPoint = 0.08
+FieldCapacity = 0.1
+ThetaSat = 0.48
+AlphaVanGenuchten = 2e-3
+NVanGenuchten = 2.5
+SpecificStorativity = 1e-6
 ! Outputs
 SoilAll = 1
 SoilPlotDepths = 50

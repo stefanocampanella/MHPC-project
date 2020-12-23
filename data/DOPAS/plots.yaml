@@ -1,0 +1,3 @@
+obs_path: ../data/DOPAS/observations/obs.csv
+model_path: ../data/DOPAS/geotop
+depths: [20, 50, 200]

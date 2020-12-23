@@ -1,0 +1,3 @@
+obs_path: ../data/DOMES/observations/obs.csv
+model_path: ../data/DOMES/geotop
+depths: [20, 50, 200]

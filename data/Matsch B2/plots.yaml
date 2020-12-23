@@ -1,0 +1,3 @@
+obs_path: ../data/Matsch B2/observations/obs.csv
+model_path: ../data/Matsch B2/geotop
+depths: [50, 200]

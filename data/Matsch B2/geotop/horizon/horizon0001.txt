@@ -1,7 +1,4 @@
-! Horizon file for met station B2
-! All measures in degrees
-
-AngleFromNorthClockwise,HorizonHeight
+angle,height
 2.50,13.98
 7.50,18.54
 12.50,21.00

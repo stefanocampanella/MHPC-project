@@ -1,27 +1,27 @@
-! Station B2 in Montecini
-! ========================
+! Apple Orchard Kaltern/Caldero
+! =============================
 
 ! Domain definition
 ! =================
 
 ! Inputs
-SoilLayerThicknesses = 20, 60, 240, 480, 1200, 3000, 5000, 12000, 28000
-PointElevation = 1480
-PointSlope = 15
+SoilLayerThicknesses = 10, 10, 30, 50, 100, 100, 150, 150, 200, 200, 500, 500, 500, 500, 500
+PointElevation = 214.294
+PointSlope = 0
 PointAspect = 225
-PointLatitude = 46.668
-PointLongitude = 10.579
-CoordinatePointX = 620815
-CoordinatePointY = 5171506
+PointLatitude = 46.35
+PointLongitude = 11.26667
+CoordinatePointX = 674401.2
+CoordinatePointY = 5135433
 
 ! General features
 ! ================
 
 ! Inputs
 FlagSkyViewFactor = 1
-TimeStepEnergyAndWater = 600
-InitDateDDMMYYYYhhmm = 01/10/2009 23:00
-EndDateDDMMYYYYhhmm = 11/01/2016 06:00
+TimeStepEnergyAndWater = 900
+InitDateDDMMYYYYhhmm	=	01/01/2013 00:30
+EndDateDDMMYYYYhhmm	=	01/01/2016 00:00
 StandardTimeSimulation = 1
 PointSim = 1
 RecoverSim = 0
@@ -35,18 +35,20 @@ EnergyBalance = 1
 MeteoFile = "meteo/meteo"
 HorizonMeteoStationFile = "horizon/horizon" 
 NumberOfMeteoStations = 1
-MeteoStationCoordinateX = 620815
-MeteoStationCoordinateY = 5171506
-MeteoStationElevation = 1480
-MeteoStationWindVelocitySensorHeight = 2.5
-MeteoStationTemperatureSensorHeight = 2
+MeteoStationElevation	=	214.294
+MeteoStationCoordinateX = 674401.2
+MeteoStationCoordinateY = 5135433
+MeteoStationWindVelocitySensorHeight	=	8
+MeteoStationTemperatureSensorHeight	=	8
 ! Headers
 HeaderDateDDMMYYYYhhmmMeteo = "datetime"
 HeaderIPrec = "rainfall_amount"
 HeaderWindVelocity = "wind_speed"
 HeaderRH = "relative_humidity"
-HeaderAirTemp = "air_temperature" 
-HeaderSWglobal = "shortwave_global" 
+HeaderAirTemp = "air_temperature"
+HeaderSWnet = "shortwave_net"
+HeaderSWglobal = "shortwave_global"
+HeaderCloudSWTransmissivity = "cloud_transmissivity"
 HeaderHorizonAngle = "angle"
 HeaderHorizonHeight = "height"
 ! Outputs
@@ -64,17 +66,16 @@ ThresSnowVegDown = 10
 ! ==========
 
 ! Inputs
-VegHeight = 400.0
-LSAI = 4
-CanopyFraction = 1.0
-DecayCoeffCanopy = 2.0
-RootDepth = 250.0
-MinStomatalRes = 25.0
+VegHeight = 3600
+DecayCoeffCanopy = 2.5
+RootDepth = 600 
+MinStomatalRes = 30
 VegReflectVis = 0.1
 VegReflNIR = 0.2
 VegTransVis = 0.07
 VegTransNIR = 0.25
 CanDensSurface = 0.5
+TimeDependentVegetationParameterFile	=	"vegetation/vegetation"
 
 ! Surface fluxes
 ! ==============
@@ -90,13 +91,13 @@ SoilAlbNIRWet = 0.25
 ! =================
 
 ! Inputs
-NormalHydrConductivity = 0.021
-ThetaRes = 0.06
-WiltingPoint = 0.11
-FieldCapacity = 0.21
-ThetaSat = 0.51
-AlphaVanGenuchten = 0.0021
-NVanGenuchten = 1.4
+NormalHydrConductivity = 0.00265
+ThetaRes = 0.056
+WiltingPoint = 0.14
+FieldCapacity = 0.3
+ThetaSat = 0.4
+AlphaVanGenuchten = 0.003
+NVanGenuchten = 1.284
 ! Outputs
 SoilAll = 1
 SoilPlotDepths = 50
@@ -109,10 +110,12 @@ SoilLiqContentProfileFileWriteEnd = "theta_liq"
 ThermalConductivitySoilSolids = 1.9
 ThermalCapacitySoilSolids = 2.16e6
 
+
 ! Boundary Conditions
 ! ===================
 
 ! Inputs
-FreeDrainageAtBottom = 1
+FreeDrainageAtBottom = 0
 InitWaterTableDepth = 2000
-InitSoilTemp =	4
+InitSoilTemp = 4
+InitSoilPressure = -990, -980, -950, -900, -800, -700, -550, -400, -200, 0, 500, 500, 500, 500, 500

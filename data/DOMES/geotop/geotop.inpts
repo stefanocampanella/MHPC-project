@@ -1,27 +1,27 @@
-! Station B2 in Montecini
-! ========================
+! Station Grassland EURAC_GS_L0_Domes1500
+! =======================================
 
 ! Domain definition
 ! =================
 
 ! Inputs
 SoilLayerThicknesses = 20, 60, 240, 480, 1200, 3000, 5000, 12000, 28000
-PointElevation = 1480
-PointSlope = 15
-PointAspect = 225
-PointLatitude = 46.668
-PointLongitude = 10.579
-CoordinatePointX = 620815
-CoordinatePointY = 5171506
+PointElevation = 1473
+PointSlope = 27
+PointAspect = 180
+PointLatitude = 46.39722
+PointLongitude = 11.44648
+CoordinatePointX = 688074
+CoordinatePointY = 5141091
 
 ! General features
 ! ================
 
 ! Inputs
 FlagSkyViewFactor = 1
-TimeStepEnergyAndWater = 600
-InitDateDDMMYYYYhhmm = 01/10/2009 23:00
-EndDateDDMMYYYYhhmm = 11/01/2016 06:00
+TimeStepEnergyAndWater = 900
+InitDateDDMMYYYYhhmm = 01/01/2012 01:00
+EndDateDDMMYYYYhhmm = 31/05/2016 23:00
 StandardTimeSimulation = 1
 PointSim = 1
 RecoverSim = 0
@@ -31,22 +31,29 @@ EnergyBalance = 1
 ! Meteo forcings
 ! ==============
 
+! Meteo Stations:
+!   1. st8512, Deutschnofen
+!   2. st8730, Radein
+!   3. st7848, Obereggen Absam
+! ========================
+
 ! Inputs
 MeteoFile = "meteo/meteo"
 HorizonMeteoStationFile = "horizon/horizon" 
-NumberOfMeteoStations = 1
-MeteoStationCoordinateX = 620815
-MeteoStationCoordinateY = 5171506
-MeteoStationElevation = 1480
-MeteoStationWindVelocitySensorHeight = 2.5
-MeteoStationTemperatureSensorHeight = 2
+NumberOfMeteoStations = 3
+MeteoStationCoordinateX	=	686486, 684427, 695895
+MeteoStationCoordinateY	=	5143630, 5135344, 5137598
+MeteoStationElevation	=	1470, 1562, 2125
+MeteoStationWindVelocitySensorHeight	=	2.5
+MeteoStationTemperatureSensorHeight	=	2
 ! Headers
 HeaderDateDDMMYYYYhhmmMeteo = "datetime"
 HeaderIPrec = "rainfall_amount"
 HeaderWindVelocity = "wind_speed"
 HeaderRH = "relative_humidity"
 HeaderAirTemp = "air_temperature" 
-HeaderSWglobal = "shortwave_global" 
+HeaderSWglobal = "shortwave_global"
+HeaderCloudSWTransmissivity = "cloud_transmissivity"
 HeaderHorizonAngle = "angle"
 HeaderHorizonHeight = "height"
 ! Outputs
@@ -106,8 +113,8 @@ SoilLiqContentProfileFileWriteEnd = "theta_liq"
 ! ================
 
 ! Inputs
-ThermalConductivitySoilSolids = 1.9
-ThermalCapacitySoilSolids = 2.16e6
+ThermalConductivitySoilSolids		=	1.9
+ThermalCapacitySoilSolids			=	2.16E+06
 
 ! Boundary Conditions
 ! ===================
@@ -115,4 +122,4 @@ ThermalCapacitySoilSolids = 2.16e6
 ! Inputs
 FreeDrainageAtBottom = 1
 InitWaterTableDepth = 2000
-InitSoilTemp =	4
+InitSoilTemp = 4
