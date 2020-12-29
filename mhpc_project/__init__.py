@@ -1,120 +1,12 @@
-from os.path import join as joinpath
-
 import nevergrad as ng
 import numpy as np
 import pandas as pd
 
-import geotopy.optim as gto
-from geotopy.utils import date_parser
+from subprocess import CalledProcessError, TimeoutExpired
+from .utils import date_parser
 
 
-class SMC50(gto.GEOtopRun):
-
-    def postprocess(self, working_dir):
-        liq_path = joinpath(working_dir, self.settings['SoilLiqContentProfileFileWriteEnd'].strip('"') + '.txt')
-        liq = pd.read_csv(liq_path,
-                          na_values=['-9999'],
-                          usecols=[0, 6],
-                          skiprows=1,
-                          header=0,
-                          names=['datetime', 'soil_moisture_content_50'],
-                          parse_dates=[0],
-                          date_parser=date_parser,
-                          index_col=0,
-                          low_memory=False,
-                          squeeze=True)
-
-        return liq
-
-
-class FullModel(gto.GEOtopRun):
-
-    def postprocess(self, working_dir):
-        depths = self.settings['SoilPlotDepths']
-        usecols = [0]
-        usecols.extend(range(6, 6 + len(depths)))
-
-        moisture_columns = ['datetime']
-        moisture_columns.extend(f"soil_moisture_{d:.0f}" for d in depths)
-
-        temperature_columns = ['datetime']
-        temperature_columns.extend(f"soil_temperature_{d:.0f}" for d in depths)
-
-        liq_path = joinpath(working_dir, self.settings['SoilLiqContentProfileFileWriteEnd'].strip('"') + '.txt')
-        liq = pd.read_csv(liq_path,
-                          na_values=['-9999'],
-                          usecols=usecols,
-                          skiprows=1,
-                          header=0,
-                          names=moisture_columns,
-                          parse_dates=[0],
-                          date_parser=date_parser,
-                          index_col=0,
-                          low_memory=False)
-
-        ice_path = joinpath(working_dir, self.settings['SoilIceContentProfileFileWriteEnd'].strip('"') + '.txt')
-        ice = pd.read_csv(ice_path,
-                          na_values=['-9999'],
-                          usecols=usecols,
-                          skiprows=1,
-                          header=0,
-                          names=moisture_columns,
-                          parse_dates=[0],
-                          date_parser=date_parser,
-                          index_col=0,
-                          low_memory=False)
-
-        temperature_path = joinpath(working_dir, self.settings['SoilTempProfileFileWriteEnd'].strip('"') + '.txt')
-        temperature = pd.read_csv(temperature_path,
-                                  na_values=['-9999'],
-                                  usecols=usecols,
-                                  skiprows=1,
-                                  header=0,
-                                  names=temperature_columns,
-                                  parse_dates=[0],
-                                  date_parser=date_parser,
-                                  index_col=0,
-                                  low_memory=False)
-        
-        point_path = joinpath(working_dir, 'point.txt')
-        point = pd.read_csv(point_path,
-                            na_values=['-9999'],
-                            parse_dates=[0],
-                            date_parser=date_parser,
-                            index_col=0,
-                            low_memory=False)
-        point.index.rename('datetime', inplace=True)
-
-        sim = pd.DataFrame(index=point.index)
-        
-        for col in moisture_columns[1:]:
-            sim[col] = ice[col] + liq[col]
-
-        for col in temperature_columns[1:]:
-            sim[col] = temperature[col]
-        
-        sim['shortwave_downwelling'] = point['SWin[W/m2]']
-        sim['shortwave_upwelling'] = point['SWup[W/m2]']
-        sim['shortwave_net'] = point['SWnet[W/m2]']
-        
-        sim['longwave_downwelling'] = point['LWin[W/m2]']
-        sim['longwave_upwelling'] = point['LWup[W/m2]']
-        sim['longwave_upwelling'] = point['LWnet[W/m2]']
-
-        sim['latent_heat'] = \
-            point['Canopy_fraction[-]'] * (point['LEg_veg[W/m2]'] + point['LEv[W/m2]']) + \
-            (1 - point['Canopy_fraction[-]']) * point['LEg_unveg[W/m2]']
-
-        sim['sensible_heat'] = \
-            point['Canopy_fraction[-]'] * (point['Hg_veg[W/m2]'] + point['Hv[W/m2]']) + \
-            (1 - point['Canopy_fraction[-]']) * point['Hg_unveg[W/m2]']
-        
-        sim['soil_heat'] = point['Soil_heat_flux[W/m2]']
-
-        return sim
-
-
-class Variables(gto.Variables):
+class Parameters:
 
     def __init__(self, *paths):
         data = pd.DataFrame()
@@ -139,7 +31,26 @@ class Variables(gto.Variables):
         return list(self.data['type'])
 
 
-class Loss(gto.Loss):
+class Loss:
+
+    def __init__(self, model, variables, measure):
+
+        self.model = model
+        self.variables = variables
+        self.criteria = measure
+
+    def __call__(self, *args, **kwargs):
+
+        args, kwargs = self.massage(*args, **kwargs)
+
+        try:
+            simulation = self.model(*args, **kwargs)
+        except CalledProcessError:
+            return np.nan
+        except TimeoutExpired:
+            return np.nan
+
+        return self.criteria(simulation)
 
     def massage(self, xs):
         names = self.variables.names
@@ -152,15 +63,15 @@ class Loss(gto.Loss):
                 y = 10 ** y
             settings[name] = y
 
-        return (), settings
+        return settings, {}
 
 
-class NGO(gto.Calibration):
+class NGO:
 
     def __init__(self, loss, **kwargs):
-        super().__init__(loss)
+        self.loss = loss
 
-        self._optimizer_istance = ng.optimizers.NGO(self.parametrization, **kwargs)
+        self._optimizer_instance = ng.optimizers.NGO(self.parametrization, **kwargs)
 
     @property
     def parametrization(self):
@@ -174,7 +85,7 @@ class NGO(gto.Calibration):
 
     @property
     def optimizer(self):
-        return self._optimizer_istance
+        return self._optimizer_instance
 
     def __call__(self, *args, **kwargs):
         recommendation = self.optimizer.minimize(self.loss, *args, **kwargs)
