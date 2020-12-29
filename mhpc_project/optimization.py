@@ -48,7 +48,7 @@ class Loss:
                 y = 10 ** y
             settings[name] = y
 
-        return settings, {}
+        return (), settings
 
     def __call__(self, *args, **kwargs):
 
