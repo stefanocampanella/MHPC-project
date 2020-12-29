@@ -1,3 +1,4 @@
 obs_path: ../data/DOMEF/observations/obs.csv
 model_path: ../data/DOMEF/inputs
+parameters_path: ../data/Calibration parameters/testbed.csv
 depths: [ 20, 50, 200 ]

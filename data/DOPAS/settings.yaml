@@ -1,3 +1,4 @@
 obs_path: ../data/DOPAS/observations/obs.csv
 model_path: ../data/DOPAS/inputs
+parameters_path: ../data/Calibration parameters/testbed.csv
 depths: [ 20, 50, 200 ]

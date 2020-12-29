@@ -1,3 +1,4 @@
 obs_path: ../data/NEPAS/observations/obs.csv
 model_path: ../data/NEPAS/inputs
+parameters_path: ../data/Calibration parameters/testbed.csv
 depths: [ 20, 50, 200 ]

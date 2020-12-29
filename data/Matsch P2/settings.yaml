@@ -1,3 +1,4 @@
 obs_path: ../data/Matsch P2/observations/obs.csv
 model_path: ../data/Matsch P2/inputs
+parameters_path: ../data/Calibration parameters/testbed.csv
 depths: [ 20, 50, 200 ]
