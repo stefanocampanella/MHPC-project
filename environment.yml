@@ -20,12 +20,11 @@ dependencies:
   - pyarrow
   - holoviz
   - pip:
-      - git+https://github.com/stefanocampanella/GEOtoPy@master
+      - geotopy
       - nevergrad
-      - git+https://github.com/AIworx-Labs/chocolate@master
       - salib
       - papermill
       - nteract-scrapbook
       - jupyter-book
-      - tqdm
       - hiplot
+      - tqdm
