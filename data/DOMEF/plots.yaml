@@ -1,3 +1,3 @@
 obs_path: ../data/DOMEF/observations/obs.csv
 model_path: ../data/DOMEF/geotop
-depths: [20, 50, 200]
+depths: [ 20, 50, 200 ]

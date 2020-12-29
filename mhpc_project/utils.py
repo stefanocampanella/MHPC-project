@@ -1,12 +1,11 @@
-from datetime import datetime
-from math import isnan
-
 import hiplot as hip
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
+import numpy as np
 import pandas as pd
 import seaborn as sns
+from datetime import datetime
+from math import isnan
 from scipy.optimize import root_scalar
 from tqdm.auto import tqdm
 

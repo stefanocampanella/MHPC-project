@@ -1,8 +1,6 @@
 import pandas as pd
-
-from .utils import date_parser, calculate_widths, calculate_weights
-
 from geotopy import GEOtop
+from .utils import date_parser, calculate_widths, calculate_weights
 
 
 class SMCMultiLayer(GEOtop):

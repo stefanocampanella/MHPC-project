@@ -1,3 +1,3 @@
 obs_path: ../data/NEPAS/observations/obs.csv
 model_path: ../data/NEPAS/geotop
-depths: [20, 50, 200]
+depths: [ 20, 50, 200 ]

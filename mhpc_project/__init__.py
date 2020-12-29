@@ -1,7 +1,6 @@
 import nevergrad as ng
 import numpy as np
 import pandas as pd
-
 from subprocess import CalledProcessError, TimeoutExpired
 from .utils import date_parser
 
