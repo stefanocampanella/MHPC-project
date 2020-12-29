@@ -1,3 +1,3 @@
 obs_path: ../data/Kaltern/observations/obs.csv
-model_path: ../data/Kaltern/geotop
+model_path: ../data/Kaltern/inputs
 depths: [ 50, 300, 600 ]

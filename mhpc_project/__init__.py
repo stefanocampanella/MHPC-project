@@ -32,15 +32,28 @@ class Parameters:
 
 class Loss:
 
-    def __init__(self, model, variables, measure):
+    def __init__(self, model, parameters, measure):
 
         self.model = model
-        self.variables = variables
+        self.parameters = parameters
         self.criteria = measure
+
+    def rescale_inputs(self, xs):
+        names = self.parameters.names
+        bounds = self.parameters.bounds
+        types = self.parameters.types
+        settings = {}
+        for x, name, (a, b), t in zip(xs, names, bounds, types):
+            y = a + x * (b - a)
+            if t == 'log':
+                y = 10 ** y
+            settings[name] = y
+
+        return settings, {}
 
     def __call__(self, *args, **kwargs):
 
-        args, kwargs = self.massage(*args, **kwargs)
+        args, kwargs = self.rescale_inputs(*args, **kwargs)
 
         try:
             simulation = self.model(*args, **kwargs)
@@ -50,19 +63,6 @@ class Loss:
             return np.nan
 
         return self.criteria(simulation)
-
-    def massage(self, xs):
-        names = self.variables.names
-        bounds = self.variables.bounds
-        types = self.variables.types
-        settings = {}
-        for x, name, (a, b), t in zip(xs, names, bounds, types):
-            y = a + x * (b - a)
-            if t == 'log':
-                y = 10 ** y
-            settings[name] = y
-
-        return settings, {}
 
 
 class NGO:
@@ -74,7 +74,7 @@ class NGO:
 
     @property
     def parametrization(self):
-        shape = (self.loss.variables.num_vars,)
+        shape = (self.loss.parameters.num_vars,)
 
         array = ng.p.Array(shape=shape, mutable_sigma=True)
         array.set_mutation(sigma=1 / 6)
@@ -88,13 +88,13 @@ class NGO:
 
     def __call__(self, *args, **kwargs):
         recommendation = self.optimizer.minimize(self.loss, *args, **kwargs)
-        _, recommendation = self.loss.massage(*recommendation.args)
+        _, recommendation = self.loss.rescale_inputs(*recommendation.args)
 
         return recommendation
 
     def to_dataframe(self, recommendation, name='recommendation'):
-        num_vars = self.loss.variables.num_vars
-        massage = self.loss.massage
+        num_vars = self.loss.parameters.num_vars
+        massage = self.loss.rescale_inputs
         _, lower = massage(np.zeros(num_vars))
         lower = pd.DataFrame.from_dict(lower, orient='index', columns=['lower'])
         _, upper = massage(np.ones(num_vars))
