@@ -92,15 +92,15 @@ def calculate_weights(edge_depth, edge_width, widths):
 
 class ParametersLogger:
 
-    def __init__(self, massage):
-        self.massage = massage
+    def __init__(self, rescaler):
+        self.rescaler = rescaler
         self.data = []
 
     def __call__(self, optimizer, candidate, loss):
         data = {"num-tell": optimizer.num_tell,
                 "generation": candidate.generation,
                 "loss": loss}
-        args, kwargs = self.massage(*candidate.args, **candidate.kwargs)
+        args, kwargs = self.rescaler(*candidate.args, **candidate.kwargs)
         for position, value in enumerate(args):
             kwargs[repr(position)] = value
         data.update(kwargs)
