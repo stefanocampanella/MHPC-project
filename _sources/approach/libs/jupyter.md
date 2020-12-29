@@ -1,1 +1,1 @@
-# JupyterLab, Papermills and Scrapbook
+# The Jupyter ecosystem
