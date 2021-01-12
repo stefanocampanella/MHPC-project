@@ -1,4 +1,2 @@
-obs_path: ../data/Latsch/observations/obs.csv
-model_path: ../data/Latsch/inputs
-parameters_path: ../data/Calibration parameters/testbed.csv
-depths: [ 200, 400 ]
+model_path: inputs
+observations_path: observations/obs.csv

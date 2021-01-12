@@ -1,13 +1,11 @@
-import hiplot as hip
+from datetime import datetime
+
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from datetime import datetime
-from math import isnan
 from scipy.optimize import root_scalar
-from tqdm.auto import tqdm
 
 
 def date_parser(x):
@@ -66,21 +64,22 @@ def comparison_plot(observations, simulation, scales=None, desc=None, unit=None,
     return fig
 
 
-def find_scale(first_layer_widths, number_of_layers, max_depth):
-    if first_layer_widths * number_of_layers >= max_depth:
-        raise ValueError
-
-    solver = root_scalar(lambda x: max_depth - sum(calculate_widths(first_layer_widths, x, number_of_layers)),
-                         bracket=(0.0, 1.0))
-
-    if not solver.converged:
-        raise RuntimeError
+def find_scale(first_layer_width, number_of_layers, max_depth):
+    if first_layer_width * number_of_layers >= max_depth:
+        raise ValueError("Max depth must be greater then the number of layers times "
+                         "the first layer width.")
     else:
-        return solver.root
+        solver = root_scalar(lambda x: max_depth - first_layer_width * np.sum(np.exp(x * np.arange(number_of_layers))),
+                             bracket=(0.0, 1.0))
+
+        if solver.converged:
+            return solver.root
+        else:
+            raise RuntimeError
 
 
-def calculate_widths(first_layer_width, max_depth, number_of_layers):
-    log_scale_factor = find_scale(first_layer_width, max_depth, number_of_layers)
+def calculate_widths(first_layer_width, number_of_layers, max_depth):
+    log_scale_factor = find_scale(first_layer_width, number_of_layers, max_depth)
     return first_layer_width * np.exp(log_scale_factor * np.arange(number_of_layers))
 
 
@@ -88,46 +87,3 @@ def calculate_weights(edge_depth, edge_width, widths):
     depths = np.insert(np.cumsum(widths), 0, 0.0)
     weights = np.diff(edge_width * np.log(1 + np.exp((depths - edge_depth) / edge_width))) / widths
     return weights
-
-
-class ParametersLogger:
-
-    def __init__(self, rescaler):
-        self.rescaler = rescaler
-        self.data = []
-
-    def __call__(self, optimizer, candidate, loss):
-        data = {"num-tell": optimizer.num_tell,
-                "generation": candidate.generation,
-                "loss": loss}
-        args, kwargs = self.rescaler(*candidate.args, **candidate.kwargs)
-        for position, value in enumerate(args):
-            kwargs[repr(position)] = value
-        data.update(kwargs)
-        self.data.append(data)
-
-    @property
-    def experiment(self):
-        return hip.Experiment.from_iterable(self.data)
-
-    def parallel_coordinate_plot(self):
-        self.experiment.display()
-
-
-class ProgressBar(tqdm):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        self.loss = None
-
-    def __call__(self, optimizer, candidate, loss, **kwargs):
-        super().update()
-
-        from_none = self.loss is None
-        from_nan = not from_none and isnan(self.loss) and not isnan(loss)
-        from_greater = not from_none and not from_nan and self.loss > loss
-
-        if from_none or from_nan or from_greater:
-            self.loss = loss
-            self.set_description(desc=f"(Current loss: {self.loss:.4f})")

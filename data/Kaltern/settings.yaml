@@ -1,4 +1,2 @@
-obs_path: ../data/Kaltern/observations/obs.csv
-model_path: ../data/Kaltern/inputs
-parameters_path: ../data/Calibration parameters/testbed.csv
-depths: [ 50, 300, 600 ]
+model_path: inputs
+observations_path: observations/obs.csv

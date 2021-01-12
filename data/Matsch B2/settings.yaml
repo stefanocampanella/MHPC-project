@@ -1,4 +1,3 @@
-obs_path: ../data/Matsch B2/observations/obs.csv
-model_path: ../data/Matsch B2/inputs
-parameters_path: ../data/Calibration parameters/testbed.csv
-depths: [ 50, 200 ]
+model_path: inputs
+observations_path: observations/obs.csv
+

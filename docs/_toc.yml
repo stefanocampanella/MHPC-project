@@ -1,12 +1,8 @@
 - file: landing-page
 
-- part:
-  chapters:
-    - file: prologue
-
 - part: Introduction
   chapters:
-    - file: intro/hydrology
+    - file: intro/prologue
     - file: intro/geotop
 
 - part: Motivations
@@ -19,27 +15,25 @@
     - file: problem/problem
     - file: problem/hyperopt
 
-- part: Approach
+- part: Methodology
   chapters:
     - file: approach/tools
     - file: approach/deployment
     - file: approach/libraries
       sections:
         - file: approach/libs/jupyter
+        - file: approach/libs/dask
+        - file: approach/libs/geotopy
         - file: approach/libs/nevergrad
         - file: approach/libs/salib
-        - file: approach/libs/dask
-        - file: approach/libs/chocolate
-        - file: approach/libs/geotopy
         - file: approach/libs/mhpc-project
+
+- part: Results
+  chapters:
     - file: approach/examples
       sections:
         - file: approach/examples/plots
         - file: approach/examples/sensitivity_analysis
         - file: approach/examples/calibration
-
-- part: Results
-  chapters:
-    - file: results/study
     - file: results/discussion
     - file: results/conclusions

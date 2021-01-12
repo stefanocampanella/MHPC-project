@@ -55,3 +55,5 @@ class KGE:
         v = simulation.std() / self.std - 1
 
         return np.sqrt(r * r + m * m + v * v)
+
+

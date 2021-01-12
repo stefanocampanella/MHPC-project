@@ -27,6 +27,8 @@ PointSim = 1
 RecoverSim = 0
 WaterBalance = 1
 EnergyBalance = 1
+! Outputs
+PointAll = 1
 
 ! Meteo forcings
 ! ==============
@@ -75,7 +77,6 @@ VegReflNIR = 0.2
 VegTransVis = 0.07
 VegTransNIR = 0.25
 CanDensSurface = 0.5
-TimeDependentVegetationParameterFile	=	"vegetation_par"
 
 ! Surface fluxes
 ! ==============
@@ -100,7 +101,7 @@ AlphaVanGenuchten = 1.64e-3
 NVanGenuchten = 1.51
 ! Outputs
 SoilAll = 1
-SoilPlotDepths = 50
+SoilPlotDepths = 200, 400
 SoilLiqContentProfileFileWriteEnd = "theta_liq"
 
 ! Soil temperature

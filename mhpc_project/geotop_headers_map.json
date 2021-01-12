@@ -1,0 +1,17 @@
+{
+  "AlphaVanGenuchten": "HeaderAlpha",
+  "ThermalCapacitySoilSolids": "HeaderCthSoilSolids",
+  "FieldCapacity": "HeaderFieldCapacity",
+  "ThermalConductivitySoilSolids": "HeaderKthSoilSolids",
+  "LateralHydrConductivity": "HeaderLateralHydrConductivity",
+  "NormalHydrConductivity": "HeaderNormalHydrConductivity",
+  "NVanGenuchten": "HeaderN",
+  "SoilLayerThicknesses": "HeaderSoilDz",
+  "InitSoilPressure": "HeaderSoilInitPres",
+  "InitSoilTemp": "HeaderSoilInitTemp",
+  "SpecificStorativity": "HeaderSpecificStorativity",
+  "ThetaRes": "HeaderThetaRes",
+  "ThetaSat": "HeaderThetaSat",
+  "VMualem": "HeaderV",
+  "WiltingPoint": "HeaderWiltingPoint"
+}

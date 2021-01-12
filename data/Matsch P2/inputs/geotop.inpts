@@ -27,6 +27,8 @@ PointSim = 1
 RecoverSim = 0
 WaterBalance = 1
 EnergyBalance = 1
+! Outputs
+PointAll = 1
 
 ! Meteo forcings
 ! ==============
@@ -100,7 +102,7 @@ NVanGenuchten = 2.5
 SpecificStorativity = 1e-6
 ! Outputs
 SoilAll = 1
-SoilPlotDepths = 50
+SoilPlotDepths = 20, 50, 200
 SoilLiqContentProfileFileWriteEnd = "theta_liq"
 
 ! Soil temperature
