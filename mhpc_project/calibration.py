@@ -59,7 +59,7 @@ class Calibration:
                             optimizer.tell(*result)
                             self.log.append(result)
                             progress_bar.update()
-                        elif future.status == 'error':
+                        else:
                             # See the executor.map comment
                             new_future = client.submit(self.objective_function, optimizer.ask())
                             completed_queue.add(new_future)
