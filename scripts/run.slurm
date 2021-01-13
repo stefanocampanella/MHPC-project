@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-#SBATCH --partition=wide2
+#SBATCH --partition=regular2
 #SBATCH --nodes=32
 #SBATCH --tasks-per-node=1
 #SBATCH --cpus-per-task=32
@@ -26,7 +26,7 @@ sleep 10
 
 mkdir -p "$(dirname "${OUTPUT}")"
 OPTIONS="--no-progress-bar \
-         --cwd $(dirname "${INPUT}") \
+         --cwd $(dirname "${PARAMETERS_FILE}") \
          -p num_workers $((SLURM_CPUS_PER_TASK * SLURM_NTASKS)) \
          -p output_dir ${OUTPUT} \
          -p address $(hostname):8786 \
