@@ -12,7 +12,7 @@ ALGORITHM=$2
 GENERATIONS=$3
 OUTPUT_DIR=$4
 
-SCHEDULER_FILE="$(mktemp -u -p "${MHPCPROJECT_ROOT}" -t XXX.json)"
+SCHEDULER_FILE="$(mktemp -p "${MHPCPROJECT_ROOT}" -t XXX.json)"
 MODEL_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/inputs"
 OBSERVATIONS_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/observations/obs.csv"
 NUM_WORKERS=$((SLURM_CPUS_PER_TASK * SLURM_NTASKS))
@@ -32,7 +32,8 @@ srun dask-worker --scheduler-file "${SCHEDULER_FILE}" --nprocs=1 --nthreads="${S
 sleep 10
 
 mkdir -p "${OUTPUT_DIR}"
-papermill --cwd "$(dirname "${PARAMETERS_FILE}")" \
+papermill --no-progress-bar \
+          --cwd "$(dirname "${PARAMETERS_FILE}")" \
           -p model_path "${MODEL_PATH}" \
           -p observations_path "${OBSERVATIONS_PATH}" \
           -p num_workers ${NUM_WORKERS} \
