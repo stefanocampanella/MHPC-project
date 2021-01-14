@@ -16,17 +16,15 @@ export NUMEXPR_MAX_THREADS=1
 export OMP_NUM_THREADS=1
 export TMPDIR=/dev/shm
 
-dask-scheduler --scheduler-file "${MHPCPROJECT_ROOT}"/scheduler.json --interface ib0 &
-sleep 10
+#dask-scheduler --scheduler-file "${MHPCPROJECT_ROOT}"/scheduler.json --interface ib0 &
+#sleep 10
+#
+#srun dask-worker "tcp://$(hostname):8786" --nprocs=1 --nthreads="${SLURM_CPUS_PER_TASK}" --interface ib0 &
+#sleep 10
 
-srun dask-worker "tcp://$(hostname):8786" --nprocs=1 --nthreads="${SLURM_CPUS_PER_TASK}" --interface ib0 &
-sleep 10
-
-mkdir -p "$(dirname "${OUTPUT}")"
-OPTIONS="--no-progress-bar \
-         --cwd "$(dirname "${PARAMETERS_FILE}")" \
-         -p popsize $((SLURM_CPUS_PER_TASK * SLURM_NTASKS)) \
-         -p address $(hostname):8786 \
-         -f "${PARAMETERS_FILE}""
-
-papermill "${OPTIONS}" "${INPUT}" "${OUTPUT}"
+mkdir -p $(dirname "${OUTPUT}")
+papermill --cwd "$(dirname "${PARAMETERS_FILE}")" \
+          -p popsize $((SLURM_CPUS_PER_TASK * SLURM_NTASKS)) \
+          -p address $(hostname):8786 \
+          -f "${PARAMETERS_FILE}" \
+          "${INPUT}" "${OUTPUT}"
