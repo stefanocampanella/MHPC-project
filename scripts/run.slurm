@@ -27,7 +27,11 @@ export OMP_NUM_THREADS=1
 export TMPDIR=/dev/shm
 
 dask-scheduler --scheduler-file="${SCHEDULER_FILE}" --interface=ib0 &
+sleep 30
+
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" --nprocs=1 --nthreads="${SLURM_CPUS_PER_TASK}" --interface=ib0 &
+sleep 30
+
 papermill --no-progress-bar \
           -p model_path "${MODEL_PATH}" \
           -p observations_path "${OBSERVATIONS_PATH}" \
