@@ -24,10 +24,10 @@ OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_WORKER
 export TMPDIR=/dev/shm
 
 dask-scheduler --scheduler-file="${SCHEDULER_FILE}" --interface=ib0 &
-sleep 30
+sleep 60
 
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" --nprocs=1 --nthreads="${SLURM_CPUS_PER_TASK}" --interface=ib0 &
-sleep 30
+sleep 60
 
 papermill --no-progress-bar \
           -p model_path "${MODEL_PATH}" \
