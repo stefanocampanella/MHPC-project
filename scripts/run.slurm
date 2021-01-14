@@ -12,14 +12,14 @@ ALGORITHM=$2
 GENERATIONS=$3
 OUTPUT_DIR=$4
 
-SCHEDULER_FILE="$(mktemp -p "${MHPCPROJECT_ROOT}" -t scheduler-XXX.json)"
+SCHEDULER_FILE="$(mktemp -p "${MHPCPROJECT_ROOT}" scheduler-XXX.json)"
 MODEL_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/inputs"
 OBSERVATIONS_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/observations/obs.csv"
 NUM_WORKERS=$((SLURM_CPUS_PER_TASK * SLURM_NTASKS))
 BUDGET=$((GENERATIONS * NUM_WORKERS))
 INPUT="${MHPCPROJECT_ROOT}/notebooks/calibration.ipynb"
 mkdir -p "${OUTPUT_DIR}"
-OUTPUT="$(mktemp -p "${OUTPUT_DIR}" -t "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_WORKERS}-XXX.ipynb")"
+OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_WORKERS}-XXX.ipynb")"
 
 export TMPDIR=/dev/shm
 
