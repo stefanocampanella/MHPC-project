@@ -21,9 +21,6 @@ INPUT="${MHPCPROJECT_ROOT}/notebooks/calibration.ipynb"
 mkdir -p "${OUTPUT_DIR}"
 OUTPUT="$(mktemp -p "${OUTPUT_DIR}" -t "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_WORKERS}-XXX.ipynb")"
 
-export NUMEXPR_NUM_THREADS=1
-export NUMEXPR_MAX_THREADS=1
-export OMP_NUM_THREADS=1
 export TMPDIR=/dev/shm
 
 dask-scheduler --scheduler-file="${SCHEDULER_FILE}" --interface=ib0 &
