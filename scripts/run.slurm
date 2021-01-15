@@ -31,6 +31,7 @@ dask-scheduler --scheduler-file="${SCHEDULER_FILE}" \
 sleep 60
 
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
+                 --no-nanny \
                  --nprocs="${SLURM_CPUS_PER_TASK}" \
                  --nthreads=1 \
                  --interface=ib0 &
