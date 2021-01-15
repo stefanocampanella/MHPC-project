@@ -38,3 +38,5 @@ papermill --no-progress-bar \
           -p scheduler_file "${SCHEDULER_FILE}" \
           "${INPUT}" "${OUTPUT}"
 rm "${SCHEDULER_FILE}"
+
+exit

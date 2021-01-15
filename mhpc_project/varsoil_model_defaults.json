@@ -1,6 +1,6 @@
 {
   "SoilLayerThicknesses": null,
-  "SoilLayerNumber": 32,
+  "SoilLayerNumber": 16,
   "SoilParFile": "\"soil/soil\"",
   "HeaderSoilDz": "\"SoilLayerThicknesses\"",
   "SoilAll": false,

@@ -56,8 +56,8 @@ class Calibration:
 
     def convergence_plot(self, figsize=(16, 9), dpi=100):
         max_generation_number = max(n for n, _ in self.log)
-        min_losses = np.fromiter([min(l for n, l in self.log if n <= k)
-                                  for k in range(1, max_generation_number + 1)], dtype=float)
+        min_losses = [min(l for n, l in self.log if n <= k)
+                      for k in range(1, max_generation_number + 1)]
         data = pd.DataFrame(self.log, columns=['generation', 'loss'])
         figure, axes = plt.subplots(figsize=figsize, dpi=dpi)
         sns.lineplot(data=data, x='generation', y='loss', ax=axes)
