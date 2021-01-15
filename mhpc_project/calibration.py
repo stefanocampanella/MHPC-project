@@ -10,21 +10,29 @@ from .utils import comparison_plot
 
 # The objective function must be a callable object
 # which can be serialized using cloudpickle by Dask.
-class ObjectiveFunction:
+# class ObjectiveFunction:
+#
+#     def __init__(self, model, observations):
+#         self.model = model
+#         self.comparators = {}
+#         for target in observations.columns:
+#             self.comparators[target] = KGE(observations[target])
+#
+#     def __call__(self, candidate):
+#         predictions = self.model(*candidate.args, **candidate.kwargs)
+#
+#         square_loss = sum(comp(predictions[target]) ** 2 for target, comp
+#                           in self.comparators.items() if target in predictions)
+#
+#         return candidate, np.sqrt(square_loss)
 
-    def __init__(self, model, observations):
-        self.model = model
-        self.comparators = {}
-        for target in observations.columns:
-            self.comparators[target] = KGE(observations[target])
+def objective_function(model, comparators, candidate):
+    sim = model(*candidate.args, **candidate.kwargs)
 
-    def __call__(self, candidate):
-        predictions = self.model(*candidate.args, **candidate.kwargs)
+    square_loss = sum(f(sim[target]) ** 2 for target, f
+                      in comparators.items() if target in sim)
 
-        square_loss = sum(comp(predictions[target]) ** 2 for target, comp
-                          in self.comparators.items() if target in predictions)
-
-        return candidate, np.sqrt(square_loss)
+    return candidate, np.sqrt(square_loss)
 
 
 class Calibration:
@@ -33,24 +41,29 @@ class Calibration:
         self.model = model
         self.parameters = parameters
         self.observations = observations
-        self.objective_function = ObjectiveFunction(model, observations)
+        self.comparators = {col: KGE(self.observations[col]) for col in self.observations.columns}
         self.log = []
 
-    def __call__(self, algorithm, budget, popsize, client, show_progress=False):
+    def __call__(self, algorithm, budget, num_workers, client, show_progress=False):
+        # objective_function = ObjectiveFunction(self.model, self.observations)
         optimizer_class = ng.optimizers.registry[algorithm]
         optimizer = optimizer_class(self.parameters.instrumentation,
                                     budget=np.inf,
-                                    num_workers=popsize)
+                                    num_workers=num_workers)
 
         with tqdm(total=budget, disable=not show_progress) as progress_bar:
             while optimizer.num_tell < budget:
-                asked_points = [optimizer.ask() for _ in range(popsize)]
+                # asked_points = [optimizer.ask() for _ in range(popsize)]
                 # To avoid annoyances with argument unpacking,
                 # ensure that loss takes just one argument.
                 # The best option is passing (and return) the whole candidate object.
                 # Otherwise, because as_completed change the order of the inputs,
                 # one should keep track of the candidates to which the losses belong.
-                futures = client.map(self.objective_function, asked_points)
+                client.scatter(self.model, broadcast=True)
+                client.scatter(self.comparators, broadcast=True)
+                # futures = client.map(objective_function, asked_points)
+                futures = [client.submit(objective_function, self.model, self.comparators, optimizer.ask())
+                           for _ in range(num_workers)]
                 completed_queue = as_completed(futures)
                 for batch in completed_queue.batches():
                     for future in batch:
@@ -61,11 +74,15 @@ class Calibration:
                             progress_bar.update()
                         else:
                             # See the executor.map comment
-                            new_future = client.submit(self.objective_function, optimizer.ask())
+                            # new_future = client.submit(objective_function, optimizer.ask())
+                            new_future = client.submit(objective_function,
+                                                       self.model,
+                                                       self.comparators,
+                                                       optimizer.ask())
                             completed_queue.add(new_future)
 
         recommendation = optimizer.provide_recommendation()
-        predictions = self.objective_function.model(*recommendation.args, **recommendation.kwargs)
+        predictions = self.model(*recommendation.args, **recommendation.kwargs)
 
         return predictions, recommendation
 
