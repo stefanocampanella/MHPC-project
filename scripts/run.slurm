@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
-#SBATCH --tasks-per-node=1
-#SBATCH --cpus-per-task=32
+#SBATCH --tasks-per-node=8
+#SBATCH --cpus-per-task=4
 #SBATCH --mem-per-cpu=400MB
 #SBATCH --hint=nomultithread
 #SBATCH --hint=compute_bound
@@ -31,9 +31,8 @@ dask-scheduler --scheduler-file="${SCHEDULER_FILE}" \
 sleep 60
 
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
-                 --no-nanny \
-                 --nprocs="${SLURM_CPUS_PER_TASK}" \
-                 --nthreads=1 \
+                 --nprocs=8 \
+                 --nthreads=4 \
                  --interface=ib0 &
 sleep 60
 
