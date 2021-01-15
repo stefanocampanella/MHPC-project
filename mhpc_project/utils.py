@@ -116,12 +116,3 @@ def comparison_plots(model, observations, candidate, **kwargs):
         if target in predictions.columns:
             desc = target.replace('_', ' ').title()
             comparison_plot(observations[target], predictions[target], desc=desc, **kwargs)
-
-
-def objective_function(model, comparators, candidate):
-    sim = model(*candidate.args, **candidate.kwargs)
-
-    square_loss = sum(f(sim[target]) ** 2 for target, f
-                      in comparators.items() if target in sim)
-
-    return candidate, np.sqrt(square_loss)
