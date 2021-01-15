@@ -1,14 +1,8 @@
 import pandas as pd
-from nevergrad.parametrization.parameter import Scalar, Log, Dict, Tuple
-
-
-def make_parameter(mapping, **kwargs):
-    if mapping == 'linear':
-        return Scalar(**kwargs)
-    elif mapping == 'exp':
-        return Log(**kwargs)
-    else:
-        raise ValueError("Unknown type of mapping {mapping}.")
+import numpy as np
+from nevergrad.parametrization.parameter import Dict, Tuple
+from SALib.analyze import delta
+from .utils import make_parameter
 
 
 class VarSoilParameters:
@@ -16,6 +10,38 @@ class VarSoilParameters:
     def __init__(self, path, defaults=None):
         self.data = pd.read_csv(path, index_col=0)
         self.defaults = defaults
+
+    def delta_mim(self, log):
+        data = self.data.drop(self.defaults)
+        names = list(data.index)
+        num_vars = len(names)
+        bounds = zip(data['lower'], data['upper'])
+        problem = {'num_vars': num_vars,
+                   'names': names,
+                   'bounds': bounds}
+        samples = []
+        for candidate, _ in log:
+            sample_dataframe = self.from_instrumentation(candidate, column_name='candidate')
+            sample_array = sample_dataframe['sample'].to_numpy()
+            samples.append(sample_array)
+        samples = np.concatenate(samples, axis=0)
+
+        losses = np.fromiter((l for _, l in log), dtype=float)
+        sa = delta.analyze(problem, samples, losses)
+        return sa.to_df()
+
+    def from_instrumentation(self, candidate, column_name='best'):
+        parameters = candidate.args[0]
+
+        extra, inpts, soil = (parameters[key] for key in ('extra', 'inpts', 'soil'))
+        soil_a = {name + '_a': a for name, (a, b) in soil.items()}
+        soil_b = {name + '_b': a for name, (a, b) in soil.items()}
+        dataframe = pd.DataFrame.from_dict({**extra, **inpts, **soil_a, **soil_b},
+                                           orient='index',
+                                           columns=column_name)
+        dataframe.index.rename('name', inplace=True)
+        dataframe.drop(self.defaults, inplace=True)
+        return dataframe
 
     @property
     def instrumentation(self):

@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from scipy.optimize import root_scalar
+from nevergrad.parametrization.parameter import Scalar, Log
 
 
 def date_parser(x):
@@ -87,3 +88,40 @@ def calculate_weights(edge_depth, edge_width, widths):
     depths = np.insert(np.cumsum(widths), 0, 0.0)
     weights = np.diff(edge_width * np.log(1 + np.exp((depths - edge_depth) / edge_width))) / widths
     return weights
+
+
+def make_parameter(mapping, **kwargs):
+    if mapping == 'linear':
+        return Scalar(**kwargs)
+    elif mapping == 'exp':
+        return Log(**kwargs)
+    else:
+        raise ValueError("Unknown type of mapping {mapping}.")
+
+
+def convergence_plot(log, figsize=(16, 9), dpi=100):
+    loss_log = [(x.generation, l) for x, l in log]
+    max_generation_number = max(n for n, _ in loss_log)
+    min_losses = [min(l for n, l in loss_log if n <= k)
+                  for k in range(1, max_generation_number + 1)]
+    data = pd.DataFrame(loss_log, columns=['generation', 'loss'])
+    figure, axes = plt.subplots(figsize=figsize, dpi=dpi)
+    sns.lineplot(data=data, x='generation', y='loss', ax=axes)
+    sns.lineplot(x=range(1, max_generation_number + 1), y=min_losses, ax=axes)
+
+
+def comparison_plots(model, observations, candidate, **kwargs):
+    predictions = model(*candidate.args, **candidate.kwargs)
+    for target in observations.columns:
+        if target in predictions.columns:
+            desc = target.replace('_', ' ').title()
+            comparison_plot(observations[target], predictions[target], desc=desc, **kwargs)
+
+
+def objective_function(model, comparators, candidate):
+    sim = model(*candidate.args, **candidate.kwargs)
+
+    square_loss = sum(f(sim[target]) ** 2 for target, f
+                      in comparators.items() if target in sim)
+
+    return candidate, np.sqrt(square_loss)
