@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
-#SBATCH --tasks-per-node=8
-#SBATCH --cpus-per-task=4
+#SBATCH --tasks-per-node=1
+#SBATCH --cpus-per-task=32
 #SBATCH --mem-per-cpu=400MB
 #SBATCH --hint=nomultithread
 #SBATCH --hint=compute_bound
