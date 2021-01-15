@@ -4,7 +4,6 @@
 #SBATCH --mem-per-cpu=400MB
 #SBATCH --hint=nomultithread
 #SBATCH --hint=compute_bound
-#SBATCH --mail-type=ALL
 #SBATCH --verbose
 
 SITE=$1
