@@ -1,2 +1,9 @@
 dask:
   temporary-directory: /scratch/$USER/dask-worker-space
+distributed:
+  logging:
+    distributed: info
+    bokeh: critical
+    tornado: critical
+  worker:
+    use-file-locking: false
