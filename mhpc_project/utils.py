@@ -116,3 +116,16 @@ def comparison_plots(model, observations, candidate, **kwargs):
         if target in predictions.columns:
             desc = target.replace('_', ' ').title()
             comparison_plot(observations[target], predictions[target], desc=desc, **kwargs)
+
+
+def kge_cmp(sim, obs):
+    square_loss = 0.0
+    for target in sim.columns:
+        if target in obs.columns:
+            x, y = sim[target], obs[target]
+            r = x.corr(y) - 1
+            m = x.mean() / y.mean() - 1
+            v = x.std() / y.std() - 1
+            square_loss += r * r + m * m + v * v
+    return np.sqrt(square_loss)
+
