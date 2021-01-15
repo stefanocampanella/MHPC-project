@@ -22,9 +22,9 @@ class Calibration:
                                     num_workers=num_workers)
 
         while optimizer.num_tell < budget:
-            client.scatter(self.model, broadcast=True)
-            client.scatter(self.comparators, broadcast=True)
-            futures = [client.submit(objective_function, self.model, self.comparators, optimizer.ask())
+            model_future = client.scatter(self.model, broadcast=True)
+            comparators_future = client.scatter(self.comparators, broadcast=True)
+            futures = [client.submit(objective_function, model_future, comparators_future, optimizer.ask())
                        for _ in range(num_workers)]
             completed_queue = as_completed(futures)
             for batch in completed_queue.batches():
@@ -35,8 +35,8 @@ class Calibration:
                         self.log.append((candidate.generation, loss))
                     else:
                         new_future = client.submit(objective_function,
-                                                   self.model,
-                                                   self.comparators,
+                                                   model_future,
+                                                   comparators_future,
                                                    optimizer.ask())
                         completed_queue.add(new_future)
 
