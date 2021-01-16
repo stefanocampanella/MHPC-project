@@ -1,5 +1,4 @@
 from datetime import datetime
-from queue import PriorityQueue
 from subprocess import CalledProcessError, TimeoutExpired
 from tempfile import TemporaryDirectory
 from timeit import default_timer as timer
