@@ -1,4 +1,5 @@
 from datetime import datetime
+from queue import PriorityQueue
 from subprocess import CalledProcessError, TimeoutExpired
 from tempfile import TemporaryDirectory
 from timeit import default_timer as timer
@@ -158,6 +159,14 @@ def run_model(model, candidate):
     return result, elapsed
 
 
+def submit_run(candidate, model, observations, client):
+    timed_sim = client.submit(run_model, model, candidate)
+    sim = client.submit(lambda x: x[0], timed_sim)
+    time = client.submit(lambda x: x[1], timed_sim)
+    loss = client.submit(kge_cmp, sim, observations)
+    return client.submit(lambda x, y, z: (x, y, z), candidate, loss, time)
+
+
 def calibrate(model, parameters, observations, budget, algorithm, popsize, client, num_workers):
     log = []
     start = timer()
@@ -169,33 +178,20 @@ def calibrate(model, parameters, observations, budget, algorithm, popsize, clien
     remote_observations = client.scatter(observations, broadcast=True)
     remote_model = client.scatter(model, broadcast=True)
     while optimizer.num_tell < budget:
-        gen_num_tell = 0
-        remote_candidates = client.scatter([optimizer.ask() for _ in range(num_workers)])
-        remote_timed_simulations = [client.submit(run_model, remote_model, candidate)
-                                    for candidate in remote_candidates]
-        remote_simulations = [client.submit(lambda x: x[0], timed_simulation)
-                              for timed_simulation in remote_timed_simulations]
-        remote_times = [client.submit(lambda x: x[1], timed_simulation)
-                        for timed_simulation in remote_timed_simulations]
-        remote_losses = [client.submit(kge_cmp, sim, remote_observations)
-                         for sim in remote_simulations]
-        remote_triples = [client.submit(lambda x, y, z: (x, y, z), candidate, loss, time)
-                          for candidate, loss, time in zip(remote_candidates, remote_losses, remote_times)]
-        completed_queue = as_completed(remote_triples, with_results=True)
+        to_tell = []
+        remote_samples = [submit_run(remote_candidate, remote_model, remote_observations, client)
+                          for remote_candidate in client.scatter(optimizer.ask() for _ in range(num_workers))]
+        completed_queue = as_completed(remote_samples, with_results=True)
         for batch in completed_queue.batches():
             for future, (candidate, loss, time) in batch:
                 log.append((candidate, loss, time))
                 if np.isfinite(loss):
-                    optimizer.tell(candidate, loss)
-                    gen_num_tell += 1
-                elif gen_num_tell + completed_queue.count() < popsize:
-                    new_candidate = optimizer.ask()
-                    new_timed_sim = client.submit(run_model, remote_model, new_candidate)
-                    new_sim = client.submit(lambda x: x[0], new_timed_sim)
-                    new_time = client.submit(lambda x: x[1], new_timed_sim)
-                    new_loss = client.submit(kge_cmp, new_sim, remote_observations)
-                    new_pair = client.submit(lambda x, y, z: (x, y, z), new_candidate, new_loss, new_time)
-                    completed_queue.add(new_pair)
+                    to_tell.append((candidate, loss))
+                elif len(to_tell) + completed_queue.count() < popsize:
+                    remote_sample = submit_run(optimizer, remote_model, remote_observations, client)
+                    completed_queue.add(remote_sample)
+        for candidate, loss in to_tell:
+            optimizer.tell(candidate, loss)
     elapsed = timer() - start
 
     return optimizer.provide_recommendation(), log, elapsed
