@@ -182,9 +182,8 @@ def calibrate(model, parameters, observations, budget, algorithm, num_workers, c
                           for candidate, loss, time in zip(remote_candidates, remote_losses, remote_times)]
         completed_queue = as_completed(remote_triples, with_results=True)
         for batch in completed_queue.batches():
-            for future, result in batch:
-                if np.isfinite(result):
-                    candidate, loss, time = result
+            for future, (candidate, loss, time) in batch:
+                if np.isfinite(loss):
                     optimizer.tell(candidate, loss)
                     log.append((candidate, loss, time))
                 else:
