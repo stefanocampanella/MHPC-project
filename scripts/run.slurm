@@ -9,9 +9,10 @@
 
 SITE=$1
 ALGORITHM=$2
-GENERATIONS=$3
-TIMEOUT=$4
-OUTPUT_DIR=$5
+POPSIZE=$3
+GENERATIONS=$4
+TIMEOUT=$5
+OUTPUT_DIR=$6
 
 SCHEDULER_FILE="$(mktemp -p "${MHPCPROJECT_ROOT}" scheduler-XXX.json)"
 MODEL_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/inputs"
@@ -38,10 +39,11 @@ papermill --no-progress-bar \
           -p model_path "${MODEL_PATH}" \
           -p observations_path "${OBSERVATIONS_PATH}" \
           -p algorithm "${ALGORITHM}" \
-          -p num_workers ${NUM_WORKERS} \
           -p budget ${BUDGET} \
+          -p popsize "${POPSIZE}" \
           -p timeout "${TIMEOUT}" \
           -p scheduler_file "${SCHEDULER_FILE}" \
+          -p num_workers ${NUM_WORKERS} \
           "${INPUT}" "${OUTPUT}"
 rm "${SCHEDULER_FILE}"
 

@@ -105,7 +105,7 @@ def make_parameter(mapping, **kwargs):
 
 
 def convergence_plot(log, figsize=(16, 9), dpi=100):
-    loss_log = [(x.generation, l) for x, l, _ in log]
+    loss_log = [(x.generation, l) for x, l, _ in log if np.isfinite(l)]
     max_generation_number = max(n for n, _ in loss_log)
     min_losses = [min(l for n, l in loss_log if n <= k)
                   for k in range(1, max_generation_number + 1)]
@@ -124,8 +124,8 @@ def comparison_plots(model, observations, candidate, **kwargs):
 
 
 def time_loss_plot(log, figsize=(16, 9), dpi=100):
-    losses = [l for _, l, _ in log]
-    times = [t for _, _, t in log]
+    losses = [l for _, l, _ in log if np.isfinite(l)]
+    times = [t for _, l, t in log if np.isfinite(l)]
     data = pd.DataFrame({'losses': losses, 'times': times})
     figure, axes = plt.subplots(figsize=figsize, dpi=dpi)
     sns.jointplot(data=data, x='losses', y='times', ax=axes)
@@ -158,17 +158,18 @@ def run_model(model, candidate):
     return result, elapsed
 
 
-def calibrate(model, parameters, observations, budget, algorithm, num_workers, client):
+def calibrate(model, parameters, observations, budget, algorithm, popsize, client, num_workers):
     log = []
     start = timer()
     optimizer_class = ng.optimizers.registry[algorithm]
     optimizer = optimizer_class(parameters.instrumentation,
                                 budget=np.inf,
-                                num_workers=num_workers)
+                                num_workers=popsize)
 
     remote_observations = client.scatter(observations, broadcast=True)
     remote_model = client.scatter(model, broadcast=True)
     while optimizer.num_tell < budget:
+        gen_num_tell = 0
         remote_candidates = client.scatter([optimizer.ask() for _ in range(num_workers)])
         remote_timed_simulations = [client.submit(run_model, remote_model, candidate)
                                     for candidate in remote_candidates]
@@ -183,10 +184,11 @@ def calibrate(model, parameters, observations, budget, algorithm, num_workers, c
         completed_queue = as_completed(remote_triples, with_results=True)
         for batch in completed_queue.batches():
             for future, (candidate, loss, time) in batch:
+                log.append((candidate, loss, time))
                 if np.isfinite(loss):
                     optimizer.tell(candidate, loss)
-                    log.append((candidate, loss, time))
-                else:
+                    gen_num_tell += 1
+                elif gen_num_tell + completed_queue.count() < popsize:
                     new_candidate = optimizer.ask()
                     new_timed_sim = client.submit(run_model, remote_model, new_candidate)
                     new_sim = client.submit(lambda x: x[0], new_timed_sim)
