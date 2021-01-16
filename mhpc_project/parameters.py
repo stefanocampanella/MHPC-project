@@ -20,13 +20,13 @@ class VarSoilParameters:
                    'names': names,
                    'bounds': bounds}
         samples = []
-        for candidate, _ in log:
+        for candidate, _, _ in log:
             sample_dataframe = self.from_instrumentation(candidate, column_name='candidate')
             sample_array = sample_dataframe['candidate'].to_numpy()
             samples.append(sample_array)
         samples = np.concatenate(samples, axis=0)
 
-        losses = np.fromiter((l for _, l in log), dtype=float)
+        losses = np.fromiter((l for _, l, _ in log), dtype=float)
         sa = delta.analyze(problem, samples, losses)
         return sa.to_df()
 

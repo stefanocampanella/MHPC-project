@@ -123,12 +123,11 @@ def comparison_plots(model, observations, candidate, **kwargs):
             comparison_plot(observations[target], predictions[target], desc=desc, **kwargs)
 
 
-def time_loss_plot(log, figsize=(16, 9), dpi=100):
+def time_loss_plot(log):
     losses = [l for _, l, _ in log if np.isfinite(l)]
     times = [t for _, l, t in log if np.isfinite(l)]
     data = pd.DataFrame({'losses': losses, 'times': times})
-    figure, axes = plt.subplots(figsize=figsize, dpi=dpi)
-    sns.jointplot(data=data, x='losses', y='times', ax=axes)
+    sns.jointplot(data=data, x='losses', y='times', height=10)
 
 
 def kge_cmp(sim, obs):
