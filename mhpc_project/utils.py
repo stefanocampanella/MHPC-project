@@ -151,7 +151,7 @@ def run_model(model, candidate):
     try:
         with TemporaryDirectory() as tmpdir:
             result = model.run_in(tmpdir, *candidate.args, **candidate.kwargs)
-    except CalledProcessError or TimeoutExpired:
+    except (CalledProcessError, TimeoutExpired):
         result = None
     elapsed = timer() - start
 
