@@ -9,17 +9,17 @@
 
 SITE=$1
 ALGORITHM=$2
-POPSIZE=$3
-GENERATIONS=$4
-OUTPUT_DIR=$5
+GENERATIONS=$3
+OUTPUT_DIR=$4
 
 SCHEDULER_FILE="$(mktemp -p "${MHPCPROJECT_ROOT}" scheduler-XXX.json)"
 MODEL_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/inputs"
 OBSERVATIONS_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/observations/obs.csv"
-BUDGET=$((GENERATIONS * POPSIZE))
+NUM_WORKERS=$((SLURM_CPUS_PER_TASK * SLURM_NTASKS))
+BUDGET=$((GENERATIONS * NUM_WORKERS))
 INPUT="${MHPCPROJECT_ROOT}/notebooks/calibration.ipynb"
 mkdir -p "${OUTPUT_DIR}"
-OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${POPSIZE}-XXX.ipynb")"
+OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_WORKERS}-XXX.ipynb")"
 
 
 export NUMEXPR_NUM_THREADS=1
@@ -41,7 +41,7 @@ papermill --no-progress-bar \
           -p model_path "${MODEL_PATH}" \
           -p observations_path "${OBSERVATIONS_PATH}" \
           -p algorithm "${ALGORITHM}" \
-          -p popsize ${POPSIZE} \
+          -p num_workers ${NUM_WORKERS} \
           -p budget ${BUDGET} \
           -p scheduler_file "${SCHEDULER_FILE}" \
           "${INPUT}" "${OUTPUT}"
