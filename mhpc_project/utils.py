@@ -178,18 +178,19 @@ def calibrate(model, parameters, observations, budget, algorithm, popsize, clien
     remote_model = client.scatter(model, broadcast=True)
     while optimizer.num_tell < budget:
         to_tell = []
-        remote_samples = [submit_run(remote_candidate, remote_model, remote_observations, client)
-                          for remote_candidate in client.scatter(optimizer.ask() for _ in range(num_workers))]
-        completed_queue = as_completed(remote_samples, with_results=True)
-        for batch in completed_queue.batches():
-            for future, (candidate, loss, time) in batch:
-                log.append((candidate, loss, time))
-                if np.isfinite(loss):
-                    to_tell.append((candidate, loss))
-                elif len(to_tell) + completed_queue.count() < popsize:
-                    candidate = optimizer.ask()
-                    remote_sample = submit_run(candidate, remote_model, remote_observations, client)
-                    completed_queue.add(remote_sample)
+        while len(to_tell) < popsize:
+            remote_samples = [submit_run(remote_candidate, remote_model, remote_observations, client)
+                              for remote_candidate in client.scatter(optimizer.ask() for _ in range(num_workers))]
+            completed_queue = as_completed(remote_samples, with_results=True)
+            for batch in completed_queue.batches():
+                for future, (candidate, loss, time) in batch:
+                    log.append((candidate, loss, time))
+                    if np.isfinite(loss):
+                        to_tell.append((candidate, loss))
+                    elif len(to_tell) + completed_queue.count() < popsize:
+                        candidate = optimizer.ask()
+                        remote_sample = submit_run(candidate, remote_model, remote_observations, client)
+                        completed_queue.add(remote_sample)
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)
     elapsed = timer() - start
