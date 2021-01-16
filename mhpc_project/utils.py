@@ -1,16 +1,17 @@
 from datetime import datetime
+from subprocess import CalledProcessError, TimeoutExpired
+from tempfile import TemporaryDirectory
 from timeit import default_timer as timer
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
+import nevergrad as ng
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import nevergrad as ng
-
 from dask.distributed import as_completed
-from scipy.optimize import root_scalar
 from nevergrad.parametrization.parameter import Scalar, Log
+from scipy.optimize import root_scalar
 
 
 def date_parser(x):
@@ -125,27 +126,36 @@ def comparison_plots(model, observations, candidate, **kwargs):
 def time_loss_plot(log, figsize=(16, 9), dpi=100):
     losses = [l for _, l, _ in log]
     times = [t for _, _, t in log]
+    data = pd.DataFrame({'losses': losses, 'times': times})
     figure, axes = plt.subplots(figsize=figsize, dpi=dpi)
-    sns.jointplot(x=losses, y=times, ax=axes)
+    sns.jointplot(data=data, x='losses', y='times', ax=axes)
 
 
 def kge_cmp(sim, obs):
-    square_loss = 0.0
-    for target in sim.columns:
-        if target in obs.columns:
-            x, y = sim[target], obs[target]
-            r = x.corr(y) - 1
-            m = x.mean() / y.mean() - 1
-            v = x.std() / y.std() - 1
-            square_loss += r * r + m * m + v * v
-    return np.sqrt(square_loss)
+    if sim is None:
+        return np.nan
+    else:
+        square_loss = 0.0
+        for target in sim.columns:
+            if target in obs.columns:
+                x, y = sim[target], obs[target]
+                r = x.corr(y) - 1
+                m = x.mean() / y.mean() - 1
+                v = x.std() / y.std() - 1
+                square_loss += r * r + m * m + v * v
+        return np.sqrt(square_loss)
 
 
 def run_model(model, candidate):
     start = timer()
-    result = model(*candidate.args, **candidate.kwargs)
-    end = timer()
-    return result, end - start
+    try:
+        with TemporaryDirectory() as tmpdir:
+            result = model.run_in(tmpdir, *candidate.args, **candidate.kwargs)
+    except CalledProcessError or TimeoutExpired:
+        result = None
+    elapsed = timer() - start
+
+    return result, elapsed
 
 
 def calibrate(model, parameters, observations, budget, algorithm, num_workers, client):
@@ -170,11 +180,11 @@ def calibrate(model, parameters, observations, budget, algorithm, num_workers, c
                          for sim in remote_simulations]
         remote_triples = [client.submit(lambda x, y, z: (x, y, z), candidate, loss, time)
                           for candidate, loss, time in zip(remote_candidates, remote_losses, remote_times)]
-        completed_queue = as_completed(remote_triples)
+        completed_queue = as_completed(remote_triples, with_results=True)
         for batch in completed_queue.batches():
-            for future in batch:
-                if future.status == 'finished':
-                    candidate, loss, time = future.result()
+            for future, result in batch:
+                if np.isfinite(result):
+                    candidate, loss, time = result
                     optimizer.tell(candidate, loss)
                     log.append((candidate, loss, time))
                 else:

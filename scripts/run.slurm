@@ -10,7 +10,8 @@
 SITE=$1
 ALGORITHM=$2
 GENERATIONS=$3
-OUTPUT_DIR=$4
+TIMEOUT=$4
+OUTPUT_DIR=$5
 
 SCHEDULER_FILE="$(mktemp -p "${MHPCPROJECT_ROOT}" scheduler-XXX.json)"
 MODEL_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/inputs"
@@ -32,8 +33,8 @@ dask-scheduler --scheduler-file="${SCHEDULER_FILE}" \
 sleep 120
 
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
-                 --nprocs=8 \
-                 --nthreads=4 \
+                 --nprocs=1 \
+                 --nthreads="${SLURM_CPUS_PER_TASK}" \
                  --interface=ib0 &
 sleep 60
 
@@ -43,6 +44,7 @@ papermill --no-progress-bar \
           -p algorithm "${ALGORITHM}" \
           -p num_workers ${NUM_WORKERS} \
           -p budget ${BUDGET} \
+          -p timeout "${TIMEOUT}" \
           -p scheduler_file "${SCHEDULER_FILE}" \
           "${INPUT}" "${OUTPUT}"
 rm "${SCHEDULER_FILE}"
