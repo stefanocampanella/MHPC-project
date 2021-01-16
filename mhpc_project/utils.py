@@ -179,8 +179,9 @@ def calibrate(model, parameters, observations, budget, algorithm, popsize, clien
     while optimizer.num_tell < budget:
         to_tell = []
         while len(to_tell) < popsize:
+            candidates = [optimizer.ask() for _ in range(num_workers)]
             remote_samples = [submit_run(remote_candidate, remote_model, remote_observations, client)
-                              for remote_candidate in client.scatter(optimizer.ask() for _ in range(num_workers))]
+                              for remote_candidate in client.scatter(candidates)]
             completed_queue = as_completed(remote_samples, with_results=True)
             for batch in completed_queue.batches():
                 for future, (candidate, loss, time) in batch:
