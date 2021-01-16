@@ -174,7 +174,6 @@ def calibrate(model, parameters, observations, budget, algorithm, popsize, clien
     optimizer = optimizer_class(parameters.instrumentation,
                                 budget=np.inf,
                                 num_workers=popsize)
-
     remote_observations = client.scatter(observations, broadcast=True)
     remote_model = client.scatter(model, broadcast=True)
     while optimizer.num_tell < budget:
@@ -188,7 +187,8 @@ def calibrate(model, parameters, observations, budget, algorithm, popsize, clien
                 if np.isfinite(loss):
                     to_tell.append((candidate, loss))
                 elif len(to_tell) + completed_queue.count() < popsize:
-                    remote_sample = submit_run(optimizer, remote_model, remote_observations, client)
+                    candidate = optimizer.ask()
+                    remote_sample = submit_run(candidate, remote_model, remote_observations, client)
                     completed_queue.add(remote_sample)
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)
