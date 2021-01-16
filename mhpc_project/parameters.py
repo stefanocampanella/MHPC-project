@@ -22,7 +22,7 @@ class VarSoilParameters:
         samples = []
         for candidate, _ in log:
             sample_dataframe = self.from_instrumentation(candidate, column_name='candidate')
-            sample_array = sample_dataframe['sample'].to_numpy()
+            sample_array = sample_dataframe['candidate'].to_numpy()
             samples.append(sample_array)
         samples = np.concatenate(samples, axis=0)
 
