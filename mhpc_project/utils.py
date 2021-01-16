@@ -1,10 +1,14 @@
 from datetime import datetime
+from timeit import default_timer as timer
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import nevergrad as ng
+
+from dask.distributed import as_completed
 from scipy.optimize import root_scalar
 from nevergrad.parametrization.parameter import Scalar, Log
 
@@ -100,7 +104,7 @@ def make_parameter(mapping, **kwargs):
 
 
 def convergence_plot(log, figsize=(16, 9), dpi=100):
-    loss_log = [(x.generation, l) for x, l in log]
+    loss_log = [(x.generation, l) for x, l, _ in log]
     max_generation_number = max(n for n, _ in loss_log)
     min_losses = [min(l for n, l in loss_log if n <= k)
                   for k in range(1, max_generation_number + 1)]
@@ -118,6 +122,13 @@ def comparison_plots(model, observations, candidate, **kwargs):
             comparison_plot(observations[target], predictions[target], desc=desc, **kwargs)
 
 
+def time_loss_plot(log, figsize=(16, 9), dpi=100):
+    losses = [l for _, l, _ in log]
+    times = [t for _, _, t in log]
+    figure, axes = plt.subplots(figsize=figsize, dpi=dpi)
+    sns.jointplot(x=losses, y=times, ax=axes)
+
+
 def kge_cmp(sim, obs):
     square_loss = 0.0
     for target in sim.columns:
@@ -129,3 +140,51 @@ def kge_cmp(sim, obs):
             square_loss += r * r + m * m + v * v
     return np.sqrt(square_loss)
 
+
+def run_model(model, candidate):
+    start = timer()
+    result = model(*candidate.args, **candidate.kwargs)
+    end = timer()
+    return result, end - start
+
+
+def calibrate(model, parameters, observations, budget, algorithm, num_workers, client):
+    log = []
+    start = timer()
+    optimizer_class = ng.optimizers.registry[algorithm]
+    optimizer = optimizer_class(parameters.instrumentation,
+                                budget=np.inf,
+                                num_workers=num_workers)
+
+    remote_observations = client.scatter(observations, broadcast=True)
+    remote_model = client.scatter(model, broadcast=True)
+    while optimizer.num_tell < budget:
+        remote_candidates = client.scatter([optimizer.ask() for _ in range(num_workers)])
+        remote_timed_simulations = [client.submit(run_model, remote_model, candidate)
+                                    for candidate in remote_candidates]
+        remote_simulations = [client.submit(lambda x: x[0], timed_simulation)
+                              for timed_simulation in remote_timed_simulations]
+        remote_times = [client.submit(lambda x: x[1], timed_simulation)
+                        for timed_simulation in remote_timed_simulations]
+        remote_losses = [client.submit(kge_cmp, sim, remote_observations)
+                         for sim in remote_simulations]
+        remote_triples = [client.submit(lambda x, y, z: (x, y, z), candidate, loss, time)
+                          for candidate, loss, time in zip(remote_candidates, remote_losses, remote_times)]
+        completed_queue = as_completed(remote_triples)
+        for batch in completed_queue.batches():
+            for future in batch:
+                if future.status == 'finished':
+                    candidate, loss, time = future.result()
+                    optimizer.tell(candidate, loss)
+                    log.append((candidate, loss, time))
+                else:
+                    new_candidate = optimizer.ask()
+                    new_timed_sim = client.submit(run_model, remote_model, new_candidate)
+                    new_sim = client.submit(lambda x: x[0], new_timed_sim)
+                    new_time = client.submit(lambda x: x[1], new_timed_sim)
+                    new_loss = client.submit(kge_cmp, new_sim, remote_observations)
+                    new_pair = client.submit(lambda x, y, z: (x, y, z), new_candidate, new_loss, new_time)
+                    completed_queue.add(new_pair)
+    elapsed = timer() - start
+
+    return optimizer.provide_recommendation(), log, elapsed
