@@ -14,14 +14,17 @@ NUM_GENERATIONS=$4
 TIMEOUT=$5
 OUTPUT_DIR=$6
 
-SCHEDULER_FILE="$(mktemp -p "${MHPCPROJECT_ROOT}" scheduler-XXX.json)"
+INPUT="${MHPCPROJECT_ROOT}/notebooks/calibration.ipynb"
 MODEL_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/inputs"
 OBSERVATIONS_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/observations/obs.csv"
 NUM_WORKERS=$((SLURM_CPUS_PER_TASK * SLURM_NTASKS))
 BUDGET=$((NUM_GENERATIONS * POPSIZE))
-INPUT="${MHPCPROJECT_ROOT}/notebooks/calibration.ipynb"
+
 mkdir -p "${OUTPUT_DIR}"
 OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_WORKERS}-XXX.ipynb")"
+
+mkdir -p "${OUTPUT_DIR}/schedulers"
+SCHEDULER_FILE="$(mktemp -p "${OUTPUT_DIR}/schedulers" scheduler-XXX.json)"
 
 export TMPDIR=/dev/shm
 

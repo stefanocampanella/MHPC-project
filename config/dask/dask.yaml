@@ -1,5 +1,5 @@
 dask:
-  temporary-directory: /scratch/$USER/dask-worker-space
+  temporary-directory: $MHPCPROJECT_ROOT/runs
 distributed:
   logging:
     distributed: info
