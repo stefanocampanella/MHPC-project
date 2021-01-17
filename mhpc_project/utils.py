@@ -165,7 +165,7 @@ def submit_run(candidate, model, observations, client):
     return client.submit(lambda x, y, z: (x, y, z), candidate, loss, time)
 
 
-def calibrate(model, parameters, observations, budget, algorithm, popsize, client, num_workers):
+def calibrate(model, parameters, observations, algorithm, popsize, num_generations, client, num_workers):
     log = []
     start = timer()
     optimizer_class = ng.optimizers.registry[algorithm]
@@ -174,7 +174,7 @@ def calibrate(model, parameters, observations, budget, algorithm, popsize, clien
                                 num_workers=popsize)
     remote_observations = client.scatter(observations, broadcast=True)
     remote_model = client.scatter(model, broadcast=True)
-    while optimizer.num_tell < budget:
+    for _ in range(num_generations):
         to_tell = []
         while len(to_tell) < popsize:
             candidates = [optimizer.ask() for _ in range(num_workers)]

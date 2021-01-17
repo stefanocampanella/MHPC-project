@@ -12,6 +12,7 @@ class VarSoilParameters:
         self.defaults = defaults
 
     def delta_mim(self, log):
+        sample_log = [(x, l) for x, l, t in log if np.isfinite(l)]
         data = self.data.drop(self.defaults)
         names = list(data.index)
         num_vars = len(names)
@@ -20,17 +21,19 @@ class VarSoilParameters:
                    'names': names,
                    'bounds': bounds}
         samples = []
-        for candidate, _, _ in log:
-            sample_dataframe = self.from_instrumentation(candidate, column_name='candidate')
-            sample_array = sample_dataframe['candidate'].to_numpy()
-            samples.append(sample_array)
-        samples = np.concatenate(samples, axis=0)
+        losses = []
+        for candidate, loss in sample_log:
+            sample_dataframe = self.from_instrumentation(candidate)
+            sample = sample_dataframe['candidate'].to_numpy()
+            samples.append(sample)
+            losses.append(loss)
+        samples = np.asarray(samples)
+        losses = np.asarray(losses)
 
-        losses = np.fromiter((l for _, l, _ in log), dtype=float)
         sa = delta.analyze(problem, samples, losses)
         return sa.to_df()
 
-    def from_instrumentation(self, candidate, column_name='best'):
+    def from_instrumentation(self, candidate, column_name='candidate'):
         parameters = candidate.args[0]
 
         extra, inpts, soil = (parameters[key] for key in ('extra', 'inpts', 'soil'))
