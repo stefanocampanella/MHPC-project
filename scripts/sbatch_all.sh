@@ -14,7 +14,6 @@ export DASK_CONFIG=$MHPCPROJECT_ROOT/config/dask
 cd "$MHPCPROJECT_ROOT" || exit
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
-  echo "Sbatching $SITE"
   sbatch -J "$SITE" -N "$NUM_NODES" -t "$TIME" \
     ./scripts/calibration "$SITE" \
     "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" \
