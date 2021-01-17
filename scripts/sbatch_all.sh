@@ -16,7 +16,7 @@ cd "$MHPCPROJECT_ROOT" || exit
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
   sbatch -p "$PARTITION" -J "$SITE" -N "$NUM_NODES" -t "$TIME" \
-    ./scripts/calibration "$SITE" \
+    ./scripts/run.slurm "$SITE" \
     "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" \
     "/scratch/$USER/MHPC-project_outputs"
 done
