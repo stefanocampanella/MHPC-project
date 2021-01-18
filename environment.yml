@@ -18,7 +18,7 @@ dependencies:
   - geotop
   - pyarrow
   - pip:
-      - geotopy
+      - git+https://github.com/stefanocampanella/GEOtoPy@master
       - nevergrad
       - salib
       - papermill
