@@ -8,23 +8,41 @@ TIMEOUT=200
 
 cd "$MHPCPROJECT_ROOT" || exit
 
-# For all sites
+# Testbed calibration for all sites with few parameters
+PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=256
 NUM_GENERATIONS=64
 PARTITION=wide2
 NUM_NODES=32
-OUTPUT="$MHPCPROJECT_ROOT/runs/sites"
+OUTPUT="$MHPCPROJECT_ROOT/runs/testbed"
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
   SECONDS=$((600 + 45 * NUM_GENERATIONS * POPSIZE / NUM_NODES))
   TIME=$(date -d@$SECONDS -u "+%H:%M:%S")
-  sbatch -p "$PARTITION" -J "$SITE" -N "$NUM_NODES" -t "$TIME" \
-    ./scripts/run.slurm "$SITE" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
+  sbatch -p "$PARTITION" -J "testbed_$SITE" -N "$NUM_NODES" -t "$TIME" \
+    ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
+done
+
+# Calibration for all sites with all parameters
+PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/all.csv"
+ALGORITHM=NGO
+POPSIZE=256
+NUM_GENERATIONS=64
+PARTITION=wide2
+NUM_NODES=32
+OUTPUT="$MHPCPROJECT_ROOT/runs/all"
+for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
+do
+  SECONDS=$((600 + 45 * NUM_GENERATIONS * POPSIZE / NUM_NODES))
+  TIME=$(date -d@$SECONDS -u "+%H:%M:%S")
+  sbatch -p "$PARTITION" -J "all_$SITE" -N "$NUM_NODES" -t "$TIME" \
+    ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
 # For some algorithms
 SITE="Matsch B2"
+PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 POPSIZE=128
 NUM_GENERATIONS=32
 PARTITION=regular2
@@ -34,17 +52,18 @@ for ALGORITHM in NGO PSO Random
 do
   SECONDS=$((600 + 45 * NUM_GENERATIONS * POPSIZE / NUM_NODES))
   TIME=$(date -d@$SECONDS -u "+%H:%M:%S")
-  sbatch -p "$PARTITION" -J "$SITE" -N "$NUM_NODES" -t "$TIME" \
-    ./scripts/run.slurm "$SITE" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
+  sbatch -p "$PARTITION" -J "algorithms_$SITE" -N "$NUM_NODES" -t "$TIME" \
+    ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
 # Strong scaling
 SITE="Matsch B2"
+PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=128
 NUM_GENERATIONS=16
 REPETITIONS=4
-OUTPUT="$MHPCPROJECT_ROOT/runs/nodes"
+OUTPUT="$MHPCPROJECT_ROOT/runs/scaling"
 for NUM_NODES in 4 8 12 16 20 24 28 32
 do
   SECONDS=$((600 + 30 * NUM_GENERATIONS * POPSIZE / NUM_NODES))
@@ -65,8 +84,8 @@ do
     for n in $(seq $REPETITIONS)
     do
       TIME=$(date -d@$SECONDS -u "+%H:%M:%S")
-      sbatch -p "$PARTITION" -J "$SITE" -N "$NUM_NODES" -t "$TIME" \
-        ./scripts/run.slurm "$SITE" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
+      sbatch -p "$PARTITION" -J "scaling_$SITE" -N "$NUM_NODES" -t "$TIME" \
+        ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
     done
   fi
 done

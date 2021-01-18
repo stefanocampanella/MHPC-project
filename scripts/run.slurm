@@ -8,11 +8,12 @@
 #SBATCH --verbose
 
 SITE=$1
-ALGORITHM=$2
-POPSIZE=$3
-NUM_GENERATIONS=$4
-TIMEOUT=$5
-OUTPUT_DIR=$6
+PARAMETERS_PATH=$2
+ALGORITHM=$3
+POPSIZE=$4
+NUM_GENERATIONS=$5
+TIMEOUT=$6
+OUTPUT_DIR=$7
 
 INPUT="${MHPCPROJECT_ROOT}/notebooks/calibration.ipynb"
 MODEL_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/inputs"
@@ -23,8 +24,8 @@ BUDGET=$((NUM_GENERATIONS * POPSIZE))
 mkdir -p "${OUTPUT_DIR}"
 OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_WORKERS}-XXX.ipynb")"
 
-mkdir -p "${OUTPUT_DIR}/schedulers"
-SCHEDULER_FILE="$(mktemp -p "${OUTPUT_DIR}/schedulers" scheduler-XXX.json)"
+mkdir -p "${OUTPUT_DIR}/scheduler_files"
+SCHEDULER_FILE="$(mktemp -p "${OUTPUT_DIR}/scheduler_files" scheduler-XXX.json)"
 
 export TMPDIR=/dev/shm
 
@@ -40,11 +41,12 @@ sleep 60
 
 papermill --no-progress-bar \
           -p model_path "${MODEL_PATH}" \
+          -p timeout "${TIMEOUT}" \
           -p observations_path "${OBSERVATIONS_PATH}" \
+          -p parameters_path "${PARAMETERS_PATH}" \
           -p algorithm "${ALGORITHM}" \
           -p popsize "${POPSIZE}" \
           -p num_generations "${NUM_GENERATIONS}" \
-          -p timeout "${TIMEOUT}" \
           -p scheduler_file "${SCHEDULER_FILE}" \
           -p num_workers ${NUM_WORKERS} \
           "${INPUT}" "${OUTPUT}"
