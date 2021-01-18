@@ -17,9 +17,7 @@ class VarSoilParameters:
         samples = []
         losses = []
         for candidate, loss in sample_log:
-            sample = self.from_instrumentation(candidate)
-            sample.drop(labels=self.defaults, inplace=True)
-            sample.sort_index()
+            sample = self.from_instrumentation(candidate).sort_index().to_numpy()
             samples.append(sample)
             losses.append(loss)
         samples = np.asarray(samples)
