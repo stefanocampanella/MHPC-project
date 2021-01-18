@@ -24,7 +24,7 @@ BUDGET=$((NUM_GENERATIONS * POPSIZE))
 mkdir -p "${OUTPUT_DIR}"
 OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_WORKERS}-XXX.ipynb")"
 
-mkdir -p "${OUTPUT_DIR}/scheduler_files"
+mkdir -p "${MHPCPROJECT_ROOT}/scheduler_files"
 SCHEDULER_FILE="$(mktemp -p "${OUTPUT_DIR}/scheduler_files" scheduler-XXX.json)"
 
 export TMPDIR=/dev/shm
