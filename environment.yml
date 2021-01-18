@@ -1,7 +1,6 @@
 name: mhpc-project
 channels:
   - conda-forge
-  - pyviz
   - stefanocampanella
 dependencies:
   - python
@@ -9,7 +8,7 @@ dependencies:
   - numpy
   - scipy
   - scikit-learn
-  - pandas
+  - pandas >= 1.1.0
   - matplotlib
   - seaborn
   - dask
@@ -18,7 +17,6 @@ dependencies:
   - nodejs
   - geotop
   - pyarrow
-  - holoviz
   - pip:
       - geotopy
       - nevergrad
@@ -26,5 +24,4 @@ dependencies:
       - papermill
       - nteract-scrapbook
       - jupyter-book
-      - hiplot
       - tqdm

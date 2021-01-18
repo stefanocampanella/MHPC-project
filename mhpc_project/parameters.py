@@ -23,8 +23,7 @@ class VarSoilParameters:
         samples = []
         losses = []
         for candidate, loss in sample_log:
-            sample_dataframe = self.from_instrumentation(candidate)
-            sample = sample_dataframe['candidate'].to_numpy()
+            sample = self.from_instrumentation(candidate).to_numpy()
             samples.append(sample)
             losses.append(loss)
         samples = np.asarray(samples)
@@ -33,18 +32,16 @@ class VarSoilParameters:
         sa = delta.analyze(problem, samples, losses)
         return sa.to_df()
 
-    def from_instrumentation(self, candidate, column_name='candidate'):
+    def from_instrumentation(self, candidate):
         parameters = candidate.args[0]
 
         extra, inpts, soil = (parameters[key] for key in ('extra', 'inpts', 'soil'))
         soil_a = {name + '_a': a for name, (a, b) in soil.items()}
         soil_b = {name + '_b': b for name, (a, b) in soil.items()}
-        dataframe = pd.DataFrame.from_dict({**extra, **inpts, **soil_a, **soil_b},
-                                           orient='index',
-                                           columns=[column_name])
-        dataframe.index.rename('name', inplace=True)
-        dataframe.drop(self.defaults, inplace=True)
-        return dataframe
+        series = pd.Series({**extra, **inpts, **soil_a, **soil_b})
+        series.index.rename('name', inplace=True)
+        series.drop(self.defaults, inplace=True)
+        return series
 
     @property
     def instrumentation(self):

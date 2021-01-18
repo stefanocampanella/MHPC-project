@@ -1,3 +1,4 @@
+import subprocess
 from datetime import datetime
 from subprocess import CalledProcessError, TimeoutExpired
 from tempfile import TemporaryDirectory
@@ -9,7 +10,7 @@ import nevergrad as ng
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from dask.distributed import as_completed
+from dask.distributed import as_completed, fire_and_forget
 from nevergrad.parametrization.parameter import Scalar, Log
 from scipy.optimize import root_scalar
 
@@ -148,7 +149,7 @@ def kge_cmp(sim, obs):
 def run_model(model, candidate):
     start = timer()
     try:
-        with TemporaryDirectory() as tmpdir:
+        with TemporaryDirectory(prefix='geotop_inputs_') as tmpdir:
             result = model.run_in(tmpdir, *candidate.args, **candidate.kwargs)
     except (CalledProcessError, TimeoutExpired):
         result = None
@@ -192,6 +193,8 @@ def calibrate(model, parameters, observations, algorithm, popsize, num_generatio
                         completed_queue.add(remote_sample)
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)
+        cleanup = client.map(lambda: subprocess.run(['rm', '-r', '$TMPDIR/geotop_inputs_*']), range(num_workers))
+        fire_and_forget(cleanup)
     elapsed = timer() - start
 
     return optimizer.provide_recommendation(), log, elapsed
