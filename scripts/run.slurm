@@ -29,13 +29,15 @@ SCHEDULER_FILE="$(mktemp -p "${OUTPUT_DIR}/scheduler_files" scheduler-XXX.json)"
 
 export TMPDIR=/dev/shm
 
+srun ulimit -n 4096
+
 dask-scheduler --scheduler-file="${SCHEDULER_FILE}" \
                --interface=ib0 &
 sleep 120
 
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
-                 --nprocs=1 \
-                 --nthreads="${SLURM_CPUS_PER_TASK}" \
+                 --nprocs=32 \
+                 --nthreads=1 \
                  --interface=ib0 &
 sleep 60
 
