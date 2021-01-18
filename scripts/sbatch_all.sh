@@ -8,17 +8,17 @@ TIMEOUT=200
 
 cd "$MHPCPROJECT_ROOT" || exit
 
-# Strong scaling
+# Testbed calibration strong scaling
 SITE=testbed
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
-POPSIZE=128
+POPSIZE=256
 NUM_GENERATIONS=16
 REPETITIONS=4
 OUTPUT="$MHPCPROJECT_ROOT/runs/scaling"
-for NUM_NODES in 4 8 12 16 20 24 28 32
+for NUM_NODES in 2 4 8 12 16 20 24 28 32
 do
-  SECONDS=$((600 + 30 * NUM_GENERATIONS * POPSIZE / NUM_NODES))
+  SECONDS=$((600 + 45 * NUM_GENERATIONS * POPSIZE / NUM_NODES))
   if [[ $SECONDS -gt 43200 ]]
   then
     PARTITION=long2
@@ -74,13 +74,13 @@ do
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
-# For some algorithms
+# Testbed calibration using different algorithms
 SITE=testbed
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
-POPSIZE=128
+POPSIZE=256
 NUM_GENERATIONS=32
 PARTITION=regular2
-NUM_NODES=8
+NUM_NODES=32
 OUTPUT="$MHPCPROJECT_ROOT/runs/algorithms"
 for ALGORITHM in NGO PSO Random
 do
