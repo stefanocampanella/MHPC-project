@@ -1,0 +1,120 @@
+! Station B2 in Montecini
+! ========================
+
+! Domain definition
+! =================
+
+! Inputs
+SoilLayerThicknesses = 20, 60, 240, 480, 1200, 3000, 5000, 12000, 28000
+PointElevation = 1480
+PointSlope = 15
+PointAspect = 225
+PointLatitude = 46.668
+PointLongitude = 10.579
+CoordinatePointX = 620815
+CoordinatePointY = 5171506
+
+! General features
+! ================
+
+! Inputs
+FlagSkyViewFactor = 1
+TimeStepEnergyAndWater = 600
+InitDateDDMMYYYYhhmm = 01/10/2009 23:00
+EndDateDDMMYYYYhhmm = 11/01/2016 06:00
+StandardTimeSimulation = 1
+PointSim = 1
+RecoverSim = 0
+WaterBalance = 1
+EnergyBalance = 1
+! Outputs
+PointAll = 1
+
+! Meteo forcings
+! ==============
+
+! Inputs
+MeteoFile = "meteo/meteo"
+HorizonMeteoStationFile = "horizon/horizon" 
+NumberOfMeteoStations = 1
+MeteoStationCoordinateX = 620815
+MeteoStationCoordinateY = 5171506
+MeteoStationElevation = 1480
+MeteoStationWindVelocitySensorHeight = 2.5
+MeteoStationTemperatureSensorHeight = 2
+! Headers
+HeaderDateDDMMYYYYhhmmMeteo = "datetime"
+HeaderIPrec = "rainfall_amount"
+HeaderWindVelocity = "wind_speed"
+HeaderRH = "relative_humidity"
+HeaderAirTemp = "air_temperature" 
+HeaderSWglobal = "shortwave_global" 
+HeaderHorizonAngle = "angle"
+HeaderHorizonHeight = "height"
+! Outputs
+DtPlotPoint = 1
+
+! Snow
+! ====
+
+! Inputs
+ThresSnowSoilRough = 100
+ThresSnowVegUp = 50
+ThresSnowVegDown = 10
+
+! Vegetation
+! ==========
+
+! Inputs
+VegHeight = 400.0
+LSAI = 4
+CanopyFraction = 1.0
+DecayCoeffCanopy = 2.0
+RootDepth = 250.0
+MinStomatalRes = 25.0
+VegReflectVis = 0.1
+VegReflNIR = 0.2
+VegTransVis = 0.07
+VegTransNIR = 0.25
+CanDensSurface = 0.5
+
+! Surface fluxes
+! ==============
+
+! Inputs
+SoilRoughness = 100.0
+SoilAlbVisDry = 0.15
+SoilAlbNIRDry = 0.25
+SoilAlbVisWet = 0.15
+SoilAlbNIRWet = 0.25
+
+! Soil infiltration
+! =================
+
+! Inputs
+NormalHydrConductivity = 0.021
+ThetaRes = 0.06
+WiltingPoint = 0.11
+FieldCapacity = 0.21
+ThetaSat = 0.51
+AlphaVanGenuchten = 0.0021
+NVanGenuchten = 1.4
+! Outputs
+SoilAll = 1
+SoilPlotDepths = 50, 200
+SoilLiqContentProfileFileWriteEnd = "theta_liq"
+
+! Soil temperature
+! ================
+
+! Inputs
+ThermalConductivitySoilSolids = 1.9
+ThermalCapacitySoilSolids = 2.16e6
+
+! Boundary Conditions
+! ===================
+
+! Inputs
+FreeDrainageAtBottom = 1
+InitWaterTableDepth = 2000
+InitSoilTemp =	4

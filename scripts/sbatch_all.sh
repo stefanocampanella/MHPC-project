@@ -8,7 +8,7 @@ TIMEOUT=200
 
 cd "$MHPCPROJECT_ROOT" || exit
 
-# Testbed calibration for all sites with few parameters
+# Testbed parameters calibration for all sites
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=256
@@ -24,7 +24,7 @@ do
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
-# Calibration for all sites with all parameters
+# All parameters calibration for all sites
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/all.csv"
 ALGORITHM=NGO
 POPSIZE=256
@@ -41,7 +41,7 @@ do
 done
 
 # For some algorithms
-SITE="Matsch B2"
+SITE=testbed
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 POPSIZE=128
 NUM_GENERATIONS=32
@@ -57,7 +57,7 @@ do
 done
 
 # Strong scaling
-SITE="Matsch B2"
+SITE=testbed
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=128
