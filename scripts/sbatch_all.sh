@@ -8,6 +8,8 @@ TIMEOUT=200
 
 cd "$MHPCPROJECT_ROOT" || exit
 
+mkdir -p "slurm_outputs"
+
 # Testbed calibration strong scaling
 SITE=testbed
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
@@ -33,6 +35,7 @@ do
   for n in $(seq $REPETITIONS)
   do
     sbatch -p "$PARTITION" -J "scaling_$SITE" -N "$NUM_NODES" -t "$TIME" \
+           -o "slurm_outputs/%x-%j.out"  -e "slurm_outputs/%x-%j.err" \
       ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
   done
 done
@@ -49,6 +52,7 @@ OUTPUT="$MHPCPROJECT_ROOT/runs/testbed"
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
   sbatch -p "$PARTITION" -J "testbed_$SITE" -N "$NUM_NODES" -t "$TIME" \
+         -o "slurm_outputs/%x-%j.out"  -e "slurm_outputs/%x-%j.err" \
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
@@ -64,6 +68,7 @@ OUTPUT="$MHPCPROJECT_ROOT/runs/all"
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
   sbatch -p "$PARTITION" -J "all_$SITE" -N "$NUM_NODES" -t "$TIME" \
+         -o "slurm_outputs/%x-%j.out"  -e "slurm_outputs/%x-%j.err" \
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
@@ -79,6 +84,7 @@ OUTPUT="$MHPCPROJECT_ROOT/runs/algorithms"
 for ALGORITHM in NGO PSO Random
 do
   sbatch -p "$PARTITION" -J "algorithms_$SITE" -N "$NUM_NODES" -t "$TIME" \
+         -o "slurm_outputs/%x-%j.out"  -e "slurm_outputs/%x-%j.err" \
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
