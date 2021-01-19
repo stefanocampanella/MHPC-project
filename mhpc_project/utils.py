@@ -168,9 +168,12 @@ def submit_run(candidate, model, observations, client):
 
 
 def weighted_success_rate(log, alpha):
-    successes = [1 if np.isfinite(l) else 0 for (_, l, _) in reversed(log)]
-    weights = [exp(-alpha * n) for n in range(len(log))]
-    return sum(w * x for w, x in zip(weights, successes)) / sum(weights)
+    if log:
+        successes = [1 if np.isfinite(l) else 0 for (_, l, _) in reversed(log)]
+        weights = [exp(-alpha * n) for n in range(len(log))]
+        return sum(w * x for w, x in zip(weights, successes)) / sum(weights)
+    else:
+        return 1.0
 
 
 def calibrate(model, parameters, observations, algorithm, popsize, num_generations, client, num_workers):
@@ -194,11 +197,12 @@ def calibrate(model, parameters, observations, algorithm, popsize, num_generatio
                     log.append((candidate, loss, time))
                     if np.isfinite(loss):
                         to_tell.append((candidate, loss))
+                    else:
                         r = weighted_success_rate(log, 1 / num_workers)
-                    elif len(to_tell) + r * completed_queue.count() < popsize:
-                        candidate = optimizer.ask()
-                        remote_sample = submit_run(candidate, remote_model, remote_observations, client)
-                        completed_queue.add(remote_sample)
+                        if len(to_tell) + r * completed_queue.count() < popsize:
+                            candidate = optimizer.ask()
+                            remote_sample = submit_run(candidate, remote_model, remote_observations, client)
+                            completed_queue.add(remote_sample)
 
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)

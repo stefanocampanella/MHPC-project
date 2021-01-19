@@ -18,7 +18,11 @@ REPETITIONS=10
 OUTPUT="$MHPCPROJECT_ROOT/runs/scaling"
 for NUM_NODES in 2 4 8 12 16 20 24 28 32
 do
-  if [[ $NUM_NODES -le 16 ]]
+  if [[ $NUM_NODES -le 4 ]]
+  then
+    PARTITION=regular2
+    TIME=8:00:00
+  elif [[ $NUM_NODES -le 16 ]]
   then
     PARTITION=regular2
     TIME=6:00:00
