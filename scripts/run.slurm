@@ -33,7 +33,7 @@ ulimit -n 16384
 
 dask-scheduler --scheduler-file="${SCHEDULER_FILE}" \
                --interface=ib0 &
-sleep 60
+sleep 120
 
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
                  --nprocs=8 \
