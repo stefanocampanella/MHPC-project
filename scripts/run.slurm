@@ -36,8 +36,8 @@ dask-scheduler --scheduler-file="${SCHEDULER_FILE}" \
 sleep 120
 
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
-                 --nprocs=32 \
-                 --nthreads=1 \
+                 --nprocs=8 \
+                 --nthreads=4 \
                  --interface=ib0 &
 sleep 60
 
