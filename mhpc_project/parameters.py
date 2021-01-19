@@ -26,7 +26,11 @@ class VarSoilParameters:
         variables = {}
         for parameter in self.data.itertuples():
             if parameter.Index not in self.defaults:
-                variables[parameter.Index] = (parameter.lower, parameter.upper)
+                if parameter.where == 'soil':
+                    variables[parameter.Index + '_a'] = (parameter.lower, parameter.upper)
+                    variables[parameter.Index + '_b'] = (parameter.lower, parameter.upper)
+                else:
+                    variables[parameter.Index] = (parameter.lower, parameter.upper)
 
         names = sorted(variables)
         num_vars = len(names)

@@ -1,7 +1,7 @@
 name,init,lower,upper,mapping,where
 FirstLayerWidth,10,1.0,100.0,exp,extra
 MaxDepth,2000,1000,10000,exp,extra
-EdgeDepth,1000,100,10000,exp,extra
+EdgeDepth,500,10,1000,exp,extra
 EdgeWidth,100,10,1000,exp,extra
 LSAI,1.0,0.0,5.0,linear,inpts
 RootDepth,300,0,1500,linear,inpts

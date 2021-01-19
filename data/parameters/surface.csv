@@ -1,7 +1,0 @@
-name,guess,lower,upper,mapping,type
-SoilRoughness,1.0,0.1,100.0,exp,surface
-SoilAlbVisDry,0.2,0.0,1.0,linear,surface
-SoilAlbNIRDry,0.2,0.0,1.0,linear,surface
-SoilAlbVisWet,0.2,0.0,1.0,linear,surface
-SoilAlbNIRWet,0.2,0.0,1.0,linear,surface
-SoilEmissiv,0.96,0.0,1.0,linear,surface
