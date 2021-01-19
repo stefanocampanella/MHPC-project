@@ -40,7 +40,7 @@ done
 # Testbed parameters calibration for all sites
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
-POPSIZE=512
+POPSIZE=1024
 NUM_GENERATIONS=64
 PARTITION=wide2
 NUM_NODES=32
@@ -55,7 +55,7 @@ done
 # All parameters calibration for all sites
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/all.csv"
 ALGORITHM=NGO
-POPSIZE=512
+POPSIZE=1024
 NUM_GENERATIONS=64
 PARTITION=wide2
 NUM_NODES=32
@@ -70,7 +70,7 @@ done
 # Testbed calibration using different algorithms
 SITE=testbed
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
-POPSIZE=512
+POPSIZE=1024
 NUM_GENERATIONS=64
 PARTITION=wide2
 NUM_NODES=32
