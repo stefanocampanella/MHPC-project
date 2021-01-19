@@ -3,6 +3,7 @@ from datetime import datetime
 from subprocess import CalledProcessError, TimeoutExpired
 from tempfile import TemporaryDirectory
 from timeit import default_timer as timer
+from math import sqrt, exp
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
@@ -143,7 +144,7 @@ def kge_cmp(sim, obs):
                 m = x.mean() / y.mean() - 1
                 v = x.std() / y.std() - 1
                 square_loss += r * r + m * m + v * v
-        return np.sqrt(square_loss)
+        return sqrt(square_loss)
 
 
 def run_model(model, candidate):
@@ -164,6 +165,12 @@ def submit_run(candidate, model, observations, client):
     time = client.submit(lambda x: x[1], timed_sim)
     loss = client.submit(kge_cmp, sim, observations)
     return client.submit(lambda x, y, z: (x, y, z), candidate, loss, time)
+
+
+def weighted_success_rate(log, alpha):
+    successes = [1 if np.isfinite(l) else 0 for (_, l, _) in reversed(log)]
+    weights = [exp(-alpha * n) for n in range(len(log))]
+    return sum(w * x for w, x in zip(weights, successes)) / sum(weights)
 
 
 def calibrate(model, parameters, observations, algorithm, popsize, num_generations, client, num_workers):
@@ -187,14 +194,18 @@ def calibrate(model, parameters, observations, algorithm, popsize, num_generatio
                     log.append((candidate, loss, time))
                     if np.isfinite(loss):
                         to_tell.append((candidate, loss))
-                    elif len(to_tell) + completed_queue.count() < popsize:
+                        r = weighted_success_rate(log, 1 / num_workers)
+                    elif len(to_tell) + r * completed_queue.count() < popsize:
                         candidate = optimizer.ask()
                         remote_sample = submit_run(candidate, remote_model, remote_observations, client)
                         completed_queue.add(remote_sample)
+
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)
+
         cleanup = client.map(lambda: subprocess.run(['rm', '-r', '$TMPDIR/geotop_inputs_*']), range(num_workers))
         fire_and_forget(cleanup)
+
     elapsed = timer() - start
 
     return optimizer.provide_recommendation(), log, elapsed
