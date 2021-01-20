@@ -5,7 +5,7 @@
 ! =================
 
 ! Inputs
-SoilLayerThicknesses = 10, 20, 40, 80, 100, 150, 200, 300, 500, 600
+SoilLayerThicknesses = 10, 12, 15, 18, 22, 26, 32, 39, 47, 58, 70, 85, 103, 125, 152, 185
 PointElevation = 641
 PointSlope = 0
 PointAspect = 0

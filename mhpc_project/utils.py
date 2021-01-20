@@ -13,6 +13,7 @@ import pandas as pd
 import seaborn as sns
 from dask.distributed import as_completed, fire_and_forget
 from nevergrad.parametrization.parameter import Scalar, Log
+from SALib.analyze import delta
 from scipy.optimize import root_scalar
 
 
@@ -97,7 +98,76 @@ def calculate_weights(edge_depth, edge_width, widths):
     return weights
 
 
-def make_parameter(mapping, **kwargs):
+def read_soil_profile(working_dir, basename, header, depths, index):
+    names = [header.format(d) for d in depths]
+    profile_path = working_dir / (basename + '.txt')
+    profile = pd.read_csv(profile_path,
+                          na_values=['-9999'],
+                          skiprows=1,
+                          header=0,
+                          names=['skipme'] + names,
+                          usecols=names,
+                          low_memory=False)
+    profile.index = index
+    return profile
+
+
+def postprocess_full(settings, working_dir):
+    def setting_string(name):
+        return settings[name].strip('"')
+
+    data = []
+
+    point_setting = setting_string('PointOutputFileWriteEnd')
+    point_path = working_dir / (point_setting + '.txt')
+    point = pd.read_csv(point_path,
+                        na_values=['-9999'],
+                        parse_dates=[0],
+                        date_parser=date_parser,
+                        index_col=0,
+                        low_memory=False)
+
+    fluxes = pd.DataFrame(index=point.index)
+    canopy_fraction = point[setting_string('HeaderCanopyFractionPoint')]
+
+    leg_veg = point[setting_string('HeaderLEgVegPoint')]
+    lev = point[setting_string('HeaderLEvPoint')]
+    leg_unveg = point[setting_string('HeaderLEgUnvegPoint')]
+    fluxes['latent_heat'] = canopy_fraction * (leg_veg + lev) + (1 - canopy_fraction) * leg_unveg
+
+    hg_veg = point[setting_string('HeaderHgVegPoint')]
+    hv = point[setting_string('HeaderHvPoint')]
+    hg_unveg = point[setting_string('HeaderHgUnvegPoint')]
+    fluxes['sensible_heat'] = canopy_fraction * (hg_veg + hv) + (1 - canopy_fraction) * hg_unveg
+
+    fluxes['soil_heat'] = point[setting_string('HeaderSoilHeatFluxPoint')]
+    data.append(fluxes)
+
+    depths = setting_string('SoilPlotDepths')
+    liq = read_soil_profile(working_dir,
+                            setting_string('SoilLiqContentProfileFileWriteEnd'),
+                            "soil_moisture_{:.0f}",
+                            depths,
+                            point.index)
+    ice = read_soil_profile(working_dir,
+                            setting_string('SoilIceContentProfileFileWriteEnd'),
+                            "soil_moisture_{:.0f}",
+                            depths,
+                            point.index)
+    theta = liq + ice
+    data.append(theta)
+
+    temperature = read_soil_profile(working_dir,
+                                    setting_string('SoilTempProfileFileWriteEnd'),
+                                    "soil_temperature_{:.0f}",
+                                    depths,
+                                    point.index)
+    data.append(temperature)
+
+    return pd.concat(data)
+
+
+def make_nevergrad_parameter(mapping, **kwargs):
     if mapping == 'linear':
         return Scalar(**kwargs)
     elif mapping == 'exp':
@@ -106,12 +176,11 @@ def make_parameter(mapping, **kwargs):
         raise ValueError("Unknown type of mapping {mapping}.")
 
 
-def convergence_plot(log, figsize=(16, 9), dpi=100):
-    loss_log = [(x.generation, l) for x, l, _ in log if np.isfinite(l)]
-    max_generation_number = max(n for n, _ in loss_log)
-    min_losses = [min(l for n, l in loss_log if n <= k)
+def convergence_plot(gen_loss_log, figsize=(16, 9), dpi=100):
+    max_generation_number = max(n for n, _ in gen_loss_log)
+    min_losses = [min(l for n, l in gen_loss_log if n <= k)
                   for k in range(1, max_generation_number + 1)]
-    data = pd.DataFrame(loss_log, columns=['generation', 'loss'])
+    data = pd.DataFrame(gen_loss_log, columns=['generation', 'loss'])
     figure, axes = plt.subplots(figsize=figsize, dpi=dpi)
     sns.lineplot(data=data, x='generation', y='loss', ax=axes)
     sns.lineplot(x=range(1, max_generation_number + 1), y=min_losses, ax=axes)
@@ -123,13 +192,6 @@ def comparison_plots(model, observations, candidate, **kwargs):
         if target in predictions.columns:
             desc = target.replace('_', ' ').title()
             comparison_plot(observations[target], predictions[target], desc=desc, **kwargs)
-
-
-def time_loss_plot(log):
-    losses = [l for _, l, _ in log if np.isfinite(l)]
-    times = [t for _, l, t in log if np.isfinite(l)]
-    data = pd.DataFrame({'losses': losses, 'times': times})
-    sns.jointplot(data=data, x='losses', y='times', height=10)
 
 
 def kge_cmp(sim, obs):
@@ -212,4 +274,26 @@ def calibrate(model, parameters, observations, algorithm, popsize, num_generatio
 
     elapsed = timer() - start
 
-    return optimizer.provide_recommendation(), log, elapsed
+    return optimizer.recommend(), log, elapsed
+
+
+def delta_mim(parameters, candidates_log):
+    samples = []
+    losses = []
+    for candidate, loss in candidates_log:
+        sample = parameters.from_instrumentation(candidate)
+        if parameters.defaults:
+            sample.drop(parameters.defaults, inplace=True)
+        sample = sample.to_numpy()
+        samples.append(sample)
+        losses.append(loss)
+    samples = np.asarray(samples)
+    losses = np.asarray(losses)
+
+    bounds = {key: value for key, value in parameters.bounds.items
+              if key not in parameters.defaults}
+    problem = {'num_vars': list(bounds),
+               'names': len(bounds),
+               'bounds': bounds}
+
+    return delta.analyze(problem, samples, losses).to_df()

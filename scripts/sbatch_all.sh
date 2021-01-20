@@ -3,14 +3,12 @@
 export MHPCPROJECT_ROOT=/scratch/$USER/MHPC-project
 export PYTHONPATH=$MHPCPROJECT_ROOT
 export DASK_CONFIG=$MHPCPROJECT_ROOT/config/dask
-
 TIMEOUT=200
 
 cd "$MHPCPROJECT_ROOT" || exit
-
 mkdir -p "slurm_outputs"
 
-# Testbed calibration strong scaling
+echo "==== Submitting testbed calibration strong scaling jobs ===="
 SITE=testbed
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
@@ -20,17 +18,21 @@ REPETITIONS=10
 OUTPUT="$MHPCPROJECT_ROOT/runs/scaling"
 for NUM_NODES in 2 4 8 12 16 20 24 28 32
 do
-  if [[ $NUM_NODES -le 4 ]]
+  if [[ $NUM_NODES -eq 2 ]]
   then
     PARTITION=regular2
     TIME=8:00:00
+  elif [[ $NUM_NODES -eq 4 ]]
+  then
+    PARTITION=regular2
+    TIME=4:00:00
   elif [[ $NUM_NODES -le 16 ]]
   then
     PARTITION=regular2
-    TIME=6:00:00
+    TIME=2:00:00
   else
     PARTITION=wide2
-    TIME=4:00:00
+    TIME=2:00:00
   fi
   for n in $(seq $REPETITIONS)
   do
@@ -40,14 +42,14 @@ do
   done
 done
 
-# Testbed parameters calibration for all sites
+echo "==== Submitting all-sites calibration of testbed parameters jobs ===="
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=1024
 NUM_GENERATIONS=64
 PARTITION=wide2
 NUM_NODES=32
-TIME=8:00:00
+TIME=6:00:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/testbed"
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
@@ -56,14 +58,14 @@ do
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
-# All parameters calibration for all sites
+echo "==== Submitting all-sites calibration of full set of parameters jobs ===="
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/all.csv"
 ALGORITHM=NGO
 POPSIZE=1024
 NUM_GENERATIONS=64
 PARTITION=wide2
 NUM_NODES=32
-TIME=8:00:00
+TIME=6:00:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/all"
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
@@ -72,14 +74,14 @@ do
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
-# Testbed calibration using different algorithms
+echo "==== Submitting different algorithms testbed calibration jobs ===="
 SITE=testbed
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 POPSIZE=1024
 NUM_GENERATIONS=64
 PARTITION=wide2
 NUM_NODES=32
-TIME=8:00:00
+TIME=6:00:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/algorithms"
 for ALGORITHM in NGO PSO Random
 do
