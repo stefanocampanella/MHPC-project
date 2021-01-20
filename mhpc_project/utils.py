@@ -1,9 +1,11 @@
-import subprocess
+import shutil
+import tempfile
 from datetime import datetime
+from math import sqrt, exp
+from pathlib import Path
 from subprocess import CalledProcessError, TimeoutExpired
 from tempfile import TemporaryDirectory
 from timeit import default_timer as timer
-from math import sqrt, exp
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mtick
@@ -11,9 +13,9 @@ import nevergrad as ng
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from SALib.analyze import delta
 from dask.distributed import as_completed, fire_and_forget
 from nevergrad.parametrization.parameter import Scalar, Log
-from SALib.analyze import delta
 from scipy.optimize import root_scalar
 
 
@@ -228,6 +230,12 @@ def weighted_success_rate(log, alpha):
         return 1.0
 
 
+def do_cleanup():
+    tempdir = Path(tempfile.gettempdir())
+    for geotop_inpts_path in tempdir.glob('geotop_inputs_*'):
+        shutil.rmtree(geotop_inpts_path)
+
+
 def calibrate(model, parameters, observations, algorithm, popsize, num_generations, client, num_workers):
     log = []
     start = timer()
@@ -263,8 +271,14 @@ def calibrate(model, parameters, observations, algorithm, popsize, num_generatio
                             completed_queue.add(remote_sample)
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)
-        for _ in range(num_workers):
-            cleanup = client.submit(lambda: subprocess.run(['rm', '-r', '$TMPDIR/geotop_inputs_*']))
+
+        workers_hosts = {}
+        for address, worker in client.scheduler_info()['workers'].items():
+            host = worker['host']
+            if host not in workers_hosts:
+                workers_hosts[host] = address
+        for address in workers_hosts.values():
+            cleanup = client.submit(do_cleanup, workers=address)
             fire_and_forget(cleanup)
     elapsed = timer() - start
 
@@ -287,8 +301,8 @@ def delta_mim(parameters, candidates_log):
 
     bounds = {key: value for key, value in parameters.bounds.items()
               if key not in parameters.defaults}
-    problem = {'num_vars': list(bounds),
-               'names': len(bounds),
+    problem = {'num_vars': len(bounds),
+               'names': list(bounds),
                'bounds': bounds}
 
     return delta.analyze(problem, samples, losses).to_df()
