@@ -3,13 +3,13 @@
 export MHPCPROJECT_ROOT=/scratch/$USER/MHPC-project
 export PYTHONPATH=$MHPCPROJECT_ROOT
 export DASK_CONFIG=$MHPCPROJECT_ROOT/config/dask
-TIMEOUT=200
 
 cd "$MHPCPROJECT_ROOT" || exit
 mkdir -p "slurm_outputs"
 
 echo "==== Submitting testbed calibration strong scaling jobs ===="
 SITE=testbed
+TIMEOUT=180
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=512
@@ -43,13 +43,14 @@ do
 done
 
 echo "==== Submitting all-sites calibration of testbed parameters jobs ===="
+TIMEOUT=300
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=1024
 NUM_GENERATIONS=64
 PARTITION=wide2
 NUM_NODES=32
-TIME=6:00:00
+TIME=8:00:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/testbed"
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
@@ -59,13 +60,14 @@ do
 done
 
 echo "==== Submitting all-sites calibration of full set of parameters jobs ===="
+TIMEOUT=300
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/all.csv"
 ALGORITHM=NGO
 POPSIZE=1024
 NUM_GENERATIONS=64
 PARTITION=wide2
 NUM_NODES=32
-TIME=6:00:00
+TIME=8:00:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/all"
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
@@ -76,12 +78,13 @@ done
 
 echo "==== Submitting different algorithms testbed calibration jobs ===="
 SITE=testbed
+TIMEOUT=200
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 POPSIZE=1024
 NUM_GENERATIONS=64
 PARTITION=wide2
 NUM_NODES=32
-TIME=6:00:00
+TIME=8:00:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/algorithms"
 for ALGORITHM in NGO PSO Random
 do

@@ -143,7 +143,7 @@ def postprocess_full(settings, working_dir):
     fluxes['soil_heat'] = point[setting_string('HeaderSoilHeatFluxPoint')]
     data.append(fluxes)
 
-    depths = setting_string('SoilPlotDepths')
+    depths = settings['SoilPlotDepths']
     liq = read_soil_profile(working_dir,
                             setting_string('SoilLiqContentProfileFileWriteEnd'),
                             "soil_moisture_{:.0f}",
@@ -186,8 +186,7 @@ def convergence_plot(gen_loss_log, figsize=(16, 9), dpi=100):
     sns.lineplot(x=range(1, max_generation_number + 1), y=min_losses, ax=axes)
 
 
-def comparison_plots(model, observations, candidate, **kwargs):
-    predictions = model(*candidate.args, **candidate.kwargs)
+def comparison_plots(predictions, observations, **kwargs):
     for target in observations.columns:
         if target in predictions.columns:
             desc = target.replace('_', ' ').title()
@@ -209,7 +208,7 @@ def kge_cmp(sim, obs):
         return sqrt(square_loss)
 
 
-def run_model(model, candidate):
+def wrapped_objective(model, candidate, observations):
     start = timer()
     try:
         with TemporaryDirectory(prefix='geotop_inputs_') as tmpdir:
@@ -217,16 +216,7 @@ def run_model(model, candidate):
     except (CalledProcessError, TimeoutExpired):
         result = None
     elapsed = timer() - start
-
-    return result, elapsed
-
-
-def submit_run(candidate, model, observations, client):
-    timed_sim = client.submit(run_model, model, candidate)
-    sim = client.submit(lambda x: x[0], timed_sim)
-    time = client.submit(lambda x: x[1], timed_sim)
-    loss = client.submit(kge_cmp, sim, observations)
-    return client.submit(lambda x, y, z: (x, y, z), candidate, loss, time)
+    return candidate, kge_cmp(result, observations), elapsed
 
 
 def weighted_success_rate(log, alpha):
@@ -251,7 +241,10 @@ def calibrate(model, parameters, observations, algorithm, popsize, num_generatio
         to_tell = []
         while len(to_tell) < popsize:
             candidates = [optimizer.ask() for _ in range(num_workers)]
-            remote_samples = [submit_run(remote_candidate, remote_model, remote_observations, client)
+            remote_samples = [client.submit(wrapped_objective,
+                                            remote_model,
+                                            remote_candidate,
+                                            remote_observations)
                               for remote_candidate in client.scatter(candidates)]
             completed_queue = as_completed(remote_samples, with_results=True)
             for batch in completed_queue.batches():
@@ -263,18 +256,20 @@ def calibrate(model, parameters, observations, algorithm, popsize, num_generatio
                         r = weighted_success_rate(log, 1 / num_workers)
                         if len(to_tell) + r * completed_queue.count() < popsize:
                             candidate = optimizer.ask()
-                            remote_sample = submit_run(candidate, remote_model, remote_observations, client)
+                            remote_sample = client.submit(wrapped_objective,
+                                                          remote_model,
+                                                          candidate,
+                                                          remote_observations)
                             completed_queue.add(remote_sample)
-
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)
-
-        cleanup = client.map(lambda: subprocess.run(['rm', '-r', '$TMPDIR/geotop_inputs_*']), range(num_workers))
-        fire_and_forget(cleanup)
-
+        for _ in range(num_workers):
+            cleanup = client.submit(lambda: subprocess.run(['rm', '-r', '$TMPDIR/geotop_inputs_*']))
+            fire_and_forget(cleanup)
     elapsed = timer() - start
 
-    return optimizer.recommend(), log, elapsed
+    recommendation = optimizer.provide_recommendation()
+    return recommendation, model(*recommendation.args, **recommendation.kwargs), log, elapsed
 
 
 def delta_mim(parameters, candidates_log):
@@ -290,7 +285,7 @@ def delta_mim(parameters, candidates_log):
     samples = np.asarray(samples)
     losses = np.asarray(losses)
 
-    bounds = {key: value for key, value in parameters.bounds.items
+    bounds = {key: value for key, value in parameters.bounds.items()
               if key not in parameters.defaults}
     problem = {'num_vars': list(bounds),
                'names': len(bounds),

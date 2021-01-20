@@ -13,6 +13,7 @@ class UniformSoilModel(GEOtop):
 
     def preprocess(self, working_dir, *args, **kwargs):
         settings = self.settings.copy()
+        settings.update(self.default_settings)
         settings.update(args[0])
         self.clone_into(working_dir)
         self.patch_inpts_file(working_dir, settings)

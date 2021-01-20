@@ -31,7 +31,7 @@ class UniformSoilParameters(Parameters):
     @property
     def bounds(self):
         bounds = {}
-        for parameter in self.data.intertuples():
+        for parameter in self.data.itertuples():
             bounds[parameter.Index] = (parameter.lower, parameter.upper)
         return bounds
 
@@ -58,6 +58,7 @@ class UniformSoilParameters(Parameters):
 
 class VariedSoilParameters(Parameters):
 
+    @property
     def bounds(self):
         bounds = {}
         for parameter in self.data.itertuples():
