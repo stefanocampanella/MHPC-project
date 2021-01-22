@@ -54,7 +54,9 @@ papermill --no-progress-bar \
           -p num_generations "${NUM_GENERATIONS}" \
           -p scheduler_file "${SCHEDULER_FILE}" \
           -p num_workers ${NUM_WORKERS} \
+          -p performance_report_filename "${OUTPUT%.ipynb}-performance-report.html" \
           "${INPUT}" "${OUTPUT}"
+jupyter nbconvert --to html "${OUTPUT}"
 rm "${SCHEDULER_FILE}"
 
 exit
