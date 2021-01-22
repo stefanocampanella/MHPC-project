@@ -32,16 +32,17 @@ export TMPDIR=/dev/shm
 ulimit -n 16384
 
 dask-scheduler --scheduler-file="${SCHEDULER_FILE}" \
+               --no-dashboard \
+               --no-show \
                --interface=ib0 &
-sleep 120
 
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
+                 --death-timeout=180 \
                  --no-dashboard \
                  --no-show \
-                 --nprocs=4 \
-                 --nthreads=8 \
+                 --nprocs=1 \
+                 --nthreads="$SLURM_CPUS_PER_TASK" \
                  --interface=ib0 &
-sleep 60
 
 papermill --no-progress-bar \
           -p model_path "${MODEL_PATH}" \

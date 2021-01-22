@@ -1,6 +1,16 @@
 dask:
-  temporary-directory: $MHPCPROJECT_ROOT/runs
+  temporary-directory: /tmp
 distributed:
+  comm:
+    retry:
+      count: 4
+    offload: false
+    socket-backlog: 4096
+    timeouts:
+      connect: 60s
+      tcp: 90s
+  scheduler:
+    unkown-task-duration: 180s
   logging:
     distributed: info
     bokeh: critical
