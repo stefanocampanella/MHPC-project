@@ -34,8 +34,7 @@ do
   fi
   for n in $(seq $REPETITIONS)
   do
-    sbatch -p "$PARTITION" -J "scaling_$SITE" -N "$NUM_NODES" -t "$TIME" \
-           -o "slurm_outputs/%x-%j.out"  -e "slurm_outputs/%x-%j.err" \
+    sbatch -p "$PARTITION" -J "scaling_$SITE" -N "$NUM_NODES" -t "$TIME" --output "slurm_outputs/%x-%j.out" \
       ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
   done
 done
@@ -52,8 +51,7 @@ TIME=8:00:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/testbed"
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
-  sbatch -p "$PARTITION" -J "testbed_$SITE" -N "$NUM_NODES" -t "$TIME" \
-         -o "slurm_outputs/%x-%j.out"  -e "slurm_outputs/%x-%j.err" \
+  sbatch -p "$PARTITION" -J "testbed_$SITE" -N "$NUM_NODES" -t "$TIME" --output "slurm_outputs/%x-%j.out" \
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
@@ -69,8 +67,7 @@ TIME=8:00:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/all"
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
-  sbatch -p "$PARTITION" -J "all_$SITE" -N "$NUM_NODES" -t "$TIME" \
-         -o "slurm_outputs/%x-%j.out"  -e "slurm_outputs/%x-%j.err" \
+  sbatch -p "$PARTITION" -J "all_$SITE" -N "$NUM_NODES" -t "$TIME"  --output "slurm_outputs/%x-%j.out" \
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
@@ -86,8 +83,7 @@ TIME=8:00:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/algorithms"
 for ALGORITHM in NGO PSO Random
 do
-  sbatch -p "$PARTITION" -J "algorithms_$SITE" -N "$NUM_NODES" -t "$TIME" \
-         -o "slurm_outputs/%x-%j.out"  -e "slurm_outputs/%x-%j.err" \
+  sbatch -p "$PARTITION" -J "algorithms_$SITE" -N "$NUM_NODES" -t "$TIME" --output "slurm_outputs/%x-%j.out" \
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
