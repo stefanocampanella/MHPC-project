@@ -221,7 +221,7 @@ def wrapped_objective(model, candidate, observations):
     return candidate, kge_cmp(result, observations), elapsed
 
 
-def weighted_success_rate(log, alpha):
+def average_success_rate(log, alpha):
     if log:
         successes = [1 if np.isfinite(l) else 0 for (_, l, _) in reversed(log)]
         weights = [exp(-alpha * n) for n in range(len(log))]
@@ -243,12 +243,8 @@ def calibrate(model,
               popsize,
               num_generations,
               client,
-              num_workers,
-              alpha=None,
-              overshoot=4):
-    alpha = alpha if alpha else 1 / num_workers
+              num_workers):
     log = []
-    start = timer()
     optimizer_class = ng.optimizers.registry[algorithm]
     optimizer = optimizer_class(parameters.instrumentation,
                                 budget=np.inf,
@@ -257,33 +253,31 @@ def calibrate(model,
     remote_model = client.scatter(model, broadcast=True)
     for _ in range(num_generations):
         to_tell = []
-        while len(to_tell) < popsize:
-            candidates = [optimizer.ask() for _ in range(num_workers)]
-            remote_samples = [client.submit(wrapped_objective,
-                                            remote_model,
-                                            remote_candidate,
-                                            remote_observations)
-                              for remote_candidate in client.scatter(candidates)]
-            completed_queue = as_completed(remote_samples, with_results=True)
-            for batch in completed_queue.batches():
-                for future, (candidate, loss, time) in batch:
-                    log.append((candidate, loss, time))
-                    if np.isfinite(loss):
-                        to_tell.append((candidate, loss))
+        candidates = [optimizer.ask() for _ in range(num_workers)]
+        remote_samples = [client.submit(wrapped_objective,
+                                        remote_model,
+                                        remote_candidate,
+                                        remote_observations)
+                          for remote_candidate in client.scatter(candidates)]
+        completed_queue = as_completed(remote_samples, with_results=True)
+        for batch in completed_queue.batches():
+            for future, (candidate, loss, time) in batch:
+                if np.isfinite(loss):
+                    to_tell.append((candidate, loss))
+                log.append((candidate, loss, time))
+                r = average_success_rate(log, 1 / popsize)
+                if (num_remaining_samples := popsize - len(to_tell) - r * completed_queue.count()) > 0:
+                    if r > 0:
+                        num_new_samples = min(num_workers, int(num_remaining_samples / r))
                     else:
-                        r = weighted_success_rate(log, alpha)
-                        if len(to_tell) + r * completed_queue.count() < popsize:
-                            if r > 0:
-                                num_new_samples = min(num_workers, int(overshoot / r))
-                            else:
-                                num_new_samples = num_workers
-                            for _ in range(num_new_samples):
-                                candidate = optimizer.ask()
-                                remote_sample = client.submit(wrapped_objective,
-                                                              remote_model,
-                                                              candidate,
-                                                              remote_observations)
-                                completed_queue.add(remote_sample)
+                        num_new_samples = num_workers
+                    for _ in range(num_new_samples):
+                        candidate = optimizer.ask()
+                        remote_sample = client.submit(wrapped_objective,
+                                                      remote_model,
+                                                      candidate,
+                                                      remote_observations)
+                        completed_queue.add(remote_sample)
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)
 
@@ -295,10 +289,9 @@ def calibrate(model,
         for address in workers_hosts.values():
             cleanup = client.submit(do_cleanup, workers=address)
             fire_and_forget(cleanup)
-    elapsed = timer() - start
 
     recommendation = optimizer.provide_recommendation()
-    return recommendation, model(*recommendation.args, **recommendation.kwargs), log, elapsed
+    return recommendation, model(*recommendation.args, **recommendation.kwargs), log
 
 
 def delta_mim(parameters, candidates_log):
