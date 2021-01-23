@@ -7,7 +7,7 @@ mkdir -p "slurm_outputs"
 
 echo "==== Submitting testbed calibration strong scaling jobs ===="
 SITE=testbed
-TIMEOUT=200
+TIMEOUT=150
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=512
@@ -40,7 +40,7 @@ do
 done
 
 echo "==== Submitting all-sites calibration of testbed parameters jobs ===="
-TIMEOUT=200
+TIMEOUT=150
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=1024
@@ -56,7 +56,7 @@ do
 done
 
 echo "==== Submitting all-sites calibration of full set of parameters jobs ===="
-TIMEOUT=200
+TIMEOUT=150
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/all.csv"
 ALGORITHM=NGO
 POPSIZE=1024
@@ -73,7 +73,7 @@ done
 
 echo "==== Submitting different algorithms testbed calibration jobs ===="
 SITE=testbed
-TIMEOUT=200
+TIMEOUT=150
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 POPSIZE=1024
 NUM_GENERATIONS=64
