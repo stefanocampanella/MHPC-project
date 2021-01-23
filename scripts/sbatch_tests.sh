@@ -7,7 +7,7 @@ mkdir -p "slurm_outputs"
 
 echo "==== Submitting test jobs ===="
 SITE=testbed
-TIMEOUT=300
+TIMEOUT=150
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=64
@@ -27,8 +27,7 @@ do
     PARTITION=wide2
     TIME=1:00:00
   fi
-  sbatch -p "$PARTITION" -J "test-${NUM_NODES}" -N "$NUM_NODES" -t "$TIME" \
-         -o "slurm_outputs/%x-%j.out"  -e "slurm_outputs/%x-%j.err" \
+  sbatch -p "$PARTITION" -J "test_$SITE" -N "$NUM_NODES" -t "$TIME" --output "slurm_outputs/%x-%j.out" \
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 

@@ -56,7 +56,6 @@ papermill --no-progress-bar \
           -p algorithm "${ALGORITHM}" \
           -p popsize "${POPSIZE}" \
           -p num_generations "${NUM_GENERATIONS}" \
-          -p num_nodes "${SLURM_NTASKS}" \
           -p scheduler_file "${SCHEDULER_FILE}" \
           -p num_workers ${NUM_WORKERS} \
           -p performance_report_filename "${OUTPUT%.ipynb}-performance-report.html" \

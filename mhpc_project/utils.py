@@ -236,7 +236,17 @@ def do_cleanup():
         shutil.rmtree(geotop_inpts_path)
 
 
-def calibrate(model, parameters, observations, algorithm, popsize, num_generations, client, num_workers):
+def calibrate(model,
+              parameters,
+              observations,
+              algorithm,
+              popsize,
+              num_generations,
+              client,
+              num_workers,
+              alpha=None,
+              overshoot=4):
+    alpha = alpha if alpha else 1 / num_workers
     log = []
     start = timer()
     optimizer_class = ng.optimizers.registry[algorithm]
@@ -261,9 +271,13 @@ def calibrate(model, parameters, observations, algorithm, popsize, num_generatio
                     if np.isfinite(loss):
                         to_tell.append((candidate, loss))
                     else:
-                        r = weighted_success_rate(log, 1 / num_workers)
+                        r = weighted_success_rate(log, alpha)
                         if len(to_tell) + r * completed_queue.count() < popsize:
-                            for _ in range(int(1 / r)):
+                            if r > 0:
+                                num_new_samples = min(num_workers, int(overshoot / r))
+                            else:
+                                num_new_samples = num_workers
+                            for _ in range(num_new_samples):
                                 candidate = optimizer.ask()
                                 remote_sample = client.submit(wrapped_objective,
                                                               remote_model,
