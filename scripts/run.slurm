@@ -22,11 +22,13 @@ export DASK_CONFIG=$MHPCPROJECT_ROOT/config/dask
 INPUT="${MHPCPROJECT_ROOT}/notebooks/calibration.ipynb"
 MODEL_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/inputs"
 OBSERVATIONS_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/observations/obs.csv"
-NUM_WORKERS=$((SLURM_CPUS_PER_TASK * SLURM_NTASKS))
+NUM_PROCS=8
+NUM_CPUS=$((SLURM_CPUS_PER_TASK * SLURM_NTASKS))
+NUM_WORKERS=$((NUM_PROCS * SLURM_NTASKS))
 BUDGET=$((NUM_GENERATIONS * POPSIZE))
 
 mkdir -p "${OUTPUT_DIR}"
-OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_WORKERS}-XXX.ipynb")"
+OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_CPUS}-XXX.ipynb")"
 
 mkdir -p "${MHPCPROJECT_ROOT}/scheduler_files"
 SCHEDULER_FILE="$(mktemp -p "${MHPCPROJECT_ROOT}/scheduler_files" scheduler-XXX.json)"
@@ -44,8 +46,8 @@ srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
                  --death-timeout=180 \
                  --no-dashboard \
                  --no-show \
-                 --nprocs=8 \
-                 --nthreads=4 \
+                 --nprocs=$NUM_PROCS \
+                 --nthreads=$((SLURM_CPUS_PER_TASK / NUM_PROCS)) \
                  --interface=ib0 &
 
 papermill --no-progress-bar \
@@ -57,6 +59,7 @@ papermill --no-progress-bar \
           -p popsize "${POPSIZE}" \
           -p num_generations "${NUM_GENERATIONS}" \
           -p scheduler_file "${SCHEDULER_FILE}" \
+          -p num_cpus ${NUM_CPUS} \
           -p num_workers ${NUM_WORKERS} \
           -p performance_report_filename "${OUTPUT%.ipynb}-performance-report.html" \
           "${INPUT}" "${OUTPUT}"
