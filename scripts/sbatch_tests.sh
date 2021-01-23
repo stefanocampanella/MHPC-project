@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 
 export MHPCPROJECT_ROOT=/scratch/$USER/MHPC-project
-export PYTHONPATH=$MHPCPROJECT_ROOT
+export PYTHONPATH=$PYTHONPATH:$MHPCPROJECT_ROOT
 export DASK_CONFIG=$MHPCPROJECT_ROOT/config/dask
 
 cd "$MHPCPROJECT_ROOT" || exit

@@ -35,6 +35,7 @@ dask-scheduler --scheduler-file="${SCHEDULER_FILE}" \
                --no-dashboard \
                --no-show \
                --interface=ib0 &
+sleep 60
 
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
                  --death-timeout=180 \
