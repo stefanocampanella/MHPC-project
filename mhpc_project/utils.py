@@ -263,12 +263,13 @@ def calibrate(model, parameters, observations, algorithm, popsize, num_generatio
                     else:
                         r = weighted_success_rate(log, 1 / num_workers)
                         if len(to_tell) + r * completed_queue.count() < popsize:
-                            candidate = optimizer.ask()
-                            remote_sample = client.submit(wrapped_objective,
-                                                          remote_model,
-                                                          candidate,
-                                                          remote_observations)
-                            completed_queue.add(remote_sample)
+                            for _ in range(int(1 / r)):
+                                candidate = optimizer.ask()
+                                remote_sample = client.submit(wrapped_objective,
+                                                              remote_model,
+                                                              candidate,
+                                                              remote_observations)
+                                completed_queue.add(remote_sample)
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)
 
