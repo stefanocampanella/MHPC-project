@@ -15,6 +15,11 @@ NUM_GENERATIONS=$5
 TIMEOUT=$6
 OUTPUT_DIR=$7
 
+export TMPDIR=/dev/shm
+export PYTHONPATH=$PYTHONPATH:$MHPCPROJECT_ROOT
+export DASK_ROOT_CONFIG=$MHPCPROJECT_ROOT/config/dask
+export DASK_CONFIG=$MHPCPROJECT_ROOT/config/dask
+
 INPUT="${MHPCPROJECT_ROOT}/notebooks/calibration.ipynb"
 MODEL_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/inputs"
 OBSERVATIONS_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/observations/obs.csv"
@@ -26,8 +31,6 @@ OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_WORKER
 
 mkdir -p "${MHPCPROJECT_ROOT}/scheduler_files"
 SCHEDULER_FILE="$(mktemp -p "${MHPCPROJECT_ROOT}/scheduler_files" scheduler-XXX.json)"
-
-export TMPDIR=/dev/shm
 
 ulimit -n 16384
 

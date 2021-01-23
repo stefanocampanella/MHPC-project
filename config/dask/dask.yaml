@@ -1,5 +1,5 @@
 dask:
-  temporary-directory: /tmp
+  temporary-directory: /tmp/dask-worker-space
 distributed:
   comm:
     retry:
