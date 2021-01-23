@@ -19,14 +19,14 @@ do
   if [[ $NUM_NODES -eq 4 ]]
   then
     PARTITION=regular2
-    TIME=2:00:00
+    TIME=1:00:00
   elif [[ $NUM_NODES -le 16 ]]
   then
     PARTITION=regular2
-    TIME=1:00:00
+    TIME=30:00
   else
     PARTITION=wide2
-    TIME=1:00:00
+    TIME=30:00
   fi
   sbatch -p "$PARTITION" -J "test_$NUM_NODES" -N "$NUM_NODES" -t "$TIME" --output "slurm_outputs/%x-%j.out" \
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
