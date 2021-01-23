@@ -28,7 +28,7 @@ do
     PARTITION=wide2
     TIME=1:00:00
   fi
-  sbatch -p "$PARTITION" -J "test_$SITE" -N "$NUM_NODES" -t "$TIME" --output "slurm_outputs/%x-%j.out" \
+  sbatch -p "$PARTITION" -J "test_$NUM_NODES" -N "$NUM_NODES" -t "$TIME" --output "slurm_outputs/%x-%j.out" \
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done
 
