@@ -40,8 +40,8 @@ srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
                  --death-timeout=180 \
                  --no-dashboard \
                  --no-show \
-                 --nprocs=1 \
-                 --nthreads="$SLURM_CPUS_PER_TASK" \
+                 --nprocs=8 \
+                 --nthreads=4 \
                  --interface=ib0 &
 
 papermill --no-progress-bar \

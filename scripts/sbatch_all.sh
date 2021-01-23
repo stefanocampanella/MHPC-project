@@ -9,23 +9,23 @@ mkdir -p "slurm_outputs"
 
 echo "==== Submitting testbed calibration strong scaling jobs ===="
 SITE=testbed
-TIMEOUT=180
+TIMEOUT=240
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=512
 NUM_GENERATIONS=16
 REPETITIONS=10
 OUTPUT="$MHPCPROJECT_ROOT/runs/scaling"
-for NUM_NODES in 2 4 8 12 16 20 24 28 32
+for NUM_NODES in 4 8 12 16 20 24 28 32
 do
-  if [[ $NUM_NODES -eq 2 ]]
-  then
-    PARTITION=regular2
-    TIME=8:00:00
-  elif [[ $NUM_NODES -eq 4 ]]
+  if [[ $NUM_NODES -eq 4 ]]
   then
     PARTITION=regular2
     TIME=4:00:00
+  elif [[ $NUM_NODES -eq 8 ]]
+  then
+    PARTITION=regular2
+    TIME=3:00:00
   elif [[ $NUM_NODES -le 16 ]]
   then
     PARTITION=regular2
