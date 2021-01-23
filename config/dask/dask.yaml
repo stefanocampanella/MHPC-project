@@ -1,6 +1,6 @@
-dask:
-  temporary-directory: /tmp
+temporary-directory: /tmp
 distributed:
+  temporary-directory: /tmp
   comm:
     retry:
       count: 4
