@@ -17,8 +17,6 @@ OUTPUT_DIR=$7
 
 export TMPDIR=/dev/shm
 export PYTHONPATH=$PYTHONPATH:$MHPCPROJECT_ROOT
-export DASK_ROOT_CONFIG=$MHPCPROJECT_ROOT/config/dask
-export DASK_CONFIG=$MHPCPROJECT_ROOT/config/dask
 
 INPUT="${MHPCPROJECT_ROOT}/notebooks/calibration.ipynb"
 MODEL_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/inputs"
@@ -56,6 +54,7 @@ papermill --no-progress-bar \
           -p algorithm "${ALGORITHM}" \
           -p popsize "${POPSIZE}" \
           -p num_generations "${NUM_GENERATIONS}" \
+          -p num_nodes "${SLURM_NTASKS}" \
           -p scheduler_file "${SCHEDULER_FILE}" \
           -p num_workers ${NUM_WORKERS} \
           -p performance_report_filename "${OUTPUT%.ipynb}-performance-report.html" \
