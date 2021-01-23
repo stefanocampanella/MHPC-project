@@ -40,7 +40,7 @@ dask-scheduler --scheduler-file="${SCHEDULER_FILE}" \
 sleep 60
 
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
-                 --local-directory="/tmp/dask-worker-files"
+                 --local-directory="/tmp/dask-worker-files" \
                  --death-timeout=180 \
                  --no-dashboard \
                  --no-show \
