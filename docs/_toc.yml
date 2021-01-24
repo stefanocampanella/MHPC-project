@@ -2,8 +2,8 @@
 
 - part: Introduction
   chapters:
-    - file: intro/prologue
-    - file: intro/geotop
+    - file: introduction/prologue
+    - file: introduction/geotop
 
 - part: Motivations
   chapters:
@@ -17,23 +17,21 @@
 
 - part: Methodology
   chapters:
-    - file: approach/tools
-    - file: approach/deployment
-    - file: approach/libraries
+    - file: methodology/tools
+    - file: methodology/deployment
       sections:
-        - file: approach/libs/jupyter
-        - file: approach/libs/dask
-        - file: approach/libs/geotopy
-        - file: approach/libs/nevergrad
-        - file: approach/libs/salib
-        - file: approach/libs/mhpc-project
+        - file: methodology/libs/jupyter
+        - file: methodology/libs/dask
+        - file: methodology/libs/geotopy
+        - file: methodology/libs/nevergrad
+        - file: methodology/libs/salib
+        - file: methodology/libs/mhpc-project
 
 - part: Results
   chapters:
-    - file: approach/examples
+    - file: results/examples
       sections:
-        - file: approach/examples/plots
-        - file: approach/examples/sensitivity_analysis
-        - file: approach/examples/calibration
-    - file: results/discussion
+        - file: results/examples/plots
+        - file: results/examples/sensitivity_analysis
+        - file: results/examples/calibration
     - file: results/conclusions

@@ -43,7 +43,7 @@ do
   fi
   for n in $(seq $REPETITIONS)
   do
-    sbatch -p "$PARTITION" -J "scaling_$SITE" -N "$NUM_NODES" -t "$TIME" --output "slurm_outputs/%x-%j.out" \
+    sbatch -p "$PARTITION" -J "strong_scaling_$NUM_NODES" -N "$NUM_NODES" -t "$TIME" --output "slurm_outputs/%x-%j.out" \
       ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
   done
 done
