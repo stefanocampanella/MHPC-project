@@ -186,13 +186,16 @@ def convergence_plot(gen_loss_log, figsize=(16, 9), dpi=100):
     figure, axes = plt.subplots(figsize=figsize, dpi=dpi)
     sns.lineplot(data=data, x='generation', y='loss', ax=axes)
     sns.lineplot(x=range(1, max_generation_number + 1), y=min_losses, ax=axes)
+    return figure
 
 
 def comparison_plots(predictions, observations, **kwargs):
+    plots = {}
     for target in observations.columns:
         if target in predictions.columns:
             desc = target.replace('_', ' ').title()
-            comparison_plot(observations[target], predictions[target], desc=desc, **kwargs)
+            plots[target] = comparison_plot(observations[target], predictions[target], desc=desc, **kwargs)
+    return plots
 
 
 def kge_cmp(sim, obs):
@@ -214,11 +217,12 @@ def wrapped_objective(model, candidate, observations):
     start = timer()
     try:
         with TemporaryDirectory(prefix='geotop_inputs_') as tmpdir:
-            result = model.run_in(tmpdir, *candidate.args, **candidate.kwargs)
+            predictions = model.run_in(tmpdir, *candidate.args, **candidate.kwargs)
     except (CalledProcessError, TimeoutExpired):
-        result = None
+        predictions = None
+    loss = kge_cmp(predictions, observations)
     elapsed = timer() - start
-    return candidate, kge_cmp(result, observations), elapsed
+    return candidate, loss, elapsed
 
 
 def average_success_rate(log, alpha):

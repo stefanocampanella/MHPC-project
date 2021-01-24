@@ -9,15 +9,22 @@ SITE=testbed
 TIMEOUT=150
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
-POPSIZE=512
 NUM_GENERATIONS=8
 REPETITIONS=4
-OUTPUT="$MHPCPROJECT_ROOT/runs/scaling"
+OUTPUT="$MHPCPROJECT_ROOT/runs/weak_scaling"
 
-echo "==== Submitting testbed calibration strong scaling jobs ===="
-for NUM_NODES in 4 8 12 16 20 24 28 32
+echo "==== Submitting testbed calibration weak scaling jobs ===="
+for NUM_NODES in 1 2 4 8 12 16 20 24 28 32
 do
-  if [[ $NUM_NODES -eq 4 ]]
+  if [[ $NUM_NODES -eq 1 ]]
+  then
+    PARTITION=long2
+    TIME=16:00:00
+  elif [[ $NUM_NODES -eq 2 ]]
+  then
+    PARTITION=regular2
+    TIME=8:00:00
+  elif [[ $NUM_NODES -eq 4 ]]
   then
     PARTITION=regular2
     TIME=4:00:00
@@ -35,6 +42,7 @@ do
   fi
   for n in $(seq $REPETITIONS)
   do
+    POPSIZE=$((32 * NUM_NODES))
     sbatch -p "$PARTITION" -J "scaling_$SITE" -N "$NUM_NODES" -t "$TIME" --output "slurm_outputs/%x-%j.out" \
       ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
   done
