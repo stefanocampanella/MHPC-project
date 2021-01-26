@@ -166,12 +166,11 @@ def do_cleanup():
 
 
 def submit_objectives(optimizer, model, observations, client, n):
-    candidates = [optimizer.ask() for _ in range(n)]
     remote_samples = [client.submit(wrapped_objective,
                                     model,
-                                    remote_candidate,
+                                    optimizer.ask(),
                                     observations)
-                      for remote_candidate in client.scatter(candidates)]
+                      for _ in range(n)]
     return remote_samples
 
 
