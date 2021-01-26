@@ -18,6 +18,6 @@ OUTPUT="$MHPCPROJECT_ROOT/runs/full"
 echo "==== Submitting all-sites calibration of full set of parameters jobs ===="
 for SITE in DOMEF DOMES DOPAS Kaltern Latsch "Matsch B2" "Matsch P2" NEPAS
 do
-  sbatch -p "$PARTITION" -J "all_$SITE" -N "$NUM_NODES" -t "$TIME"  --output "slurm_outputs/%x-%j.out" \
+  sbatch -p "$PARTITION" -J "$SITE" -N "$NUM_NODES" -t "$TIME"  --output "slurm_outputs/%x-%j.out" \
     ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
 done

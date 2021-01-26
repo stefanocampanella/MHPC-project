@@ -22,7 +22,7 @@ export DASK_CONFIG=$MHPCPROJECT_ROOT/config/dask
 INPUT="${MHPCPROJECT_ROOT}/notebooks/calibration.ipynb"
 MODEL_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/inputs"
 OBSERVATIONS_PATH="${MHPCPROJECT_ROOT}/data/${SITE}/observations/obs.csv"
-NUM_PROCS=1
+NUM_PROCS=2
 NUM_CPUS=$((SLURM_CPUS_PER_TASK * SLURM_NTASKS))
 NUM_WORKERS=$((NUM_PROCS * SLURM_NTASKS))
 BUDGET=$((NUM_GENERATIONS * POPSIZE))
@@ -33,7 +33,7 @@ OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_CPUS}-
 mkdir -p "${MHPCPROJECT_ROOT}/scheduler_files"
 SCHEDULER_FILE="$(mktemp -p "${MHPCPROJECT_ROOT}/scheduler_files" scheduler-XXX.json)"
 
-ulimit -n 16384
+ulimit -n 128000
 
 dask-scheduler --scheduler-file="${SCHEDULER_FILE}" \
                --no-dashboard \

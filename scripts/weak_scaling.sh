@@ -10,35 +10,18 @@ TIMEOUT=150
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 NUM_GENERATIONS=8
-REPETITIONS=4
+REPETITIONS=8
+TIME=1:30:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/weak_scaling"
 
 echo "==== Submitting testbed calibration weak scaling jobs ===="
 for NUM_NODES in 1 2 4 8 12 16 20 24 28 32
 do
-  if [[ $NUM_NODES -eq 1 ]]
-  then
-    PARTITION=long2
-    TIME=16:00:00
-  elif [[ $NUM_NODES -eq 2 ]]
+  if [[ $NUM_NODES -le 16 ]]
   then
     PARTITION=regular2
-    TIME=8:00:00
-  elif [[ $NUM_NODES -eq 4 ]]
-  then
-    PARTITION=regular2
-    TIME=4:00:00
-  elif [[ $NUM_NODES -eq 8 ]]
-  then
-    PARTITION=regular2
-    TIME=3:00:00
-  elif [[ $NUM_NODES -le 16 ]]
-  then
-    PARTITION=regular2
-    TIME=2:00:00
   else
     PARTITION=wide2
-    TIME=2:00:00
   fi
   for n in $(seq $REPETITIONS)
   do

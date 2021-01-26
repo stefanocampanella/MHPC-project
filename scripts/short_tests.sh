@@ -6,14 +6,14 @@ cd "$MHPCPROJECT_ROOT" || exit
 mkdir -p "slurm_outputs"
 
 SITE=testbed
-TIMEOUT=150
+TIMEOUT=120
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=64
 NUM_GENERATIONS=4
-OUTPUT="$MHPCPROJECT_ROOT/runs/tests"
+OUTPUT="$MHPCPROJECT_ROOT/runs/short_tests"
 
-echo "==== Submitting test jobs ===="
+echo "==== Submitting short test jobs ===="
 for NUM_NODES in  4 8 16 32
 do
   if [[ $NUM_NODES -eq 4 ]]

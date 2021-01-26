@@ -11,7 +11,7 @@ PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 POPSIZE=512
 NUM_GENERATIONS=8
-REPETITIONS=4
+REPETITIONS=8
 OUTPUT="$MHPCPROJECT_ROOT/runs/strong_scaling"
 
 echo "==== Submitting testbed calibration strong scaling jobs ===="
@@ -36,10 +36,10 @@ do
   elif [[ $NUM_NODES -le 16 ]]
   then
     PARTITION=regular2
-    TIME=2:00:00
+    TIME=1:30:00
   else
     PARTITION=wide2
-    TIME=2:00:00
+    TIME=1:30:00
   fi
   for n in $(seq $REPETITIONS)
   do

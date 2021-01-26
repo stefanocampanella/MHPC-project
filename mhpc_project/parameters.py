@@ -36,9 +36,17 @@ class UniformSoilParameters(Parameters):
         return bounds
 
     def from_instrumentation(self, candidate):
-        series = pd.Series(candidate.args[0])
+        return self.from_dict(candidate.args[0])
+
+    @staticmethod
+    def from_dict(d):
+        series = pd.Series(d)
         series.index.rename('name', inplace=True)
         return series
+
+    @property
+    def init(self):
+        return self.data['init'].to_dict()
 
     @property
     def instrumentation(self):

@@ -7,12 +7,9 @@ from subprocess import CalledProcessError, TimeoutExpired
 from tempfile import TemporaryDirectory
 from timeit import default_timer as timer
 
-import matplotlib.pyplot as plt
-import matplotlib.ticker as mtick
 import nevergrad as ng
 import numpy as np
 import pandas as pd
-import seaborn as sns
 from SALib.analyze import delta
 from dask.distributed import as_completed, fire_and_forget
 from nevergrad.parametrization.parameter import Scalar, Log
@@ -21,58 +18,6 @@ from scipy.optimize import root_scalar
 
 def date_parser(x):
     return datetime.strptime(x, '%d/%m/%Y %H:%M')
-
-
-def comparison_plot(observations, simulation, scales=None, desc=None, unit=None, rel=False, figsize=(16, 9),
-                    dpi=100):
-    if not scales:
-        scales = {'Daily': 'D', 'Weekly': 'W', 'Monthly': 'M'}
-
-    fig, axes = plt.subplots(ncols=3,
-                             nrows=len(scales),
-                             figsize=figsize,
-                             dpi=dpi,
-                             constrained_layout=True)
-
-    if desc:
-        fig.suptitle(desc)
-
-    for i, (time_scale_description, time_scale) in enumerate(scales.items()):
-        comp_plot, diff_plot, hist_plot = axes[i, :]
-
-        obs_resampled = observations.resample(time_scale).mean()
-        sim_resampled = simulation.resample(time_scale).mean()
-
-        err = obs_resampled - sim_resampled
-        if rel:
-            err = err / obs_resampled.abs()
-
-        data = pd.DataFrame({'Observations': obs_resampled, 'Simulation': sim_resampled})
-        sns.lineplot(data=data, ax=comp_plot)
-        plt.setp(comp_plot.get_xticklabels(), rotation=20)
-        comp_plot.set_title(time_scale_description)
-        comp_plot.set_xlabel('')
-        if unit:
-            comp_plot.set_ylabel(f"[{unit}]")
-
-        sns.lineplot(data=err, ax=diff_plot)
-        plt.setp(diff_plot.get_xticklabels(), rotation=20)
-        diff_plot.set_xlabel('')
-        if rel:
-            diff_plot.set_ylabel("Relative error")
-            diff_plot.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1.0))
-        elif unit:
-            diff_plot.set_ylabel(f"Error [{unit}]")
-        else:
-            diff_plot.set_ylabel("Error")
-
-        sns.histplot(y=err, kde=True, stat='probability', ax=hist_plot)
-        y1, y2 = diff_plot.get_ylim()
-        hist_plot.set_ylim(y1, y2)
-        hist_plot.set_yticklabels([])
-        hist_plot.set_ylabel('')
-
-    return fig
 
 
 def find_scale(first_layer_width, number_of_layers, max_depth):
@@ -178,26 +123,6 @@ def make_nevergrad_parameter(mapping, **kwargs):
         raise ValueError("Unknown type of mapping {mapping}.")
 
 
-def convergence_plot(gen_loss_log, figsize=(16, 9), dpi=100):
-    max_generation_number = max(n for n, _ in gen_loss_log)
-    min_losses = [min(l for n, l in gen_loss_log if n <= k)
-                  for k in range(1, max_generation_number + 1)]
-    data = pd.DataFrame(gen_loss_log, columns=['generation', 'loss'])
-    figure, axes = plt.subplots(figsize=figsize, dpi=dpi)
-    sns.lineplot(data=data, x='generation', y='loss', ax=axes)
-    sns.lineplot(x=range(1, max_generation_number + 1), y=min_losses, ax=axes)
-    return figure
-
-
-def comparison_plots(predictions, observations, **kwargs):
-    plots = {}
-    for target in observations.columns:
-        if target in predictions.columns:
-            desc = target.replace('_', ' ').title()
-            plots[target] = comparison_plot(observations[target], predictions[target], desc=desc, **kwargs)
-    return plots
-
-
 def kge_cmp(sim, obs):
     if sim is None:
         return np.nan
@@ -240,6 +165,16 @@ def do_cleanup():
         shutil.rmtree(geotop_inpts_path)
 
 
+def submit_objectives(optimizer, model, observations, client, n):
+    candidates = [optimizer.ask() for _ in range(n)]
+    remote_samples = [client.submit(wrapped_objective,
+                                    model,
+                                    remote_candidate,
+                                    observations)
+                      for remote_candidate in client.scatter(candidates)]
+    return remote_samples
+
+
 def calibrate(model,
               parameters,
               observations,
@@ -247,7 +182,8 @@ def calibrate(model,
               popsize,
               num_generations,
               client,
-              num_workers):
+              num_workers,
+              overshoot=2):
     log = []
     optimizer_class = ng.optimizers.registry[algorithm]
     optimizer = optimizer_class(parameters.instrumentation,
@@ -257,12 +193,7 @@ def calibrate(model,
     remote_model = client.scatter(model, broadcast=True)
     for _ in range(num_generations):
         to_tell = []
-        candidates = [optimizer.ask() for _ in range(num_workers)]
-        remote_samples = [client.submit(wrapped_objective,
-                                        remote_model,
-                                        remote_candidate,
-                                        remote_observations)
-                          for remote_candidate in client.scatter(candidates)]
+        remote_samples = submit_objectives(optimizer, remote_model, remote_observations, client, num_workers)
         completed_queue = as_completed(remote_samples, with_results=True)
         for batch in completed_queue.batches():
             for future, (candidate, loss, time) in batch:
@@ -270,18 +201,22 @@ def calibrate(model,
                     to_tell.append((candidate, loss))
                 log.append((candidate, loss, time))
                 r = average_success_rate(log, 1 / popsize)
-                if (num_remaining_samples := popsize - len(to_tell) - r * completed_queue.count()) > 0:
+                if len(to_tell) == popsize:
+                    break
+                elif (num_remaining_samples := popsize - len(to_tell) - r * completed_queue.count()) > 0:
                     if r > 0:
-                        num_new_samples = min(num_workers, int(num_remaining_samples / r))
+                        num_new_samples = min(num_workers, int(overshoot * num_remaining_samples / r))
                     else:
                         num_new_samples = num_workers
-                    for _ in range(num_new_samples):
-                        candidate = optimizer.ask()
-                        remote_sample = client.submit(wrapped_objective,
-                                                      remote_model,
-                                                      candidate,
-                                                      remote_observations)
-                        completed_queue.add(remote_sample)
+                    remote_samples = submit_objectives(optimizer, remote_model, remote_observations, client,
+                                                       num_new_samples)
+                    completed_queue.update(remote_samples)
+
+        with completed_queue.lock:
+            futures = list(completed_queue.futures)
+            client.cancel(futures)
+        completed_queue.clear()
+
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)
 
@@ -298,11 +233,44 @@ def calibrate(model,
     return recommendation, model(*recommendation.args, **recommendation.kwargs), log
 
 
-def delta_mim(parameters, candidates_log):
+def cell_status(cell):
+    return cell['metadata']['papermill']['status']
+
+
+def notebook_status(notebook):
+    if notebook.metadata['papermill']['exception']:
+        return 'exception'
+    if all(cell_status(cell) == 'completed' for cell in notebook.cells):
+        return 'completed'
+    else:
+        return 'uncompleted'
+
+
+def papermill_parameters(notebook):
+    return notebook.metadata['papermill']['parameters']
+
+
+def get_scaling_data(book, efficiency=False):
+    data = []
+    for name, nb in book.items():
+        if notebook_status(nb) == 'completed':
+            record = {key: value for key, value in papermill_parameters(nb).items()
+                      if key in ['num_cpus', 'popsize', 'num_generations']}
+            record['duration'] = nb.metadata['papermill']['duration']
+            if efficiency:
+                num_cpus = record['num_cpus']
+                duration = record['duration']
+                tasks_duration = sum(t for _, _, t in nb.scraps['log'].data)
+                record['efficiency'] = tasks_duration / (num_cpus * duration)
+            data.append(record)
+    return pd.DataFrame.from_records(data)
+
+
+def delta_mim(parameters, candidates_dict_log):
     samples = []
     losses = []
-    for candidate, loss in candidates_log:
-        sample = parameters.from_instrumentation(candidate)
+    for candidate, loss in candidates_dict_log:
+        sample = parameters.from_dict(candidate)
         if parameters.defaults:
             sample.drop(parameters.defaults, inplace=True)
         sample = sample.to_numpy()
