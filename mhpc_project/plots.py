@@ -58,6 +58,15 @@ def comparison(observations, simulation, scales=None, desc=None, unit=None, rel=
     return fig
 
 
+def comparisons(predictions, observations, **kwargs):
+    plots = {}
+    for target in observations.columns:
+        if target in predictions.columns:
+            desc = target.replace('_', ' ').title()
+            plots[target] = comparison(observations[target], predictions[target], desc=desc, **kwargs)
+    return plots
+
+
 def convergence(gen_loss_log, figsize=(16, 9), dpi=100):
     max_generation_number = max(n for n, _ in gen_loss_log)
     min_losses = [min(l for n, l in gen_loss_log if n <= k)
@@ -69,24 +78,19 @@ def convergence(gen_loss_log, figsize=(16, 9), dpi=100):
     return figure
 
 
-def comparisons(predictions, observations, **kwargs):
-    plots = {}
-    for target in observations.columns:
-        if target in predictions.columns:
-            desc = target.replace('_', ' ').title()
-            plots[target] = comparison(observations[target], predictions[target], desc=desc, **kwargs)
-    return plots
-
-
 def strong_scaling(book, dpi=100, figsize=(16, 9), **kwargs):
     data = get_scaling_data(book)
     min_cpus = data['num_cpus'].min()
     duration_baseline = data[data['num_cpus'] == min_cpus]['duration'].mean()
     data['speedup'] = duration_baseline / data['duration']
-    data['perfect scaling'] = data[['num_cpus', 'popsize']].min(axis=1) / min_cpus
+    data['legend'] = 'observed'
+    ref = data.copy()
+    ref['legend'] = 'perfect scaling'
+    ref['speedup'] = data[['num_cpus', 'popsize']].min(axis=1) / min_cpus
     figure, axes = plt.subplots(dpi=dpi, figsize=figsize)
-    sns.lineplot(data=data, x='num_cpus', y='speedup', ax=axes, err_style='bars', **kwargs)
-    sns.lineplot(data=data, x='num_cpus', y='perfect scaling', ax=axes, err_style='bars', **kwargs)
+    options = dict(err_style='bars')
+    options.update(kwargs)
+    sns.lineplot(data=pd.concat([data, ref]), x='num_cpus', y='speedup', hue='legend', ax=axes, **options)
     return figure
 
 

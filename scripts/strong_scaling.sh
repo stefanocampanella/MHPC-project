@@ -20,19 +20,19 @@ do
   if [[ $NUM_NODES -eq 1 ]]
   then
     PARTITION=long2
-    TIME=16:00:00
+    TIME=12:00:00
   elif [[ $NUM_NODES -eq 2 ]]
   then
     PARTITION=regular2
-    TIME=8:00:00
+    TIME=6:00:00
   elif [[ $NUM_NODES -eq 4 ]]
   then
     PARTITION=regular2
-    TIME=4:00:00
+    TIME=3:00:00
   elif [[ $NUM_NODES -eq 8 ]]
   then
     PARTITION=regular2
-    TIME=3:00:00
+    TIME=2:00:00
   elif [[ $NUM_NODES -le 16 ]]
   then
     PARTITION=regular2
