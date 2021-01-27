@@ -11,7 +11,7 @@ import nevergrad as ng
 import numpy as np
 import pandas as pd
 from SALib.analyze import delta
-from dask.distributed import as_completed, fire_and_forget
+from dask.distributed import as_completed, wait
 from nevergrad.parametrization.parameter import Scalar, Log
 from scipy.optimize import root_scalar
 
@@ -224,37 +224,51 @@ def calibrate(model,
             host = worker['host']
             if host not in workers_hosts:
                 workers_hosts[host] = address
-        for address in workers_hosts.values():
-            cleanup = client.submit(do_cleanup, workers=address)
-            fire_and_forget(cleanup)
+        cleanups = [client.submit(do_cleanup, workers=address)
+                    for address in workers_hosts.values()]
+        wait(cleanups)
+        cleanups.clear()
 
-    recommendation = optimizer.provide_recommendation()
-    return recommendation, model(*recommendation.args, **recommendation.kwargs), log
+    recommendation = optimizer.recommend()
+    predictions = None
+    while not predictions:
+        try:
+            recommendation = recommendation.spawn_child()
+            predictions = model(*recommendation.args, **recommendation.kwargs)
+        except (CalledProcessError, TimeoutExpired):
+            predictions = None
+
+    return recommendation, predictions, log
 
 
-def cell_status(cell):
-    return cell['metadata']['papermill']['status']
+def is_cell_ok(cell):
+    cell_type = cell['cell_type']
+    cell_status = cell['metadata']['papermill']['status'] == 'completed'
+    if cell_type == 'markdown':
+        return cell_status
+    elif cell_type == 'code':
+        return cell['execution_count'] and cell_status
+    else:
+        raise ValueError(f"Unknown cell type {cell_type}")
 
 
 def notebook_status(notebook):
     if notebook.metadata['papermill']['exception']:
         return 'exception'
-    if all(cell_status(cell) == 'completed' for cell in notebook.cells):
+    if all(is_cell_ok(cell) for cell in notebook.cells):
         return 'completed'
     else:
         return 'uncompleted'
-
-
-def papermill_parameters(notebook):
-    return notebook.metadata['papermill']['parameters']
 
 
 def get_scaling_data(book, efficiency=False):
     data = []
     for name, nb in book.items():
         if notebook_status(nb) == 'completed':
-            record = {key: value for key, value in papermill_parameters(nb).items()
+            parameters = nb.metadata['papermill']['parameters']
+            record = {key: value for key, value in parameters.items()
                       if key in ['num_cpus', 'popsize', 'num_generations']}
+            record['name'] = name
             record['duration'] = nb.metadata['papermill']['duration']
             if efficiency:
                 num_cpus = record['num_cpus']

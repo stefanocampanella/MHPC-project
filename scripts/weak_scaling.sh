@@ -11,7 +11,7 @@ PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 NUM_GENERATIONS=8
 REPETITIONS=8
-TIME=1:30:00
+TIME=2:00:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/weak_scaling"
 
 echo "==== Submitting testbed calibration weak scaling jobs ===="

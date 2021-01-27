@@ -26,6 +26,7 @@ NUM_PROCS=4
 NUM_CPUS=$((SLURM_CPUS_PER_TASK * SLURM_NTASKS))
 NUM_WORKERS=$((NUM_PROCS * SLURM_NTASKS))
 BUDGET=$((NUM_GENERATIONS * POPSIZE))
+SCHEDULER_WAIT_RETRY_MAX=10
 
 mkdir -p "${OUTPUT_DIR}"
 OUTPUT="$(mktemp -p "${OUTPUT_DIR}" "${SITE}-${ALGORITHM}-${BUDGET}-${NUM_CPUS}-XXX.ipynb")"
@@ -39,7 +40,18 @@ dask-scheduler --scheduler-file="${SCHEDULER_FILE}" \
                --no-dashboard \
                --no-show \
                --interface=ib0 &
-sleep 60
+
+SCHEDULER_WAIT_RETRY_COUNT=0
+while [[ ! -f $SCHEDULER_FILE ]] && [[ $SCHEDULER_WAIT_RETRY_COUNT -lt $SCHEDULER_WAIT_RETRY_MAX ]]
+do
+  SCHEDULER_WAIT_RETRY_COUNT=$((SCHEDULER_WAIT_RETRY_COUNT + 1))
+  sleep 30
+done
+if [[ ! -f $SCHEDULER_FILE ]]
+then
+  echo ERROR: scheduler wait time elapsed
+  exit 1
+fi
 
 srun dask-worker --scheduler-file="${SCHEDULER_FILE}" \
                  --local-directory="/tmp" \
