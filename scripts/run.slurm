@@ -48,6 +48,7 @@ do
   SCHEDULER_WAIT_RETRY_COUNT=$((SCHEDULER_WAIT_RETRY_COUNT + 1))
   sleep 30
 done
+python "$MHPCPROJECT_ROOT"/scripts/check_scheduler_file.py "$SCHEDULER_FILE"
 
 srun dask-worker --scheduler-file="$SCHEDULER_FILE" \
                  --local-directory="/tmp" \
