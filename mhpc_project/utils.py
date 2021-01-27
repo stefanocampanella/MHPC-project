@@ -165,15 +165,6 @@ def do_cleanup():
         shutil.rmtree(geotop_inpts_path)
 
 
-def submit_objectives(optimizer, model, observations, client, n):
-    remote_samples = [client.submit(wrapped_objective,
-                                    model,
-                                    optimizer.ask(),
-                                    observations)
-                      for _ in range(n)]
-    return remote_samples
-
-
 def calibrate(model,
               parameters,
               observations,
@@ -192,24 +183,32 @@ def calibrate(model,
     remote_model = client.scatter(model, broadcast=True)
     for _ in range(num_generations):
         to_tell = []
-        remote_samples = submit_objectives(optimizer, remote_model, remote_observations, client, num_workers)
+        remote_samples = [client.submit(wrapped_objective,
+                                        remote_model,
+                                        optimizer.ask(),
+                                        remote_observations)
+                          for _ in range(num_workers)]
         completed_queue = as_completed(remote_samples, with_results=True)
         for batch in completed_queue.batches():
             for future, (candidate, loss, time) in batch:
                 if np.isfinite(loss):
                     to_tell.append((candidate, loss))
                 log.append((candidate, loss, time))
-                r = average_success_rate(log, 1 / popsize)
                 if len(to_tell) == popsize:
                     break
-                elif (num_remaining_samples := popsize - len(to_tell) - r * completed_queue.count()) > 0:
-                    if r > 0:
-                        num_new_samples = min(num_workers, int(overshoot * num_remaining_samples / r))
-                    else:
-                        num_new_samples = num_workers
-                    remote_samples = submit_objectives(optimizer, remote_model, remote_observations, client,
-                                                       num_new_samples)
-                    completed_queue.update(remote_samples)
+                else:
+                    r = average_success_rate(log, 1 / popsize)
+                    if (num_remaining_samples := popsize - len(to_tell) - r * completed_queue.count()) > 0:
+                        if r > 0:
+                            num_new_samples = min(num_workers, int(overshoot * num_remaining_samples / r))
+                        else:
+                            num_new_samples = num_workers
+                        remote_samples = [client.submit(wrapped_objective,
+                                                        remote_model,
+                                                        optimizer.ask(),
+                                                        remote_observations)
+                                          for _ in range(num_new_samples)]
+                        completed_queue.update(remote_samples)
 
         with completed_queue.lock:
             futures = list(completed_queue.futures)
