@@ -230,7 +230,7 @@ def calibrate(model,
 
     recommendation = optimizer.recommend()
     predictions = None
-    while not predictions:
+    while predictions is None:
         try:
             recommendation = recommendation.spawn_child()
             predictions = model(*recommendation.args, **recommendation.kwargs)

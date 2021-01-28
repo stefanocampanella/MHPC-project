@@ -40,15 +40,16 @@ dask-scheduler --scheduler-file="$SCHEDULER_FILE" \
                --no-dashboard \
                --no-show \
                --interface=ib0 &
+sleep 30
 
 SCHEDULER_WAIT_RETRY_COUNT=0
-while ! python "$MHPCPROJECT_ROOT"/scripts/check_scheduler_file.py "$SCHEDULER_FILE" && \
+while ! python "$MHPCPROJECT_ROOT"/scripts/check_address.py "$SCHEDULER_FILE" && \
  [[ $SCHEDULER_WAIT_RETRY_COUNT -lt $SCHEDULER_WAIT_RETRY_MAX ]]
 do
   SCHEDULER_WAIT_RETRY_COUNT=$((SCHEDULER_WAIT_RETRY_COUNT + 1))
   sleep 30
 done
-python "$MHPCPROJECT_ROOT"/scripts/check_scheduler_file.py "$SCHEDULER_FILE"
+python "$MHPCPROJECT_ROOT"/scripts/check_address.py "$SCHEDULER_FILE"
 
 srun dask-worker --scheduler-file="$SCHEDULER_FILE" \
                  --local-directory="/tmp" \
