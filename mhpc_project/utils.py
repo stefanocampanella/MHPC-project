@@ -191,9 +191,9 @@ def calibrate(model,
         completed_queue = as_completed(remote_samples, with_results=True)
         for batch in completed_queue.batches():
             for future, (candidate, loss, time) in batch:
+                log.append((candidate, loss, time))
                 if np.isfinite(loss):
                     to_tell.append((candidate, loss))
-                log.append((candidate, loss, time))
             if len(to_tell) >= popsize:
                 break
             else:
