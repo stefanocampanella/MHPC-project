@@ -210,9 +210,6 @@ def calibrate(model,
                                       for _ in range(num_new_samples)]
                     completed_queue.update(remote_samples)
 
-        with completed_queue.lock:
-            futures = list(completed_queue.futures)
-            client.cancel(futures)
         completed_queue.clear()
 
         for candidate, loss in to_tell:
