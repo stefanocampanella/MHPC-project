@@ -15,7 +15,7 @@ REPETITIONS=8
 OUTPUT="$MHPCPROJECT_ROOT/runs/strong_scaling"
 
 echo "==== Submitting testbed calibration strong scaling jobs ===="
-for NUM_NODES in 1 2 4 8 12 16 20 24 28 32
+for NUM_NODES in 32 28 24 20 16 12 8 4 2 1
 do
   if [[ $NUM_NODES -eq 1 ]]
   then

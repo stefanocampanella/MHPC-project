@@ -7,14 +7,12 @@ dependencies:
   - pip
   - numpy
   - scipy
-  - scikit-learn
   - pandas >= 1.1.0
   - matplotlib
   - seaborn
   - dask
   - dask-jobqueue
   - jupyterlab
-  - nodejs
   - geotop
   - pyarrow
   - pip:
@@ -24,4 +22,3 @@ dependencies:
       - papermill
       - scrapbook
       - jupyter-book
-      - tqdm

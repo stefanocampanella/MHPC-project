@@ -194,21 +194,21 @@ def calibrate(model,
                 if np.isfinite(loss):
                     to_tell.append((candidate, loss))
                 log.append((candidate, loss, time))
-                if len(to_tell) == popsize:
-                    break
-                else:
-                    r = average_success_rate(log, 1 / popsize)
-                    if (num_remaining_samples := popsize - len(to_tell) - r * completed_queue.count()) > 0:
-                        if r > 0:
-                            num_new_samples = min(num_workers, int(overshoot * num_remaining_samples / r))
-                        else:
-                            num_new_samples = num_workers
-                        remote_samples = [client.submit(wrapped_objective,
-                                                        remote_model,
-                                                        optimizer.ask(),
-                                                        remote_observations)
-                                          for _ in range(num_new_samples)]
-                        completed_queue.update(remote_samples)
+            if len(to_tell) >= popsize:
+                break
+            else:
+                r = average_success_rate(log, 1 / popsize)
+                if (num_remaining_samples := popsize - len(to_tell) - r * completed_queue.count()) > 0:
+                    if r > 0:
+                        num_new_samples = min(num_workers, int(overshoot * num_remaining_samples / r))
+                    else:
+                        num_new_samples = num_workers
+                    remote_samples = [client.submit(wrapped_objective,
+                                                    remote_model,
+                                                    optimizer.ask(),
+                                                    remote_observations)
+                                      for _ in range(num_new_samples)]
+                    completed_queue.update(remote_samples)
 
         with completed_queue.lock:
             futures = list(completed_queue.futures)
