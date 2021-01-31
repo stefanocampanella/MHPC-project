@@ -165,6 +165,18 @@ def do_cleanup():
         shutil.rmtree(geotop_inpts_path)
 
 
+def nodes_cleanup(client):
+    workers_hosts = {}
+    for address, worker in client.scheduler_info()['workers'].items():
+        host = worker['host']
+        if host not in workers_hosts:
+            workers_hosts[host] = address
+    cleanups = [client.submit(do_cleanup, workers=address)
+                for address in workers_hosts.values()]
+    wait(cleanups)
+    cleanups.clear()
+
+
 def calibrate(model,
               parameters,
               observations,
@@ -214,16 +226,6 @@ def calibrate(model,
 
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)
-
-        workers_hosts = {}
-        for address, worker in client.scheduler_info()['workers'].items():
-            host = worker['host']
-            if host not in workers_hosts:
-                workers_hosts[host] = address
-        cleanups = [client.submit(do_cleanup, workers=address)
-                    for address in workers_hosts.values()]
-        wait(cleanups)
-        cleanups.clear()
 
     recommendation = optimizer.recommend()
     predictions = None

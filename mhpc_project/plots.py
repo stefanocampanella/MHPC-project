@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -78,36 +79,47 @@ def convergence(gen_loss_log, figsize=(16, 9), dpi=100):
     return figure
 
 
-def strong_scaling(book, dpi=100, figsize=(16, 9), **kwargs):
+def strong_scaling(book, dpi=100, figsize=(16, 9), title=None, **kwargs):
     data = get_scaling_data(book)
     min_cpus = data['num_cpus'].min()
     duration_baseline = data[data['num_cpus'] == min_cpus]['duration'].mean()
     data['speedup'] = duration_baseline / data['duration']
-    data['legend'] = 'observed'
-    ref = data.copy()
-    ref['legend'] = 'perfect scaling'
-    ref['speedup'] = data[['num_cpus', 'popsize']].min(axis=1) / min_cpus
+    data['ref'] = data[['num_cpus', 'popsize']].min(axis=1) / min_cpus
     figure, axes = plt.subplots(dpi=dpi, figsize=figsize)
-    options = dict(err_style='bars')
-    options.update(kwargs)
-    sns.lineplot(data=pd.concat([data, ref]), x='num_cpus', y='speedup', hue='legend', ax=axes, **options)
+    if title:
+        axes.set_title(title)
+    sns.lineplot(data=data, x='num_cpus', y='speedup',
+                 err_style='bars', marker='o',
+                 label='data', ax=axes, **kwargs)
+    sns.lineplot(data=data, x='num_cpus', y='ref',
+                 label='reference', ax=axes, **kwargs)
     return figure
 
 
-def weak_scaling(book, dpi=100, figsize=(16, 9), **kwargs):
+def weak_scaling(book, dpi=100, figsize=(16, 9), title=None, **kwargs):
     data = get_scaling_data(book)
+    data['ref'] = data['duration'].mean()
     figure, axes = plt.subplots(dpi=dpi, figsize=figsize)
-    options = dict(capsize=0.2, color='#41ff1f')
-    options.update(kwargs)
-    sns.barplot(data=data, x='num_cpus', y='duration', ax=axes, **options)
+    if title:
+        axes.set_title(title)
+    sns.lineplot(data=data, x='num_cpus', y='duration',
+                 label='data', err_style='bars', marker='o',
+                 ax=axes, **kwargs)
     axes.yaxis.set_major_formatter(lambda value, position: timedelta(seconds=value))
+    sns.lineplot(data=data, x='num_cpus', y='ref',
+                 label='reference',
+                 ax=axes, **kwargs)
     return figure
 
 
-def efficiency(book, dpi=100, figsize=(16, 9), **kwargs):
+def efficiency(book, dpi=100, figsize=(16, 9), title=None, **kwargs):
     data = get_scaling_data(book, efficiency=True)
+    xmin, xmax = data['num_cpus'].min(), data['num_cpus'].max()
     figure, axes = plt.subplots(dpi=dpi, figsize=figsize)
-    options = dict(capsize=0.2, color='#41ff1f')
-    options.update(kwargs)
-    sns.barplot(data=data, x='num_cpus', y='efficiency', ax=axes, **options)
+    axes.set_xlim(xmin - 0.05 * (xmax - xmin), xmax + 0.05 * (xmax - xmin))
+    if title:
+        axes.set_title(title)
+    sns.regplot(data=data, x='num_cpus', y='efficiency',
+                x_estimator=np.mean, truncate=False,
+                ax=axes, **kwargs)
     return figure
