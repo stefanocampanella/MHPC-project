@@ -271,7 +271,7 @@ def get_scaling_data(book, efficiency=False):
             if efficiency:
                 num_cpus = record['num_cpus']
                 duration = record['duration']
-                tasks_duration = sum(t for _, _, t in nb.scraps['log'].data)
+                tasks_duration = sum(t for _, l, t in nb.scraps['log'].data if l != 'nan')
                 record['efficiency'] = tasks_duration / (num_cpus * duration)
             data.append(record)
     return pd.DataFrame.from_records(data)
