@@ -16,13 +16,13 @@ Indeed, the characteristics listed above make Python a right candidate when choo
 
 ## The Jupyter Ecosystem
 
-##GEOtoPy
+## GEOtoPy
 
-##Calibration and Sensitivity Analysis using Nevergrad and SALib
+## Calibration and Sensitivity Analysis using Nevergrad and SALib
 
-##Parallel Computing in Python
+## Parallel Computing in Python
 
-##High-Performance Computing in Python using Dask
+## High-Performance Computing in Python using Dask
 
-##Deploying Python Software on HPC
+## Deploying Python Software on HPC
 
