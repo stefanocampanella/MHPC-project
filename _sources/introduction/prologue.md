@@ -65,7 +65,7 @@ bibliography and in the presentation of these tools, which occasionally could be
 responsibility for those is mine and mine only. However, I hope that the material presented here, if not the subject for
 more in-depth and broader research by the author, will be at least a prompt for more expert readers.
 
-```{bibliography} references.bib
+```{bibliography} ../references.bib
 :filter: docname in docnames
 ```
 

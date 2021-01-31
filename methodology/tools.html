@@ -57,7 +57,7 @@
     <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/methodology/tools.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Deployment" href="deployment.html" />
+    <link rel="next" title="Implementation" href="implementation.html" />
     <link rel="prev" title="Hyperparameter optimization" href="../problem/hyperopt.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -68,7 +68,7 @@
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/methodology/tools.html" />
 <meta property="og:type"        content="article" />
 <meta property="og:title"       content="Tools" />
-<meta property="og:description" content="Tools  Talk is cheap, show me the code.  Linus Torvalds  The Python Programming Language  Python is an open-source, cross-platform, scripting, high-level, duck-" />
+<meta property="og:description" content="Tools  Code reuse is the Holy Grail of Software Engineering  Douglas Crockford  The Python Programming Language  Python is an open-source, cross-platform, scrip" />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -159,39 +159,10 @@
    Tools
   </a>
  </li>
- <li class="toctree-l1 collapsible-parent">
-  <a class="reference internal" href="deployment.html">
-   Deployment
+ <li class="toctree-l1">
+  <a class="reference internal" href="implementation.html">
+   Implementation
   </a>
-  <ul class="collapse-ul">
-   <li class="toctree-l2">
-    <a class="reference internal" href="libs/jupyter.html">
-     The Jupyter Ecosystem
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="libs/dask.html">
-     Dask
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="libs/geotopy.html">
-     GEOtoPy
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="libs/nevergrad.html">
-     Nevergrad
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="libs/salib.html">
-     SALib
-    </a>
-   </li>
-  </ul>
-  <i class="fas fa-chevron-down">
-  </i>
  </li>
 </ul>
 <p class="caption collapsible-parent">
@@ -200,6 +171,26 @@
  </span>
 </p>
 <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/results.html">
+   Results
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/examples/plots.html">
+   Example of Plots using GEOtoPy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/examples/calibration.html">
+   Example of Calibration
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/examples/sensitivity_analysis.html">
+   Example of Sensitivity Analysis
+  </a>
+ </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../results/conclusions.html">
    Conclusions
@@ -280,6 +271,36 @@
    The Python Programming Language
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-jupyter-ecosystem">
+   The Jupyter Ecosystem
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#geotopy">
+   GEOtoPy
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#calibration-and-sensitivity-analysis-using-nevergrad-and-salib">
+   Calibration and Sensitivity Analysis using Nevergrad and SALib
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#parallel-computing-in-python">
+   Parallel Computing in Python
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#high-performance-computing-in-python-using-dask">
+   High-Performance Computing in Python using Dask
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#deploying-python-software-on-hpc">
+   Deploying Python Software on HPC
+  </a>
+ </li>
 </ul>
 
         </nav>
@@ -294,15 +315,32 @@
   <div class="section" id="tools">
 <h1>Tools<a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h1>
 <blockquote class="epigraph">
-<div><p>Talk is cheap, show me the code.</p>
-<p class="attribution">—Linus Torvalds</p>
+<div><p>Code reuse is the Holy Grail of Software Engineering</p>
+<p class="attribution">—Douglas Crockford</p>
 </div></blockquote>
 <div class="section" id="the-python-programming-language">
 <h2>The Python Programming Language<a class="headerlink" href="#the-python-programming-language" title="Permalink to this headline">¶</a></h2>
 <p>Python is an open-source, cross-platform, scripting, high-level, duck-typed language (footnote: however type annotations are available in recent versions) with a terse syntax, which allows for the fast pace development. The reference implementation, CPython, can be easily integrated with pre-existing C and Fortran codebases; indeed, Python is sometimes referred to as a glue language. Moreover, it has a rich standard library and a full gamut of third-party libraries and tools. Python is the third language in the Tiobe index in 2020 and continues to grow steadily because of its popularity in machine learning and artificial intelligence.</p>
 <p>The usage of Python in scientific computing is nowadays a consolidated practice. Among its reasons, there is the existence of mature, fully-featured, and open-source libraries like Numpy, Matplotlib, and Pandas, respectively, for numerical computing, plotting, and manipulation of tabular data. Thanks to these libraries, in some contexts,  Python was able to overtake the proprietary programming language MATLAB and the open-source one R, which, being a programming language specifically though for statistics, has its quirks.</p>
 <p>Indeed, the characteristics listed above make Python a right candidate when choosing a programming language in which writing code powerful and extensible, yet to be used by scientists without formal training in computer science. In that sense, Python is a glue language in terms of the developers’ level of expertise. However, when it comes to the typical workloads of numerical computing (CPU-bounded applications, the so-called number-crunching), Python shows the same shortcoming of MATLAB. Due to the dynamic nature of the language, repeated floating-point operations on contiguous memory or other kinds of tight loops, which are very fast on x86 architectures, take far longer than compiled languages. Although comparing programming languages is a bit like comparing apples and oranges, a quick look at the computer language benchmarks game tells us that is reasonable to expect that a pure Python implementation of some algorithm is between ten and one thousand times slower than one in C. So how come that Python is widely adopted in numerical computing? The answer is similar to the one for the case of MATLAB. In both cases, the dynamic programming language overcomes these shortcomings by wrapping and calling some more efficient code, usually written in Fortran, C or C++. It is possible to do so because number-crunching codes’ profile often follows a Pareto distribution: 80% of the time is spent on 20% of the code. The whole situation is typically referred to as the two-language problem. There are many ancillary problems related to the two-language one and to solve them, a new programming language, Julia, has been developed. Julia will probably become the dominant language in scientific computing soon. However, the scientific computing community’s inertia means that Python will remain the way to go for new projects if they depend on existing libraries that don’t have a Julia equivalent.</p>
-<p>The discussion above covers briefly the topic of Python’s usage in scientific computing, but is Python used in high-performance computing? And how?</p>
+</div>
+<div class="section" id="the-jupyter-ecosystem">
+<h2>The Jupyter Ecosystem<a class="headerlink" href="#the-jupyter-ecosystem" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="geotopy">
+<h2>GEOtoPy<a class="headerlink" href="#geotopy" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="calibration-and-sensitivity-analysis-using-nevergrad-and-salib">
+<h2>Calibration and Sensitivity Analysis using Nevergrad and SALib<a class="headerlink" href="#calibration-and-sensitivity-analysis-using-nevergrad-and-salib" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="parallel-computing-in-python">
+<h2>Parallel Computing in Python<a class="headerlink" href="#parallel-computing-in-python" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="high-performance-computing-in-python-using-dask">
+<h2>High-Performance Computing in Python using Dask<a class="headerlink" href="#high-performance-computing-in-python-using-dask" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="deploying-python-software-on-hpc">
+<h2>Deploying Python Software on HPC<a class="headerlink" href="#deploying-python-software-on-hpc" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -335,7 +373,7 @@
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="../problem/hyperopt.html" title="previous page">Hyperparameter optimization</a>
-    <a class='right-next' id="next-link" href="deployment.html" title="next page">Deployment</a>
+    <a class='right-next' id="next-link" href="implementation.html" title="next page">Implementation</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
