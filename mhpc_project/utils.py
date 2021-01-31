@@ -177,15 +177,9 @@ def nodes_cleanup(client):
     cleanups.clear()
 
 
-def calibrate(model,
-              parameters,
-              observations,
-              algorithm,
-              popsize,
-              num_generations,
-              client,
-              num_workers,
-              overshoot=2):
+def calibrate(model, parameters, observations,
+              algorithm, popsize, num_generations,
+              client, num_workers, overshoot=2):
     log = []
     optimizer_class = ng.optimizers.registry[algorithm]
     optimizer = optimizer_class(parameters.instrumentation,
