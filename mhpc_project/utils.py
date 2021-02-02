@@ -179,7 +179,7 @@ def nodes_cleanup(client):
 
 def calibrate(model, parameters, observations,
               algorithm, popsize, num_generations,
-              client, num_workers, overshoot=2):
+              client, num_workers, overshoot=2, paranoid=False):
     log = []
     optimizer_class = ng.optimizers.registry[algorithm]
     optimizer = optimizer_class(parameters.instrumentation,
@@ -217,6 +217,8 @@ def calibrate(model, parameters, observations,
                     completed_queue.update(remote_samples)
 
         completed_queue.clear()
+        if paranoid:
+            nodes_cleanup(client)
 
         for candidate, loss in to_tell:
             optimizer.tell(candidate, loss)

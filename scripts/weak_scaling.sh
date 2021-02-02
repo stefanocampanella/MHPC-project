@@ -10,8 +10,8 @@ TIMEOUT=150
 PARAMETERS_PATH="$MHPCPROJECT_ROOT/data/parameters/testbed.csv"
 ALGORITHM=NGO
 NUM_GENERATIONS=8
-REPETITIONS=8
-TIME=2:00:00
+REPETITIONS=16
+TIME=3:00:00
 OUTPUT="$MHPCPROJECT_ROOT/runs/weak_scaling"
 
 echo "==== Submitting testbed calibration weak scaling jobs ===="
@@ -25,7 +25,7 @@ do
   fi
   for n in $(seq $REPETITIONS)
   do
-    POPSIZE=$((32 * NUM_NODES))
+    POPSIZE=$((64 * NUM_NODES))
     sbatch -p "$PARTITION" -J "weak_scaling_$NUM_NODES" -N "$NUM_NODES" -t "$TIME" --output "slurm_outputs/%x-%j.out" \
       ./scripts/run.slurm "$SITE" "$PARAMETERS_PATH" "$ALGORITHM" "$POPSIZE" "$NUM_GENERATIONS" "$TIMEOUT" "$OUTPUT"
   done
