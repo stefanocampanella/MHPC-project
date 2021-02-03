@@ -255,22 +255,26 @@ def notebook_status(notebook):
         return 'uncompleted'
 
 
-def get_scaling_data(book, efficiency=False):
+def get_scaling_data(book):
     data = []
     for name, nb in book.items():
         if notebook_status(nb) == 'completed':
-            parameters = nb.metadata['papermill']['parameters']
-            record = {key: value for key, value in parameters.items()
-                      if key in ['num_cpus', 'popsize', 'num_generations']}
-            record['name'] = name
+            record = dict(name=name)
+            for key in ('num_cpus', 'popsize', 'num_generations'):
+                record[key] = nb.metadata['papermill']['parameters'][key]
+            record['x'] = record['popsize'] / record['num_cpus']
             record['duration'] = nb.metadata['papermill']['duration']
-            if efficiency:
-                num_cpus = record['num_cpus']
-                duration = record['duration']
-                tasks_duration = sum(t for _, l, t in nb.scraps['log'].data if l != 'nan')
-                record['efficiency'] = tasks_duration / (num_cpus * duration)
+            log = nb.scraps['log'].data
+            record['num_samples'] = len(log)
+            good_samples = [(l, t) for _, l, t in log if l != 'nan']
+            record['num_good_samples'] = len(good_samples)
+            record['good_samples_duration'] = sum(t for l, t in good_samples)
+            record['efficiency'] = record['good_samples_duration'] / (record['num_cpus'] * record['duration'])
             data.append(record)
-    return pd.DataFrame.from_records(data)
+    data = pd.DataFrame.from_records(data)
+    duration_baseline = data[data['num_cpus'] == data['num_cpus'].min()]['duration'].mean()
+    data['speedup'] = duration_baseline / data['duration']
+    return data
 
 
 def delta_mim(parameters, candidates_dict_log):
