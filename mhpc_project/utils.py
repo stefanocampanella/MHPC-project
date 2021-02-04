@@ -262,10 +262,11 @@ def get_scaling_data(book):
             record = dict(name=name)
             for key in ('num_cpus', 'popsize', 'num_generations'):
                 record[key] = nb.metadata['papermill']['parameters'][key]
-            record['x'] = record['popsize'] / record['num_cpus']
+            record['ratio'] = record['popsize'] / record['num_cpus']
             record['duration'] = nb.metadata['papermill']['duration']
             log = nb.scraps['log'].data
             record['num_samples'] = len(log)
+            record['samples_duration'] = sum(t for _, _, t in log)
             good_samples = [(l, t) for _, l, t in log if l != 'nan']
             record['num_good_samples'] = len(good_samples)
             record['good_samples_duration'] = sum(t for l, t in good_samples)
