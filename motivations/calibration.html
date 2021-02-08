@@ -270,21 +270,10 @@
                 
   <div class="section" id="geotop-calibration-or-finding-the-needle-in-the-haystack">
 <h1>GEOtop calibration or finding the needle in the haystack<a class="headerlink" href="#geotop-calibration-or-finding-the-needle-in-the-haystack" title="Permalink to this headline">¶</a></h1>
-<p>As previously discussed, GEOtop has many parameters. Their large number is the result of assembling many different
-submodels of statistical, physical (i.e. from first principles) and phenomenological nature. Not all of these parameters
-can be directly measured with an instrument or inferred in some other way than calibration. This fact is especially
-actual for the ones found in phenomenological relations, think for example to the Van Genuchten equation for soil
-retention. Furthermore, even when there is a straightforward experimental procedure to determine them, their value is
-affected by uncertainties, which could be large.</p>
-<p>One could think that there exist some default values which describe the average system and that, with due exceptions,
-these values would produce meaningful results once fed into the model or, in short, that these parameters simply need
-fine-tuning. However, he would fool himself.</p>
-<p>Indeed, GEOtop is very sensitive to the values of its parameters: the outputs of a simulation can change wildly, and
-without carefully chosen parameters, the results are entirely meaningless. Hence its predictive power is strictly
-related to a good calibration.</p>
-<p>But what it means to calibrate the model? In the intuitive idea of “finding the values of the inputs whose outputs
-better reproduce the observations” there is a certain degree of hand waving. From a practical point of view, one faces
-himself with the following questions:</p>
+<p>As previously discussed, GEOtop has many parameters. Their large number is the result of assembling many different submodels of statistical, physical (i.e. from first principles) and phenomenological nature. Not all of these parameters can be directly measured with an instrument or inferred in some other way than calibration. This fact is especially actual for the ones found in phenomenological relations, think for example to the Van Genuchten equation for soil retention. Furthermore, even when there is a straightforward experimental procedure to determine them, their value is affected by uncertainties, which could be large.</p>
+<p>One could think that there exist some default values which describe the average system and that, with due exceptions, these values would produce meaningful results once fed into the model or, in short, that these parameters simply need fine-tuning. However, he would fool himself.</p>
+<p>Indeed, GEOtop is very sensitive to the values of its parameters: the outputs of a simulation can change wildly, and without carefully chosen parameters, the results are entirely meaningless. Hence its predictive power is strictly related to a good calibration.</p>
+<p>But what it means to calibrate the model? In the intuitive idea of “finding the values of the inputs whose outputs better reproduce the observations” there is a certain degree of hand waving. From a practical point of view, one faces himself with the following questions:</p>
 <ol class="simple">
 <li><p>How do I compare the time series produced by the model with the experimental data?</p></li>
 <li><p>How do I choose how many and which input parameters I need to calibrate?</p></li>
@@ -295,38 +284,21 @@ himself with the following questions:</p>
 <li><p>And finally, is there a way to get the same or better ones with fewer resources, i.e. waiting less or using less
 computational power?</p></li>
 </ol>
-<p>This task, namely the calibration of a model, is more an art than a science. But if it can’t be a science, then it would
-be nice at least to have some hints and heuristics. Indeed, this is precisely the purpose of this work: trying to
-understand and automate the calibration process or some parts of it. Before diving in, let’s consider the challenges
-that calibration entail.</p>
-<p>The multitude of parameters translates into dimensionality curse, i.e. the exponential growth of the volume of the
-search space with respect to the number of parameters. However, the dimensionality curse is not an obstacle per se;
-think of neural networks. Yet, neural networks have two peculiar properties. On the one hand, they are easily
-differentiable with respect to their parameters; on the other wherever you start from, there is always a good set of
-parameters nearby.</p>
+<p>This task, namely the calibration of a model, is more an art than a science. But if it can’t be a science, then it would be nice at least to have some hints and heuristics. Indeed, this is precisely the purpose of this work: trying to understand and automate the calibration process or some parts of it. Before diving in, let’s consider the challenges that calibration entail.</p>
+<p>The multitude of parameters translates into dimensionality curse, i.e. the exponential growth of the volume of the search space with respect to the number of parameters. However, the dimensionality curse is not an obstacle per se; think of neural networks. Yet, neural networks have two peculiar properties. On the one hand, they are easily differentiable with respect to their parameters; on the other wherever you start from, there is always a good set of parameters nearby.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>As noted in a <a class="reference external" href="https://news.ycombinator.com/item?id=24835336">recent article</a>
-posted on Hacker News on our intuition around neural networks, it is implausible that local optima exist in such high dimensional spaces. Endowed with the gargantuan dimensionality of models like GTP3, the concept of direction (and distance) assumes a statistical meaning: just by chance, there will always be a direction along which you could move to smaller values of the cost function.</p>
+<p>As noted in a <a class="reference external" href="https://news.ycombinator.com/item?id=24835336">recent article</a> posted on Hacker News on our intuition around neural networks, it is implausible that local optima exist in such high dimensional spaces. Endowed with the gargantuan dimensionality of models like GTP3, the concept of direction (and distance) assumes a statistical meaning: just by chance, there will always be a direction along which you could move to smaller values of the cost function.</p>
 </div>
-<p>The first point is not a real impediment if we neglect the categorical parameters on which GEOtop might depend. Indeed,
-we could always use some numerical differentiation scheme (supposing that there are no threats of numerical instability)
-. However, the second is much more peculiar. Indeed the situation for GEOtop is very different<a class="footnote-reference brackets" href="#hyperopt" id="id1">1</a>.</p>
-<p>If one could put himself in the parameters space of GEOtop, and look at the cost function, he would see hills and
-canyons, craters where the model crashes, swamps where it doesn’t converge, mirages of oasis with unphysical parameters,
-and deadly desert plateaus where one moves from meaningless outputs to equally meaningless outputs.</p>
-<p>In this lumpy and bumpy landscape, moving towards the direction of steepest descent would lead, in the best scenario, to
-a useless local optimum.</p>
+<p>The first point is not a real impediment if we neglect the categorical parameters on which GEOtop might depend. Indeed, we could always use some numerical differentiation scheme (supposing that there are no threats of numerical instability). However, the second is much more peculiar. Indeed the situation for GEOtop is very different<a class="footnote-reference brackets" href="#hyperopt" id="id1">1</a>.</p>
+<p>If one could put himself in the parameters space of GEOtop, and look at the cost function, he would see hills and canyons, craters where the model crashes, swamps where it doesn’t converge, mirages of oasis with unphysical parameters, and deadly desert plateaus where one moves from meaningless outputs to equally meaningless outputs.</p>
+<p>In this lumpy and bumpy landscape, moving towards the direction of steepest descent would lead, in the best scenario, to a useless local optimum.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>However, at the end of a good calibration, we might have a good prior. In this case, it would make sense to perform a local optimization search. In principle, this would boost the performance of the calibration strategy.
-Unfortunately, there was no time to develop this idea.</p>
+<p>However, at the end of a good calibration, we might have a good prior. In this case, it would make sense to perform a local optimization search. In principle, this would boost the performance of the calibration strategy. Unfortunately, there was no time to develop this idea.</p>
 </div>
-<p>Hence if we want to find the holy grail of global optimum (or a local minimum with decent performance), we need to roam
-and wander, jumping here and there, with increasing confidence on our next guess as we grasp some (statistical)
-knowledge of the shape of the loss function.</p>
-<p>However, this process is very much time consuming: for the kind of simulations with which we are involved, each sampling
-takes about one minute, which leads to the next chapter.</p>
+<p>Hence if we want to find the holy grail of global optimum (or a local minimum with decent performance), we need to roam and wander, jumping here and there, with increasing confidence on our next guess as we grasp some (statistical) knowledge of the shape of the loss function.</p>
+<p>However, this process is very much time consuming: for the kind of simulations with which we are involved, each sampling takes about one minute, which leads to the next chapter.</p>
 <hr class="footnotes docutils" />
 <dl class="footnote brackets">
 <dt class="label" id="hyperopt"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
