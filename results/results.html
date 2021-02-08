@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Results &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
+    <title>Scaling Analysis and Modeling &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -57,6 +57,8 @@
     <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/results/results.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="&lt;no title&gt;" href="examples.html" />
+    <link rel="prev" title="Implementation" href="../methodology/implementation.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -65,8 +67,8 @@
 <!-- Opengraph tags -->
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/results/results.html" />
 <meta property="og:type"        content="article" />
-<meta property="og:title"       content="Results" />
-<meta property="og:description" content="Results  Scaling and Efficiency  Examples of CalibrationScaling and EfficiencyExamples of Calibration" />
+<meta property="og:title"       content="Scaling Analysis and Modeling" />
+<meta property="og:description" content="Scaling Analysis and Modeling  In this chapter the question of how calibration time T scale with the number of available processing units (PUs) n will be examin" />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -168,7 +170,12 @@
   Results
  </span>
 </p>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Scaling Analysis and Modeling
+  </a>
+ </li>
  <li class="toctree-l1">
   <a class="reference internal" href="examples/plots.html">
    Example of Plots using GEOtoPy
@@ -229,9 +236,9 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/results/results.md"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/results/results.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
+                data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
         <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
             onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
@@ -249,6 +256,23 @@
 
         <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/results/results.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
     </div>
 
     <!-- Table of contents -->
@@ -263,10 +287,35 @@
   <a class="reference internal nav-link" href="#scaling-and-efficiency">
    Scaling and Efficiency
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#strong-scaling">
+     Strong Scaling
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#efficiency">
+     Efficiency
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#weak-scaling">
+     Weak Scaling
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#examples-of-calibration">
-   Examples of Calibration
+  <a class="reference internal nav-link" href="#a-linear-model">
+   A Linear Model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#models-for-large-n">
+   Models for Large
+   <span class="math notranslate nohighlight">
+    \(n\)
+   </span>
   </a>
  </li>
 </ul>
@@ -280,13 +329,626 @@
         
               <div>
                 
-  <div class="section" id="results">
-<h1>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="scaling-analysis-and-modeling">
+<h1>Scaling Analysis and Modeling<a class="headerlink" href="#scaling-analysis-and-modeling" title="Permalink to this headline">¶</a></h1>
+<p>In this chapter the question of how calibration time <span class="math notranslate nohighlight">\(T\)</span> scale with the number of available processing units (PUs) <span class="math notranslate nohighlight">\(n\)</span> will be examined. It is possible to perform two types of scaling analyses, one where the <em>size of the problem</em> stays fixed and one where it varies with the number of PUs. As customary, I will refer to them as <strong>weak scaling</strong> and <strong>strong scaling</strong> respectively. What do I mean by <em>size of the problem</em> in the context of derivative-free optimization? One obvious answer is the number of function evaluations, or budget, in the parlance of the Nevergrad library; but this number is a random variable when we resample after failing computations. Nonetheless, the budget is the infimum for the actual number of function evaluations and <code class="docutils literal notranslate"><span class="pre">optimizer.tell</span></code> calls, which is the amount of information collected by the optimizer. Therefore, the budget is a good definition for the size of the problem after all, as long as one keeps in mind that he is dealing with a stochastic process. Indeed, each particular realization will not depend in a deterministic way on parameters such as the budget. However, changing the budget <strong>will</strong> change the distribution, and the mean value of calibration time in a deterministic way.</p>
+<p>For evolutionary algorithms the budget is given by the number of individuals <span class="math notranslate nohighlight">\(p\)</span> times the number of generations <span class="math notranslate nohighlight">\(g\)</span>. For these algorithms, as more thoroughly explained in previous chapters, changing the population size can have large effects on the result and execution time of optimization. Indeed, the population size determines, on the one hand, the probability of escaping from a local minimum and, on the other, the degree to which optimization can be executed in parallel. The latter statement, for which we have developed an intuition based on the arguments in the previous chapters, will be given a quantitative form later on in this one. For the previous reasons, in the following I will consider <span class="math notranslate nohighlight">\(p\)</span> as the size of the problem, and the number of generations <span class="math notranslate nohighlight">\(g\)</span> fixed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">scrapbook</span> <span class="k">as</span> <span class="nn">sb</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">statsmodels.formula.api</span> <span class="k">as</span> <span class="nn">smf</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">mhpc_project.utils</span> <span class="kn">import</span> <span class="n">get_scaling_data</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">:(</span><span class="mi">16</span><span class="p">,</span><span class="mi">9</span><span class="p">),</span> <span class="s1">&#39;figure.dpi&#39;</span><span class="p">:</span><span class="mi">100</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="section" id="scaling-and-efficiency">
 <h2>Scaling and Efficiency<a class="headerlink" href="#scaling-and-efficiency" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="strong-scaling">
+<h3>Strong Scaling<a class="headerlink" href="#strong-scaling" title="Permalink to this headline">¶</a></h3>
+<p>In this analysis, the calibration notebook has been executed several times with increasing <span class="math notranslate nohighlight">\(n\)</span> while keeping <span class="math notranslate nohighlight">\(p\)</span> fixed. This is done using Papermill, which allows parametrizing and executing Jupyter notebooks in an automated way. Later, using the Scrapbook library, it is possible to recover the objects defined during the execution (which are serialized and saved within the notebook) and the metadata saved by Papermill, such as the notebook execution time.</p>
+<p>The Scrapbook library offers the convenience function <code class="docutils literal notranslate"><span class="pre">read_notebooks</span></code> that takes the path to a directory and returns a scrapbook. This object has an iterator interface that yields the notebooks within that directory, and that can be used to collect the data from an ensemble of notebooks.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">strong_scaling_book</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">read_notebooks</span><span class="p">(</span><span class="s1">&#39;../runs/strong_scaling&#39;</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="examples-of-calibration">
-<h2>Examples of Calibration<a class="headerlink" href="#examples-of-calibration" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+<p>We can retrieve the data relevant to scaling using the <code class="docutils literal notranslate"><span class="pre">get_scaling_data</span></code> function from <code class="docutils literal notranslate"><span class="pre">mhpc_project.utils</span></code>. This function takes a scrapbook and for each of its notebooks checks that every code cell has been successfully executed and, if so, it stores its data in a Pandas dataframe.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">strong_scaling_data</span> <span class="o">=</span>  <span class="n">get_scaling_data</span><span class="p">(</span><span class="n">strong_scaling_book</span><span class="p">)</span>
+<span class="n">strong_scaling_data</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>num_cpus</th>
+      <th>popsize</th>
+      <th>num_generations</th>
+      <th>ratio</th>
+      <th>duration</th>
+      <th>num_samples</th>
+      <th>samples_duration</th>
+      <th>num_good_samples</th>
+      <th>good_samples_duration</th>
+      <th>efficiency</th>
+      <th>speedup</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>testbed-NGO-4096-1024-6Cy</td>
+      <td>1024</td>
+      <td>512</td>
+      <td>8</td>
+      <td>0.5</td>
+      <td>1345.692414</td>
+      <td>4849</td>
+      <td>530615.400963</td>
+      <td>4100</td>
+      <td>418992.039157</td>
+      <td>0.304061</td>
+      <td>19.184729</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>testbed-NGO-4096-1024-RJ3</td>
+      <td>1024</td>
+      <td>512</td>
+      <td>8</td>
+      <td>0.5</td>
+      <td>1773.088293</td>
+      <td>4956</td>
+      <td>550710.424364</td>
+      <td>4096</td>
+      <td>423005.345256</td>
+      <td>0.232978</td>
+      <td>14.560327</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>testbed-NGO-4096-1024-WO3</td>
+      <td>1024</td>
+      <td>512</td>
+      <td>8</td>
+      <td>0.5</td>
+      <td>2044.776349</td>
+      <td>4922</td>
+      <td>543414.466632</td>
+      <td>4120</td>
+      <td>424187.515901</td>
+      <td>0.202587</td>
+      <td>12.625706</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>testbed-NGO-4096-1024-hNP</td>
+      <td>1024</td>
+      <td>512</td>
+      <td>8</td>
+      <td>0.5</td>
+      <td>1385.237619</td>
+      <td>4739</td>
+      <td>518288.827073</td>
+      <td>4097</td>
+      <td>424066.970334</td>
+      <td>0.298958</td>
+      <td>18.637051</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>testbed-NGO-4096-1024-jar</td>
+      <td>1024</td>
+      <td>512</td>
+      <td>8</td>
+      <td>0.5</td>
+      <td>2020.561965</td>
+      <td>4937</td>
+      <td>547096.831652</td>
+      <td>4098</td>
+      <td>423238.672021</td>
+      <td>0.204556</td>
+      <td>12.777012</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>As noted above, the calibration time is a random variable and, as shown by the entries in the previous dataframe, it can vary widely from one realization to another, although with the same parameters. However, we will be mainly concerned with its mean value <span class="math notranslate nohighlight">\(T\)</span>, and, if not explicitly stated otherwise, I will refer to mean values when talking about execution times (the same goes for its derived quantities).</p>
+<p>The speedup <span class="math notranslate nohighlight">\(S\)</span> is usually defined as</p>
+<div class="math notranslate nohighlight">
+\[ S(n, p) = \frac{T(1, p)}{T(n, p)} \, .\]</div>
+<p>However, since we don’t have a serial execution as a reference, the following definition will be used</p>
+<div class="math notranslate nohighlight">
+\[ S(n, p) = \frac{T(n_0, p)}{T(n, p)} \, ,\]</div>
+<p>where in our case <span class="math notranslate nohighlight">\(n_0 = 32\)</span>. In case of perfect (linear) strong scaling, <span class="math notranslate nohighlight">\(T\)</span> is inversely proportional to <span class="math notranslate nohighlight">\(n\)</span>, and we have</p>
+<div class="math notranslate nohighlight">
+\[ S(n, p) = \frac{n}{n_0} \, .\]</div>
+<p>It is possible to improve this simple model of the computation by including the effect of the population size. If the objective never fails, each PU exceeding the population size will idle. Hence, we can have perfect scaling only up to <span class="math notranslate nohighlight">\(n = p\)</span></p>
+<div class="math notranslate nohighlight" id="equation-eq-max-speedup">
+<span class="eqno">(1)<a class="headerlink" href="#equation-eq-max-speedup" title="Permalink to this equation">¶</a></span>\[ S(n, p) = \frac{\min(n, p)}{n_0} \, . \]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">strong_scaling_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;speedup&#39;</span><span class="p">,</span>
+             <span class="n">err_style</span><span class="o">=</span><span class="s1">&#39;bars&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">strong_scaling_data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">strong_scaling_data</span><span class="p">[[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="s1">&#39;popsize&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">strong_scaling_data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;reference&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Strong Scaling (popsize = 512)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_7_0.png" src="../_images/results_7_0.png" />
+</div>
+</div>
+<p>As can be evinced from the plot above, the simple model described by the equation {eq}`eq:max_speedup} seems to be very effective. It is interesting to note that the execution appears to reach values near the theoretical maximum speedup, but with <span class="math notranslate nohighlight">\(n\)</span> sensibly larger than <span class="math notranslate nohighlight">\(p\)</span>. One possible interpretation is that, as we know, the effective population size is larger than <span class="math notranslate nohighlight">\(p\)</span> due to objective function failures. However, in that case the speedup should be also larger than <span class="math notranslate nohighlight">\(p / n_0\)</span>. In principle, knowing the statistics of the objective execution times and failures, it should be possible to model more accurately the calibration speedup. However, I will use a simpler approach based on data.</p>
+</div>
+<div class="section" id="efficiency">
+<h3>Efficiency<a class="headerlink" href="#efficiency" title="Permalink to this headline">¶</a></h3>
+<p>Another interesting quantity is the efficiency, defined as the fraction of time spent by a PU computing the values of the objective actually told to the optimizer</p>
+<div class="math notranslate nohighlight">
+\[ \eta(p, n) = \frac{\sum\limits_{X_i \text{ told}} t_i}{n T} \, .\]</div>
+<p>By definition, the remaining part of time is spent idle, computing NaNs or unused values.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">strong_scaling_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;efficiency&#39;</span><span class="p">,</span> <span class="n">err_style</span><span class="o">=</span><span class="s1">&#39;bars&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_9_0.png" src="../_images/results_9_0.png" />
+</div>
+</div>
+<p>It is worth noting that while we can get a speedup by using more PUs, the efficiency will drop.</p>
+</div>
+<div class="section" id="weak-scaling">
+<h3>Weak Scaling<a class="headerlink" href="#weak-scaling" title="Permalink to this headline">¶</a></h3>
+<p>In weak scaling analysis, the calibration notebook has been executed several times with increasing <span class="math notranslate nohighlight">\(p\)</span> and <span class="math notranslate nohighlight">\(n\)</span>, while keeping the ration <span class="math notranslate nohighlight">\(p / n\)</span> fixed. Note that from strong scaling analysis we know that larger <span class="math notranslate nohighlight">\(p / n\)</span> values correspond to smaller errors.</p>
+<p>In case of weak scaling, the speedup is not a meaningful metric, since the size of the problem changes. Instead, we are interested in the execution time <span class="math notranslate nohighlight">\(T\)</span>, and perfect scaling happens when <span class="math notranslate nohighlight">\(T\)</span> is constant.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">weak_scaling_book</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">read_notebooks</span><span class="p">(</span><span class="s1">&#39;../runs/weak_scaling&#39;</span><span class="p">)</span>
+<span class="n">weak_scaling_data</span> <span class="o">=</span> <span class="n">get_scaling_data</span><span class="p">(</span><span class="n">weak_scaling_book</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;duration&#39;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">err_style</span><span class="o">=</span><span class="s1">&#39;bars&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">value</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">value</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;reference&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Weak Scaling (num_cpus = popsize)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_12_0.png" src="../_images/results_12_0.png" />
+</div>
+</div>
+<p>In the plot above, the reference indicating perfect scaling is chosen as the average execution time, and visual inspection suggests that the hypothesis of perfect weak scaling is compatible with the data within the errors. The same thing can be shown by means of linear regression in the plot and summary below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grid</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">JointGrid</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;duration&#39;</span><span class="p">)</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">set_figwidth</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">set_figheight</span><span class="p">(</span><span class="mi">9</span><span class="p">)</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">plot_joint</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">,</span> <span class="n">x_estimator</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">ax_marg_x</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;duration&#39;</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">ax_marg_y</span><span class="p">)</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">ax_joint</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">value</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">value</span><span class="p">))</span>
+<span class="c1"># plots.duration_regplot(weak_scaling_data)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="n">formula</span><span class="o">=</span><span class="s1">&#39;duration ~ 1 + num_cpus&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_14_0.png" src="../_images/results_14_0.png" />
+<div class="output text_html"><table class="simpletable">
+<caption>OLS Regression Results</caption>
+<tr>
+  <th>Dep. Variable:</th>        <td>duration</td>     <th>  R-squared:         </th> <td>   0.027</td>
+</tr>
+<tr>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.009</td>
+</tr>
+<tr>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   1.525</td>
+</tr>
+<tr>
+  <th>Date:</th>             <td>Mon, 08 Feb 2021</td> <th>  Prob (F-statistic):</th>  <td> 0.222</td> 
+</tr>
+<tr>
+  <th>Time:</th>                 <td>09:17:17</td>     <th>  Log-Likelihood:    </th> <td> -457.80</td>
+</tr>
+<tr>
+  <th>No. Observations:</th>      <td>    56</td>      <th>  AIC:               </th> <td>   919.6</td>
+</tr>
+<tr>
+  <th>Df Residuals:</th>          <td>    54</td>      <th>  BIC:               </th> <td>   923.7</td>
+</tr>
+<tr>
+  <th>Df Model:</th>              <td>     1</td>      <th>                     </th>     <td> </td>   
+</tr>
+<tr>
+  <th>Covariance Type:</th>      <td>nonrobust</td>    <th>                     </th>     <td> </td>   
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+      <td></td>         <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
+</tr>
+<tr>
+  <th>Intercept</th> <td> 2428.8054</td> <td>  191.431</td> <td>   12.688</td> <td> 0.000</td> <td> 2045.010</td> <td> 2812.601</td>
+</tr>
+<tr>
+  <th>num_cpus</th>  <td>    0.5934</td> <td>    0.481</td> <td>    1.235</td> <td> 0.222</td> <td>   -0.370</td> <td>    1.557</td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+  <th>Omnibus:</th>       <td>42.536</td> <th>  Durbin-Watson:     </th> <td>   2.219</td>
+</tr>
+<tr>
+  <th>Prob(Omnibus):</th> <td> 0.000</td> <th>  Jarque-Bera (JB):  </th> <td> 114.578</td>
+</tr>
+<tr>
+  <th>Skew:</th>          <td> 2.342</td> <th>  Prob(JB):          </th> <td>1.32e-25</td>
+</tr>
+<tr>
+  <th>Kurtosis:</th>      <td> 8.212</td> <th>  Cond. No.          </th> <td>    652.</td>
+</tr>
+</table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</div></div>
+</div>
+</div>
+</div>
+<div class="section" id="a-linear-model">
+<h2>A Linear Model<a class="headerlink" href="#a-linear-model" title="Permalink to this headline">¶</a></h2>
+<p>Previous results make sense since, without further assumptions, neither perfect weak scaling imply perfect strong scaling (as would contradict our observations), nor vice-versa. Also, the way in which we measure the problem size affects weak scaling. Howeer, if the execution time is proportional to the problem size, then one form of scaling imply the other.</p>
+<p>This fact is more evident in equations than words: the two contitions are</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align} T(p, n) &amp; \propto \frac{1}{n} &amp; \text{for strong scaling} \\ T(p, n) &amp;= T(\frac{p}{n}) &amp; \text{for weak scaling} \end{align} \, \end{split}\]</div>
+<p>hence, if <span class="math notranslate nohighlight">\(T(p, n) \propto p\)</span>, then one imply the other.</p>
+<p>More often, a sensible requirement on the size <span class="math notranslate nohighlight">\(p\)</span> is just that <span class="math notranslate nohighlight">\(T(p, n) \sim \mathcal{O}(p)\)</span>. In this sense, choosing the population size <span class="math notranslate nohighlight">\(p\)</span> as the problem size seems very reasonable. Indeed, it is plausible, as a first approximation, that the fraction of successful objective function calls stays constant as we change <span class="math notranslate nohighlight">\(p\)</span>: hence, the required amount of computation goes asymptotically as <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<p>What we can deduce from the previous analyses? From perfect weak scaling we know that <span class="math notranslate nohighlight">\(T\)</span> is a function of <span class="math notranslate nohighlight">\(p / n\)</span> alone. From strong scaling we know that the speedup for large <span class="math notranslate nohighlight">\(n\)</span> seems to saturate at a non-zero value, which means that <span class="math notranslate nohighlight">\(T\)</span> cannot have neither poles nor zeros for finite (of course, non-negative) <span class="math notranslate nohighlight">\(p / n\)</span>. Therefore, the simplest form for <span class="math notranslate nohighlight">\(T\)</span> is a linear model</p>
+<div class="math notranslate nohighlight" id="equation-eq-linear-model">
+<span class="eqno">(2)<a class="headerlink" href="#equation-eq-linear-model" title="Permalink to this equation">¶</a></span>\[ T(p, n) = T_0 + T_1 \frac{p}{n} \, .\]</div>
+<p>Let’s see if this model fits the data and what can be deduced from it.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span> <span class="o">=</span> <span class="n">strong_scaling_data</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">strong_scaling_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;ratio&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;duration&#39;</span><span class="p">,</span> <span class="n">x_estimator</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">truncate</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">value</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">value</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">fit</span> <span class="o">=</span> <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="n">formula</span><span class="o">=</span><span class="s1">&#39;duration ~ 1 + ratio&#39;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span>
+<span class="n">fit</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_16_0.png" src="../_images/results_16_0.png" />
+<div class="output text_html"><table class="simpletable">
+<caption>OLS Regression Results</caption>
+<tr>
+  <th>Dep. Variable:</th>        <td>duration</td>     <th>  R-squared:         </th> <td>   0.994</td>
+</tr>
+<tr>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.994</td>
+</tr>
+<tr>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   8729.</td>
+</tr>
+<tr>
+  <th>Date:</th>             <td>Mon, 08 Feb 2021</td> <th>  Prob (F-statistic):</th> <td>1.34e-59</td>
+</tr>
+<tr>
+  <th>Time:</th>                 <td>09:17:17</td>     <th>  Log-Likelihood:    </th> <td> -406.38</td>
+</tr>
+<tr>
+  <th>No. Observations:</th>      <td>    54</td>      <th>  AIC:               </th> <td>   816.8</td>
+</tr>
+<tr>
+  <th>Df Residuals:</th>          <td>    52</td>      <th>  BIC:               </th> <td>   820.7</td>
+</tr>
+<tr>
+  <th>Df Model:</th>              <td>     1</td>      <th>                     </th>     <td> </td>   
+</tr>
+<tr>
+  <th>Covariance Type:</th>      <td>nonrobust</td>    <th>                     </th>     <td> </td>   
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+      <td></td>         <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
+</tr>
+<tr>
+  <th>Intercept</th> <td>  822.2863</td> <td>   73.346</td> <td>   11.211</td> <td> 0.000</td> <td>  675.106</td> <td>  969.467</td>
+</tr>
+<tr>
+  <th>ratio</th>     <td> 1546.7021</td> <td>   16.554</td> <td>   93.431</td> <td> 0.000</td> <td> 1513.483</td> <td> 1579.921</td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+  <th>Omnibus:</th>       <td> 5.439</td> <th>  Durbin-Watson:     </th> <td>   2.198</td>
+</tr>
+<tr>
+  <th>Prob(Omnibus):</th> <td> 0.066</td> <th>  Jarque-Bera (JB):  </th> <td>   4.363</td>
+</tr>
+<tr>
+  <th>Skew:</th>          <td> 0.623</td> <th>  Prob(JB):          </th> <td>   0.113</td>
+</tr>
+<tr>
+  <th>Kurtosis:</th>      <td> 3.622</td> <th>  Cond. No.          </th> <td>    5.30</td>
+</tr>
+</table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</div></div>
+</div>
+<p>Linear regression of the optimization time <span class="math notranslate nohighlight">\(T\)</span> gives a strong indication that equation <a class="reference internal" href="#equation-eq-linear-model">(2)</a> might be the right candidate. The same functional relation can be represented also in the scaling plot.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ys</span><span class="o">=</span><span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="mi">512</span> <span class="o">/</span> <span class="mi">32</span><span class="p">)</span> <span class="o">/</span> <span class="n">fit</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ratio&#39;</span><span class="p">])</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;speedup&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">err_style</span><span class="o">=</span><span class="s1">&#39;bars&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">ys</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;linear model&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_18_0.png" src="../_images/results_18_0.png" />
+</div>
+</div>
+<p>We can also explicitly calculate the speedup</p>
+<div class="math notranslate nohighlight">
+\[ S(p, n) = \frac{T_0 + T_1 \frac{p}{n_0}}{T_0 + T_1 \frac{p}{n}} = \frac{1}{\frac{T_0}{T_0 + T_1 \frac{p}{n_0}} + \frac{T_1 \frac{p}{n_0}}{T_0 + T_1 \frac{p}{n_0}} \frac{n_0}{n}} \, , \]</div>
+<p>and compare this expression with the Amdahl’s law (corrected to use <span class="math notranslate nohighlight">\(T(p, n_0)\)</span> as a reference)</p>
+<div class="math notranslate nohighlight">
+\[ S(n) = \frac{1}{(1 - f) + f \frac{n_0}{n}} \, , \]</div>
+<p>where <span class="math notranslate nohighlight">\(f\)</span> is the fraction of the program that can benefit from the speedup.</p>
+<p>Therefore, we have that</p>
+<div class="math notranslate nohighlight">
+\[ f = \frac{T_1 \frac{p}{n_0}}{T_0 + T_1 \frac{p}{n_0}} \approx 96.8 \%\]</div>
+<p>or, equivalently, that the fraction of time that the program spend in serial code (that is not split among PUs, i.e. the internals of the optimizer) is approximately the 3.2%. Note that this has nothing to do with the data dependency that exists between a generation of individuals and the next, which actually limits the possibility to scale the execution on larger numbers of PUs.</p>
+<p>We can also calculate the maximum speedup</p>
+<div class="math notranslate nohighlight">
+\[ S_\text{max} = \frac{1}{1 - f} = 1 + \frac{T_1}{T_0} \frac{p}{n_0} \approx 31 \, ,\]</div>
+<p>which is sensibly higher than predicted using the simple model based on the assumption of perfect strong scaling up to <span class="math notranslate nohighlight">\(p\)</span>.</p>
+<p>In this case, the previous argument would suggest an effective population size of <span class="math notranslate nohighlight">\(p_\text{eff} \approx n_0 S_\text{max} \approx 963\)</span> individuals. The new estimate of <span class="math notranslate nohighlight">\(S_\text{max}\)</span> is however too high, and the reason is that the linear model considered fails for small <span class="math notranslate nohighlight">\(p / n\)</span>, that is large <span class="math notranslate nohighlight">\(n\)</span>. We will address this issue later.</p>
+<p>We can use the formula for <span class="math notranslate nohighlight">\(T\)</span> also to express the efficiency. Since the number of <code class="docutils literal notranslate"><span class="pre">optimizer.tell</span></code> calls is approximately <span class="math notranslate nohighlight">\(p\)</span>, then, for large enough <span class="math notranslate nohighlight">\(p\)</span>, we can approximate the sum in the definition of <span class="math notranslate nohighlight">\(\eta\)</span> as <span class="math notranslate nohighlight">\(g\)</span> times <span class="math notranslate nohighlight">\(p\)</span> times the mean execution time of successful computations <span class="math notranslate nohighlight">\(\langle t_\text{s} \rangle\)</span></p>
+<div class="math notranslate nohighlight">
+\[ \eta(p, n) = \frac{p}{n} \frac{g \langle t_\text{s} \rangle}{T} = \frac{g \langle t_\text{s} \rangle}{\frac{n}{p} T_0 + T_1} \, .\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">average_sample_duration</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;good_samples_duration&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_good_samples&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">predicted_efficiency</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_generations&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">average_sample_duration</span> <span class="o">/</span> <span class="p">(</span><span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;popsize&#39;</span><span class="p">])</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;efficiency&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">err_style</span><span class="o">=</span><span class="s1">&#39;bars&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">predicted_efficiency</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;linear model&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_20_0.png" src="../_images/results_20_0.png" />
+</div>
+</div>
+<p>The maximum efficiency is reached for <span class="math notranslate nohighlight">\(n \ll p\)</span> and is equal to</p>
+<div class="math notranslate nohighlight">
+\[\eta_\text{max} = \frac{g \langle t_\text{s} \rangle}{T_1} \, .\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;efficiency&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_generations&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;good_samples_duration&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_good_samples&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">/</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.5730291571165904, 0.5510781335909407)
+</pre></div>
+</div>
+</div>
+</div>
+<p>The story holds up: on the one hand, <span class="math notranslate nohighlight">\(g p T_1\)</span> is the amount of work that can be split among workers, i.e. the average computation time times the budget. On the other, if we consider a serial execution with a large population (that is <span class="math notranslate nohighlight">\(n = 1\)</span> and <span class="math notranslate nohighlight">\(p \gg 1\)</span>), then the efficiency is the ratio between the average time spent on a successful computation and the average computation time per unit budget <span class="math notranslate nohighlight">\(\langle t \rangle\)</span>. In both cases <span class="math notranslate nohighlight">\(T_1 = g \langle t \rangle\)</span>. Therefore, the maximum efficiency is <span class="math notranslate nohighlight">\(\eta_\text{max} = \frac{\langle t_\text{s} \rangle}{\langle t \rangle}\)</span>, and is characteristic of the objective function, the optimizer and the timeout.</p>
+<p>Also, notice that there is an implicit dependency on <span class="math notranslate nohighlight">\(g\)</span> in <span class="math notranslate nohighlight">\(T_1\)</span>, and hence in <span class="math notranslate nohighlight">\(\langle t \rangle\)</span>. Indeed, as the generations pass, the optimizer explores regions the search space associated to smaller and smaller losses, and it is plausible that the objective function fails less and less. Hence, the value of <span class="math notranslate nohighlight">\(\langle t \rangle\)</span> calculated within a generation is expected to decrease from one generation to the next. In principle, there could be a also a dependency on <span class="math notranslate nohighlight">\(p\)</span>, but the data for large values of <span class="math notranslate nohighlight">\(p / n\)</span> seems to exclude that (more on this topic in the next section).</p>
+<p>Therefore, we can estimate <span class="math notranslate nohighlight">\(T_1\)</span> from the data in this other way.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t1_estimate</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_generations&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;samples_duration&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_good_samples&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">t1_estimate</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1546.7021007983863, 1216.4128161605433)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that <span class="math notranslate nohighlight">\(\langle t \rangle\)</span> can be larger than the timeout of the objective function. The reason is that there could be multiple failing computations per successful one.</p>
+</div>
+<div class="section" id="models-for-large-n">
+<h2>Models for Large <span class="math notranslate nohighlight">\(n\)</span><a class="headerlink" href="#models-for-large-n" title="Permalink to this headline">¶</a></h2>
+<p>The previous model fails to describe the situation for large <span class="math notranslate nohighlight">\(n\)</span>. The reason is that when <span class="math notranslate nohighlight">\(n\)</span> is larger than the effective population size, adding more PUs should decrease sublinearly the execution time. Indeed, if we neglect the effects due to the statistics of successful computations, <span class="math notranslate nohighlight">\(T\)</span> should be constant. For this reason, I considered other two models which introduce a scale <span class="math notranslate nohighlight">\(x_0\)</span> for <span class="math notranslate nohighlight">\(p / n\)</span> separating the two regimes.</p>
+<p>The first one is a piecewise linear function</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} T_\text{piecewise}(p, n) = \begin{cases} T_0 + T_1 \left( \frac{p}{n} - x_0 \right) &amp; \text{if } \frac{p}{n} \geq x_0 \\ T_0 &amp; \text{otherwise} \\ \end{cases} \, , \end{split}\]</div>
+<p>the other one is the lowest order rational function with vanishing slope at the origin and same asymptotic behaviour</p>
+<div class="math notranslate nohighlight">
+\[ T_\text{rational}(p, n) = T_0 + T_1 \frac{x_0 \left(\frac{1}{x_0} \frac{p}{n}\right)^2}{1 + \frac{1}{x_0} \frac{p}{n}} \, .\]</div>
+<p>We can fit the speedup using these models for the execution time. Since the speedup is defined as a ratio, it does not depend on the unit of measure of <span class="math notranslate nohighlight">\(T\)</span>. This also means that it is not a function of both <span class="math notranslate nohighlight">\(T_0\)</span> and <span class="math notranslate nohighlight">\(T_1\)</span> but depends only on their ratio. Since the behaviour we are trying to capture is at <span class="math notranslate nohighlight">\(p / n \to 0\)</span>, the three models are asymptotically equivalent, and the error on <span class="math notranslate nohighlight">\(T_1\)</span> in the fit of the linear model is small, it is convenient to consider <span class="math notranslate nohighlight">\(T_1\)</span> fixed to the previously calculated value.</p>
+<p>We can now fit the piecewise model,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">speedup_from_t</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">n0</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">t</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">p</span> <span class="o">/</span> <span class="n">n0</span><span class="p">]),</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span> <span class="o">/</span> <span class="n">t</span><span class="p">(</span><span class="n">p</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">t_pwise</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">x0</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">apply_along_axis</span><span class="p">(</span><span class="k">lambda</span> <span class="n">col</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">piecewise</span><span class="p">(</span><span class="n">col</span><span class="p">,</span> <span class="p">[</span><span class="n">col</span> <span class="o">&gt;=</span> <span class="n">x0</span><span class="p">,</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="n">x0</span><span class="p">],</span> <span class="p">[</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">t1</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x0</span><span class="p">),</span> <span class="n">t0</span><span class="p">]),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">xs</span><span class="p">)</span>
+
+<span class="p">(</span><span class="n">t0_pwise</span><span class="p">,</span> <span class="n">x0_pwise</span><span class="p">),</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">:</span> <span class="n">speedup_from_t</span><span class="p">(</span><span class="n">t_pwise</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x0</span><span class="p">]),</span>
+                                              <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;speedup&#39;</span><span class="p">])</span>
+<span class="p">(</span><span class="n">t0_pwise</span><span class="p">,</span> <span class="n">x0_pwise</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cov</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((1646.5908732589887, 0.5893299062130565), array([40.13697403,  0.04197212]))
+</pre></div>
+</div>
+</div>
+</div>
+<p>and plot the results</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">speedup_from_t</span><span class="p">(</span><span class="n">t_pwise</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="p">[</span><span class="n">t0_pwise</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x0_pwise</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;piecewise linear model&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;speedup&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">err_style</span><span class="o">=</span><span class="s1">&#39;bars&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_29_0.png" src="../_images/results_29_0.png" />
+</div>
+</div>
+<p>Visual inspection confirms that there is a good overlap between the data and this model. Indeed, there might even be overfitting. We can also interpret <span class="math notranslate nohighlight">\(T_0\)</span> and <span class="math notranslate nohighlight">\(x_0\)</span> and use their values to calculate the maximum speedup, which is</p>
+<div class="math notranslate nohighlight">
+\[ S_\text{max, piecewise} = 1 + \frac{T_1}{T_0} \left( \frac{p}{n_0} - x_0 \right) \approx 15.5 \, .\]</div>
+<p>This value is basically the average speedup at <span class="math notranslate nohighlight">\(n = 1024\)</span>.</p>
+<p>The parameter <span class="math notranslate nohighlight">\(T_0\)</span> is the lower bound for the execution time (i.e. when the work is split among infinite PUs), and the value of <span class="math notranslate nohighlight">\(T_0 \approx 27\text{m}\)</span> is much more reasonable than <span class="math notranslate nohighlight">\(T_0 \approx 14\text{m}\)</span> found in the linear model. Indeed, in the limit <span class="math notranslate nohighlight">\(p / n \to 0\)</span>, we can estimate this parameter</p>
+<div class="math notranslate nohighlight">
+\[T_0 \approx g \langle t_\text{s} \rangle + \Delta T_0\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Delta T_0\)</span> is the amount of time needed by the system and the optimizer. We can calculate this number using the available data</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0_pwise</span> <span class="o">-</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_generations&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;good_samples_duration&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_good_samples&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>794.237166329827
+</pre></div>
+</div>
+</div>
+</div>
+<p>that is <span class="math notranslate nohighlight">\(\Delta T_0 \approx 13\text{m}\)</span>.</p>
+<p>It is also interesting to explicit the meaning of <span class="math notranslate nohighlight">\(x_0\)</span>. In the piecewise model this parameter is the value of <span class="math notranslate nohighlight">\(p / n\)</span> at which the time abruptly stops scaling: this means that the number of PUs has exceded the effective population, hence</p>
+<div class="math notranslate nohighlight">
+\[ p_\text{eff} \approx \frac{p}{x_0} \approx 868 \, .\]</div>
+<p>We can fit in the same way the rational model</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">t_rat</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">,</span> <span class="n">x0</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">x0</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">x0</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">x0</span><span class="p">))</span>
+
+
+<span class="p">(</span><span class="n">t0_rat</span><span class="p">,</span> <span class="n">x0_rat</span><span class="p">),</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">curve_fit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">x0</span><span class="p">:</span> <span class="n">speedup_from_t</span><span class="p">(</span><span class="n">t_rat</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="p">[</span><span class="n">t0</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x0</span><span class="p">]),</span>
+                                            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;speedup&#39;</span><span class="p">],</span> <span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">))</span>
+<span class="p">(</span><span class="n">t0_rat</span><span class="p">,</span> <span class="n">x0_rat</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">cov</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((1109.9192294187324, 0.32353410232671953),
+ array([192.64967956,   0.31587426]))
+</pre></div>
+</div>
+</div>
+</div>
+<p>plot the result</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">speedup_from_t</span><span class="p">(</span><span class="n">t_rat</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="p">[</span><span class="n">t0_rat</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x0_rat</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rational function model&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;speedup&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">err_style</span><span class="o">=</span><span class="s1">&#39;bars&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_35_0.png" src="../_images/results_35_0.png" />
+</div>
+</div>
+<p>and see that the behaviour at large <span class="math notranslate nohighlight">\(n\)</span> is quite different. In this case we have</p>
+<div class="math notranslate nohighlight">
+\[ S_\text{max, rational} = 1 + \frac{T_1}{T_0} \frac{x_0 \left( \frac{1}{x_0} \frac{p}{n_0} \right)^2}{ 1 + \frac{1}{x_0} \frac{p}{n_0} } \approx 23 \, .\]</div>
+<p>Using the previous argument (although it is a bit of a stretch) we can also estimate the order of magnitude of <span class="math notranslate nohighlight">\(p_\text{eff}\)</span></p>
+<div class="math notranslate nohighlight">
+\[p_\text{eff} \approx \frac{p}{x_0} \approx 1600 \, . \]</div>
+<p>Also, in this case, the estimated serial time</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t0_rat</span> <span class="o">-</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_generations&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;good_samples_duration&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;num_good_samples&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>257.56552248957064
+</pre></div>
+</div>
+</div>
+</div>
+<p>is much less, <span class="math notranslate nohighlight">\(\Delta T \approx 4\text{m}\)</span>.</p>
+<p>All in all, the piecewise linear model seems to be a bit more realistic.</p>
+<p>Finally, it is instructive to take a look at the different models for execution times near <span class="math notranslate nohighlight">\(p / n \to 0\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;ratio&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;ratio&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;duration&#39;</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">xs</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;linear model&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">t_pwise</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">t0_pwise</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x0_pwise</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;piecewise linear model&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">t_rat</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">t0_rat</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x0_rat</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rational function model&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">value</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">value</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_39_0.png" src="../_images/results_39_0.png" />
+</div>
+</div>
+<p>or equivalently to the speedups at <span class="math notranslate nohighlight">\(n \gg p\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2048</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;speedup&#39;</span><span class="p">,</span> <span class="n">estimator</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">speedup_from_t</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">t0</span><span class="p">,</span> <span class="n">t1</span><span class="p">:</span> <span class="n">t0</span> <span class="o">+</span> <span class="n">t1</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;linear model&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">speedup_from_t</span><span class="p">(</span><span class="n">t_pwise</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="p">[</span><span class="n">t0_pwise</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x0_pwise</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;piecewise linear model&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">xs</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">speedup_from_t</span><span class="p">(</span><span class="n">t_rat</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="p">[</span><span class="n">t0_rat</span><span class="p">,</span> <span class="n">fit</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">x0_rat</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;rational function model&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_41_0.png" src="../_images/results_41_0.png" />
+</div>
+</div>
 </div>
 </div>
 
@@ -318,6 +980,8 @@
     
     <div class='prev-next-bottom'>
         
+    <a class='left-prev' id="prev-link" href="../methodology/implementation.html" title="previous page">Implementation</a>
+    <a class='right-next' id="next-link" href="examples.html" title="next page">&lt;no title&gt;</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

@@ -172,6 +172,11 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
+  <a class="reference internal" href="../results/results.html">
+   Scaling Analysis and Modeling
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="../results/examples/plots.html">
    Example of Plots using GEOtoPy
   </a>
@@ -344,7 +349,7 @@ for a further optimization process!</p>
 the first lines of this section. For our purpose, we will pretend to live in a world where there are no queues on
 supercomputers, and where each user has unlimited access to the resources of the machine. In this wonderful world, the
 only finite resource is time (this, unfortunately, is unavoidable even in the wildest fantasies
-<a class="bibtex reference internal" href="#pievani2020finitudine" id="id1">[Pie20]</a>, and hence <em>tempori parere</em> <a class="bibtex reference internal" href="#dionigi2020segui" id="id2">[Dio20]</a>). Therefore the second criteria for
+<a href="#id1"><span class="problematic" id="id2">:cite:`pievani2020finitudine`</span></a>, and hence <em>tempori parere</em> <a href="#id3"><span class="problematic" id="id4">:cite:`dionigi2020segui`</span></a>). Therefore the second criteria for
 this multi-objective optimization will be <span class="math notranslate nohighlight">\(t(\lambda)\)</span>, the average execution time of <span class="math notranslate nohighlight">\(X_\lambda\)</span>.</p>
 <p>Finally, we can answer precisely the question of what scaling means for the calibration of GEOtop or, better, why it
 makes no sense to talk about scaling for this kind of applications.</p>
@@ -355,15 +360,6 @@ number of CPUs, among the other hyperparameters.</p>
 <p>Therefore, in principle, we can select the point of the Pareto front corresponding to a particular execution time and
 return the number of CPUs, hence having a function. But, in general, it is not invertible: there might well be multiple
 optimal execution times given the same number of CPUs!</p>
-<p id="bibtex-bibliography-problem/hyperopt-0"><dl class="citation">
-<dt class="bibtex label" id="dionigi2020segui"><span class="brackets"><a class="fn-backref" href="#id2">Dio20</a></span></dt>
-<dd><p>Ivano Dionigi. <em>Segui il tuo demone</em>. Editori Laterza, 2020. ISBN 978-88-581-3235-6.</p>
-</dd>
-<dt class="bibtex label" id="pievani2020finitudine"><span class="brackets"><a class="fn-backref" href="#id1">Pie20</a></span></dt>
-<dd><p>Telmo Pievani. <em>Finitudine</em>. Raffaello Cortina Editore, 2020. ISBN 978-88-328-5217-2.</p>
-</dd>
-</dl>
-</p>
 </div>
 
     <script type="text/x-thebe-config">
