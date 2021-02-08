@@ -68,7 +68,7 @@
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/results/scaling.html" />
 <meta property="og:type"        content="article" />
 <meta property="og:title"       content="Scaling Analysis and Modeling" />
-<meta property="og:description" content="Scaling Analysis and Modeling  In this chapter the question of how calibration time T scale with the number of available processing units (PUs) n will be examin" />
+<meta property="og:description" content="Scaling Analysis and Modeling  There are four kinds of lies: Lies, Damn Lies, Statistics, and Visualizations  Nathaniel S. Borenstein  In this chapter the quest" />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -335,6 +335,10 @@
                 
   <div class="section" id="scaling-analysis-and-modeling">
 <h1>Scaling Analysis and Modeling<a class="headerlink" href="#scaling-analysis-and-modeling" title="Permalink to this headline">¶</a></h1>
+<blockquote class="epigraph">
+<div><p>There are four kinds of lies: Lies, Damn Lies, Statistics, and Visualizations</p>
+<p class="attribution">—Nathaniel S. Borenstein</p>
+</div></blockquote>
 <p>In this chapter the question of how calibration time <span class="math notranslate nohighlight">\(T\)</span> scale with the number of available processing units (PUs) <span class="math notranslate nohighlight">\(n\)</span> will be examined. It is possible to perform two types of scaling analyses, one where the <em>size of the problem</em> stays fixed and one where it varies with the number of PUs. As customary, I will refer to them as <strong>weak scaling</strong> and <strong>strong scaling</strong> respectively. What do I mean by <em>size of the problem</em> in the context of derivative-free optimization? One obvious answer is the number of function evaluations, or budget, in the parlance of the Nevergrad library; but this number is a random variable when we resample after failing computations. Nonetheless, the budget is the infimum for the actual number of function evaluations and <code class="docutils literal notranslate"><span class="pre">optimizer.tell</span></code> calls, which is the amount of information collected by the optimizer. Therefore, the budget is a good definition for the size of the problem after all, as long as one keeps in mind that he is dealing with a stochastic process. Indeed, each particular realization will not depend in a deterministic way on parameters such as the budget. However, changing the budget <strong>will</strong> change the distribution, and the mean value of calibration time in a deterministic way.</p>
 <p>For evolutionary algorithms the budget is given by the number of individuals <span class="math notranslate nohighlight">\(p\)</span> times the number of generations <span class="math notranslate nohighlight">\(g\)</span>. For these algorithms, as more thoroughly explained in previous chapters, changing the population size can have large effects on the result and execution time of optimization. Indeed, the population size determines, on the one hand, the probability of escaping from a local minimum and, on the other, the degree to which optimization can be executed in parallel. The latter statement, for which we have developed an intuition based on the arguments in the previous chapters, will be given a quantitative form later on in this one. For the previous reasons, in the following I will consider <span class="math notranslate nohighlight">\(p\)</span> as the size of the problem, and the number of generations <span class="math notranslate nohighlight">\(g\)</span> fixed.</p>
 <div class="cell docutils container">
