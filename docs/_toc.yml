@@ -22,7 +22,7 @@
 
 - part: Results
   chapters:
-    - file: results/scaling
+    - file: results/results
     - file: results/examples
       sections:
         - file: results/examples/plots
