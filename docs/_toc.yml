@@ -23,7 +23,6 @@
 - part: Results
   chapters:
     - file: results/results
-    - file: results/examples
       sections:
         - file: results/examples/plots
         - file: results/examples/calibration
