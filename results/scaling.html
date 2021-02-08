@@ -54,7 +54,7 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/results/results.html" />
+    <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/results/scaling.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Example of Plots using GEOtoPy" href="examples/plots.html" />
@@ -65,7 +65,7 @@
 
 
 <!-- Opengraph tags -->
-<meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/results/results.html" />
+<meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/results/scaling.html" />
 <meta property="og:type"        content="article" />
 <meta property="og:title"       content="Scaling Analysis and Modeling" />
 <meta property="og:description" content="Scaling Analysis and Modeling  In this chapter the question of how calibration time T scale with the number of available processing units (PUs) n will be examin" />
@@ -240,7 +240,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/results/results.ipynb"><button type="button"
+        <a class="dropdown-buttons" href="../_sources/results/scaling.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.ipynb</button></a>
         <!-- Download PDF via print -->
@@ -265,7 +265,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/results/results.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/results/scaling.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../_static/images/logo_binder.svg"
@@ -512,7 +512,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/results_7_0.png" src="../_images/results_7_0.png" />
+<img alt="../_images/scaling_7_0.png" src="../_images/scaling_7_0.png" />
 </div>
 </div>
 <p>As can be evinced from the plot above, the simple model described by the equation {eq}`eq:max_speedup} seems to be very effective. It is interesting to note that the execution appears to reach values near the theoretical maximum speedup, but with <span class="math notranslate nohighlight">\(n\)</span> sensibly larger than <span class="math notranslate nohighlight">\(p\)</span>. One possible interpretation is that, as we know, the effective population size is larger than <span class="math notranslate nohighlight">\(p\)</span> due to objective function failures. However, in that case the speedup should be also larger than <span class="math notranslate nohighlight">\(p / n_0\)</span>. In principle, knowing the statistics of the objective execution times and failures, it should be possible to model more accurately the calibration speedup. However, I will use a simpler approach based on data.</p>
@@ -531,7 +531,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/results_9_0.png" src="../_images/results_9_0.png" />
+<img alt="../_images/scaling_9_0.png" src="../_images/scaling_9_0.png" />
 </div>
 </div>
 <p>It is worth noting that while we can get a speedup by using more PUs, the efficiency will drop.</p>
@@ -555,7 +555,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/results_12_0.png" src="../_images/results_12_0.png" />
+<img alt="../_images/scaling_12_0.png" src="../_images/scaling_12_0.png" />
 </div>
 </div>
 <p>In the plot above, the reference indicating perfect scaling is chosen as the average execution time, and visual inspection suggests that the hypothesis of perfect weak scaling is compatible with the data within the errors. The same thing can be shown by means of linear regression in the plot and summary below.</p>
@@ -576,7 +576,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/results_14_0.png" src="../_images/results_14_0.png" />
+<img alt="../_images/scaling_14_0.png" src="../_images/scaling_14_0.png" />
 <div class="output text_html"><table class="simpletable">
 <caption>OLS Regression Results</caption>
 <tr>
@@ -660,7 +660,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/results_16_0.png" src="../_images/results_16_0.png" />
+<img alt="../_images/scaling_16_0.png" src="../_images/scaling_16_0.png" />
 <div class="output text_html"><table class="simpletable">
 <caption>OLS Regression Results</caption>
 <tr>
@@ -728,7 +728,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/results_18_0.png" src="../_images/results_18_0.png" />
+<img alt="../_images/scaling_18_0.png" src="../_images/scaling_18_0.png" />
 </div>
 </div>
 <p>We can also explicitly calculate the speedup</p>
@@ -761,7 +761,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/results_20_0.png" src="../_images/results_20_0.png" />
+<img alt="../_images/scaling_20_0.png" src="../_images/scaling_20_0.png" />
 </div>
 </div>
 <p>The maximum efficiency is reached for <span class="math notranslate nohighlight">\(n \ll p\)</span> and is equal to</p>
@@ -839,7 +839,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/results_29_0.png" src="../_images/results_29_0.png" />
+<img alt="../_images/scaling_29_0.png" src="../_images/scaling_29_0.png" />
 </div>
 </div>
 <p>Visual inspection confirms that there is a good overlap between the data and this model. Indeed, there might even be overfitting. We can also interpret <span class="math notranslate nohighlight">\(T_0\)</span> and <span class="math notranslate nohighlight">\(x_0\)</span> and use their values to calculate the maximum speedup, which is</p>
@@ -897,7 +897,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/results_35_0.png" src="../_images/results_35_0.png" />
+<img alt="../_images/scaling_35_0.png" src="../_images/scaling_35_0.png" />
 </div>
 </div>
 <p>and see that the behaviour at large <span class="math notranslate nohighlight">\(n\)</span> is quite different. In this case we have</p>
@@ -935,7 +935,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/results_39_0.png" src="../_images/results_39_0.png" />
+<img alt="../_images/scaling_39_0.png" src="../_images/scaling_39_0.png" />
 </div>
 </div>
 <p>or equivalently to the speedups at <span class="math notranslate nohighlight">\(n \gg p\)</span></p>
@@ -951,7 +951,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/results_41_0.png" src="../_images/results_41_0.png" />
+<img alt="../_images/scaling_41_0.png" src="../_images/scaling_41_0.png" />
 </div>
 </div>
 <div class="toctree-wrapper compound">
