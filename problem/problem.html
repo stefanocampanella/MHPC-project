@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Formalish definition of the problem &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
+    <title>Formal Definition of the Problem &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -67,8 +67,8 @@
 <!-- Opengraph tags -->
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/problem/problem.html" />
 <meta property="og:type"        content="article" />
-<meta property="og:title"       content="Formalish definition of the problem" />
-<meta property="og:description" content="Formalish definition of the problem  In this chapter, I would like to pinpoint in mathematical terms the ideas behind the numerical experiments with which this " />
+<meta property="og:title"       content="Formal Definition of the Problem" />
+<meta property="og:description" content="Formal Definition of the Problem  My children, the only true technology is nature. All the other forms of manmade technology are perversions.  Ralph Bakshi, Wiz" />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -97,32 +97,27 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form>
 <nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <p class="caption collapsible-parent">
- <span class="caption-text">
-  Introduction
- </span>
-</p>
-<ul class="nav sidenav_l1">
+    <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../introduction/prologue.html">
    Prologue
   </a>
  </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction and Motivations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../introduction/geotop.html">
    Brief Introduction to GEOtop
   </a>
  </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
-  Motivations
- </span>
-</p>
-<ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../motivations/calibration.html">
-   GEOtop calibration or finding the needle in the haystack
+   GEOtop calibration
   </a>
  </li>
  <li class="toctree-l1">
@@ -133,13 +128,13 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Problem
+  Problem, Methodology and Implementation
  </span>
 </p>
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Formalish definition of the problem
+   Formal Definition of the Problem
   </a>
  </li>
  <li class="toctree-l1">
@@ -147,13 +142,6 @@
    Hyperparameter optimization
   </a>
  </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
-  Methodology
- </span>
-</p>
-<ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../methodology/tools.html">
    Tools
@@ -272,8 +260,12 @@
         
               <div>
                 
-  <div class="section" id="formalish-definition-of-the-problem">
-<h1>Formalish definition of the problem<a class="headerlink" href="#formalish-definition-of-the-problem" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="formal-definition-of-the-problem">
+<h1>Formal Definition of the Problem<a class="headerlink" href="#formal-definition-of-the-problem" title="Permalink to this headline">¶</a></h1>
+<blockquote class="epigraph">
+<div><p>My children, the only true technology is nature. All the other forms of manmade technology are perversions.</p>
+<p class="attribution">—Ralph Bakshi, Wizards</p>
+</div></blockquote>
 <p>In this chapter, I would like to pinpoint in mathematical terms the ideas behind the numerical experiments with which this thesis is concerned. The following is far from a rigorous treatment, may seem pretentious or naive, and probably it is. Nonetheless, I think it’s helpful to have a mental model of the computations that are going to be performed.</p>
 <p>As more thoroughly explained in the previous chapters, we are concerned with the calibration of the GEOtop hydrological model. Calibration means to find the values of the input parameters that one has to set to obtain the best possible overlapping between the outputs of a simulation and the experimental data.</p>
 <p>“Overlapping” is not a precise term, but for the moment let’s suppose that we have a pure function, the cost function, which takes the value of the parameters as arguments, runs a simulation, and returns a real number representing the discrepancy with observations: higher values mean worst overlap, and 0 means perfection. We will consider only continuous parameters, and suppose that you can get arbitrarily small differences by evaluating the cost function with ” close enough” arguments, which we can image as points of the parameter/search space.</p>

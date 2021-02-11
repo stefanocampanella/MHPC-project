@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GEOtop calibration or finding the needle in the haystack &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
+    <title>GEOtop calibration &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -67,8 +67,8 @@
 <!-- Opengraph tags -->
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/motivations/calibration.html" />
 <meta property="og:type"        content="article" />
-<meta property="og:title"       content="GEOtop calibration or finding the needle in the haystack" />
-<meta property="og:description" content="GEOtop calibration or finding the needle in the haystack  As previously discussed, GEOtop has many parameters. Their large number is the result of assembling ma" />
+<meta property="og:title"       content="GEOtop calibration" />
+<meta property="og:description" content="GEOtop calibration  As previously discussed, GEOtop has many parameters. Their large number is the result of assembling many different submodels of statistical," />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -97,32 +97,27 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form>
 <nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <p class="caption collapsible-parent">
- <span class="caption-text">
-  Introduction
- </span>
-</p>
-<ul class="nav sidenav_l1">
+    <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../introduction/prologue.html">
    Prologue
   </a>
  </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction and Motivations
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../introduction/geotop.html">
    Brief Introduction to GEOtop
   </a>
  </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
-  Motivations
- </span>
-</p>
-<ul class="current nav sidenav_l1">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   GEOtop calibration or finding the needle in the haystack
+   GEOtop calibration
   </a>
  </li>
  <li class="toctree-l1">
@@ -133,13 +128,13 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Problem
+  Problem, Methodology and Implementation
  </span>
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../problem/problem.html">
-   Formalish definition of the problem
+   Formal Definition of the Problem
   </a>
  </li>
  <li class="toctree-l1">
@@ -147,13 +142,6 @@
    Hyperparameter optimization
   </a>
  </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
-  Methodology
- </span>
-</p>
-<ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../methodology/tools.html">
    Tools
@@ -272,8 +260,8 @@
         
               <div>
                 
-  <div class="section" id="geotop-calibration-or-finding-the-needle-in-the-haystack">
-<h1>GEOtop calibration or finding the needle in the haystack<a class="headerlink" href="#geotop-calibration-or-finding-the-needle-in-the-haystack" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="geotop-calibration">
+<h1>GEOtop calibration<a class="headerlink" href="#geotop-calibration" title="Permalink to this headline">¶</a></h1>
 <p>As previously discussed, GEOtop has many parameters. Their large number is the result of assembling many different submodels of statistical, physical (i.e. from first principles) and phenomenological nature. Not all of these parameters can be directly measured with an instrument or inferred in some other way than calibration. This fact is especially actual for the ones found in phenomenological relations, think for example to the Van Genuchten equation for soil retention. Furthermore, even when there is a straightforward experimental procedure to determine them, their value is affected by uncertainties, which could be large.</p>
 <p>One could think that there exist some default values which describe the average system and that, with due exceptions, these values would produce meaningful results once fed into the model or, in short, that these parameters simply need fine-tuning. However, he would fool himself.</p>
 <p>Indeed, GEOtop is very sensitive to the values of its parameters: the outputs of a simulation can change wildly, and without carefully chosen parameters, the results are entirely meaningless. Hence its predictive power is strictly related to a good calibration.</p>

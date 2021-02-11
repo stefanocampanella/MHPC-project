@@ -58,7 +58,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Tools" href="../methodology/tools.html" />
-    <link rel="prev" title="Formalish definition of the problem" href="problem.html" />
+    <link rel="prev" title="Formal Definition of the Problem" href="problem.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -97,32 +97,27 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form>
 <nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
-    <p class="caption collapsible-parent">
- <span class="caption-text">
-  Introduction
- </span>
-</p>
-<ul class="nav sidenav_l1">
+    <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../introduction/prologue.html">
    Prologue
   </a>
  </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction and Motivations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../introduction/geotop.html">
    Brief Introduction to GEOtop
   </a>
  </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
-  Motivations
- </span>
-</p>
-<ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../motivations/calibration.html">
-   GEOtop calibration or finding the needle in the haystack
+   GEOtop calibration
   </a>
  </li>
  <li class="toctree-l1">
@@ -133,13 +128,13 @@
 </ul>
 <p class="caption collapsible-parent">
  <span class="caption-text">
-  Problem
+  Problem, Methodology and Implementation
  </span>
 </p>
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="problem.html">
-   Formalish definition of the problem
+   Formal Definition of the Problem
   </a>
  </li>
  <li class="toctree-l1 current active">
@@ -147,13 +142,6 @@
    Hyperparameter optimization
   </a>
  </li>
-</ul>
-<p class="caption collapsible-parent">
- <span class="caption-text">
-  Methodology
- </span>
-</p>
-<ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../methodology/tools.html">
    Tools
@@ -297,17 +285,26 @@
 <p>However, we can still do better. The choice of <span class="math notranslate nohighlight">\(x_\text{min}\)</span> usually has a great impact on the optimal value of the hyperparameters. For example, it may increase or reduce the sensitivity of a cost function to some target. Also, notice that <span class="math notranslate nohighlight">\(F\)</span> depends explicitly (other than implicitly) on <span class="math notranslate nohighlight">\(x_\text{min}\)</span>. As a matter of fact, we can write <span class="math notranslate nohighlight">\(F\)</span> as <span class="math notranslate nohighlight">\(F_{\lambda, x}\)</span>.</p>
 <p>To estimate the expected value of <span class="math notranslate nohighlight">\(F_{\lambda, x}\)</span>, it is necessary to run several calibrations and then average. But nothing prevents us from drawing <span class="math notranslate nohighlight">\(x\)</span> from another random variable <span class="math notranslate nohighlight">\(X_\text{min}\)</span>. In this case, the expected value is</p>
 <div class="math notranslate nohighlight">
-\[\begin{split}\begin{align} 
+\[\begin{split}\begin{aligned} 
 g(\lambda) &amp;= \frac{ \mathbf{E} \left[ \lVert X_\lambda - X_\text{min}\rVert \right]}{\mathbf{E} \left[ \lVert X_\text{rand} - X_\text{min}\rVert \right]} \\ 
 &amp;= \sum\limits_\phi \phi \left( \sum\limits_x \mathbf{P}(F_{\lambda, x} = \phi \vert X = x) \mathbf{P}(X = x) \right) \\
 &amp;\approx \frac{1}{N} \sum\limits_{k = 1}^N \phi_k \, ,
-\end{align}\end{split}\]</div>
+\end{aligned}\end{split}\]</div>
 <p>where <span class="math notranslate nohighlight">\(\phi_k\)</span> are samples of <span class="math notranslate nohighlight">\(F\)</span> obtained running a calibration <span class="math notranslate nohighlight">\(N\)</span> times, each time with <span class="math notranslate nohighlight">\(x\)</span> drawn from <span class="math notranslate nohighlight">\(X_\text{min}\)</span>. The hope is to average the effects of the choice of <span class="math notranslate nohighlight">\(x\)</span> and get a result that generalizes better to calibrations on real data. However, if this averaging makes real sense depends on the particular model and optimizers. Finally, what should be the distribution of <span class="math notranslate nohighlight">\(X_\text{min}\)</span>? The answer to this question is related to the typical values of the parameters encountered in applications.</p>
 <p>Now <span class="math notranslate nohighlight">\(g(\lambda)\)</span> is bounded from below, although it could have many global minima. Furthermore, in the considered cases, <span class="math notranslate nohighlight">\(\lambda\)</span> parametrizes a finite set of values of some categorical hyperparameters. Hence <span class="math notranslate nohighlight">\(g\)</span> is a suitable cost function for a further optimization process!</p>
-<p>However, this time it will be a multi-objective optimization. Indeed, we still need to talk about the “how” mentioned in the first lines of this section. For our purpose, we will pretend to live in a world where there are no queues on supercomputers, and where each user has unlimited access to the resources of the machine. In this wonderful world, the only finite resource is time (this, unfortunately, is unavoidable even in the wildest fantasies <a href="#id1"><span class="problematic" id="id2">:cite:`pievani2020finitudine`</span></a>, and hence <em>tempori parere</em> <a href="#id3"><span class="problematic" id="id4">:cite:`dionigi2020segui`</span></a>). Therefore the second criteria for this multi-objective optimization will be <span class="math notranslate nohighlight">\(t(\lambda)\)</span>, the average execution time of <span class="math notranslate nohighlight">\(X_\lambda\)</span>.</p>
+<p>However, this time it will be a multi-objective optimization. Indeed, we still need to talk about the “how” mentioned in the first lines of this section. For our purpose, we will pretend to live in a world where there are no queues on supercomputers, and where each user has unlimited access to the resources of the machine. In this wonderful world, the only finite resource is time (this, unfortunately, is unavoidable even in the wildest fantasies <span id="id1">[<a class="reference internal" href="#id6"><span>Pie20</span></a>]</span>, and hence <em>tempori parere</em> <span id="id2">[<a class="reference internal" href="#id7"><span>Dio20</span></a>]</span>). Therefore the second criteria for this multi-objective optimization will be <span class="math notranslate nohighlight">\(t(\lambda)\)</span>, the average execution time of <span class="math notranslate nohighlight">\(X_\lambda\)</span>.</p>
 <p>Finally, we can answer precisely the question of what scaling means for the calibration of GEOtop or, better, why it makes no sense to talk about scaling for this kind of applications.</p>
 <p>When reasoning about scaling one generally assumes that exist a functional relation between the number of Concurrent Processing Units (CPUs) and the execution time. However, in our case, the second is one of the criteria of a multi-objective optimization problem. Each point of the Pareto front of this optimization problem has its value of the number of CPUs, among the other hyperparameters.</p>
 <p>Therefore, in principle, we can select the point of the Pareto front corresponding to a particular execution time and return the number of CPUs, hence having a function. But, in general, it is not invertible: there might well be multiple optimal execution times given the same number of CPUs!</p>
+<p id="id3"><dl class="citation">
+<dt class="label" id="id7"><span class="brackets"><a class="fn-backref" href="#id2">Dio20</a></span></dt>
+<dd><p>Ivano Dionigi. <em>Segui il tuo demone</em>. Editori Laterza, 2020. ISBN 978-88-581-3235-6.</p>
+</dd>
+<dt class="label" id="id6"><span class="brackets"><a class="fn-backref" href="#id1">Pie20</a></span></dt>
+<dd><p>Telmo Pievani. <em>Finitudine</em>. Raffaello Cortina Editore, 2020. ISBN 978-88-328-5217-2.</p>
+</dd>
+</dl>
+</p>
 </div>
 
     <script type="text/x-thebe-config">
@@ -338,7 +335,7 @@ g(\lambda) &amp;= \frac{ \mathbf{E} \left[ \lVert X_\lambda - X_\text{min}\rVert
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="problem.html" title="previous page">Formalish definition of the problem</a>
+    <a class='left-prev' id="prev-link" href="problem.html" title="previous page">Formal Definition of the Problem</a>
     <a class='right-next' id="next-link" href="../methodology/tools.html" title="next page">Tools</a>
 
     </div>
