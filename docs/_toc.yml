@@ -1,22 +1,19 @@
-- file: landing-page
+- file: home
 
-- part: Introduction
+- part:
   chapters:
     - file: introduction/prologue
-    - file: introduction/geotop
 
-- part: Motivations
+- part: Introduction and Motivations
   chapters:
+    - file: introduction/geotop
     - file: motivations/calibration
     - file: motivations/hpc
 
-- part: Problem
+- part: Problem, Methodology and Implementation
   chapters:
     - file: problem/problem
     - file: problem/hyperopt
-
-- part: Methodology
-  chapters:
     - file: methodology/tools
     - file: methodology/implementation
 
@@ -28,4 +25,3 @@
         - file: results/examples/calibration
         - file: results/examples/sensitivity_analysis
     - file: results/conclusions
-

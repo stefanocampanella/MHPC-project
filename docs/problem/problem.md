@@ -1,4 +1,10 @@
-# Formalish definition of the problem
+# Formal Definition of the Problem
+
+```{epigraph}
+My children, the only true technology is nature. All the other forms of manmade technology are perversions.
+
+--Ralph Bakshi, Wizards
+```
 
 In this chapter, I would like to pinpoint in mathematical terms the ideas behind the numerical experiments with which this thesis is concerned. The following is far from a rigorous treatment, may seem pretentious or naive, and probably it is. Nonetheless, I think it's helpful to have a mental model of the computations that are going to be performed.
 

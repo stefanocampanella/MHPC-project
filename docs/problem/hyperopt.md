@@ -35,11 +35,11 @@ However, we can still do better. The choice of $x_\text{min}$ usually has a grea
 
 To estimate the expected value of $F_{\lambda, x}$, it is necessary to run several calibrations and then average. But nothing prevents us from drawing $x$ from another random variable $X_\text{min}$. In this case, the expected value is
 
-$$\begin{align} 
+$$\begin{aligned} 
 g(\lambda) &= \frac{ \mathbf{E} \left[ \lVert X_\lambda - X_\text{min}\rVert \right]}{\mathbf{E} \left[ \lVert X_\text{rand} - X_\text{min}\rVert \right]} \\ 
 &= \sum\limits_\phi \phi \left( \sum\limits_x \mathbf{P}(F_{\lambda, x} = \phi \vert X = x) \mathbf{P}(X = x) \right) \\
 &\approx \frac{1}{N} \sum\limits_{k = 1}^N \phi_k \, ,
-\end{align}$$
+\end{aligned}$$
 
 where $\phi_k$ are samples of $F$ obtained running a calibration $N$ times, each time with $x$ drawn from $X_\text{min}$. The hope is to average the effects of the choice of $x$ and get a result that generalizes better to calibrations on real data. However, if this averaging makes real sense depends on the particular model and optimizers. Finally, what should be the distribution of $X_\text{min}$? The answer to this question is related to the typical values of the parameters encountered in applications.
 
@@ -53,6 +53,6 @@ When reasoning about scaling one generally assumes that exist a functional relat
 
 Therefore, in principle, we can select the point of the Pareto front corresponding to a particular execution time and return the number of CPUs, hence having a function. But, in general, it is not invertible: there might well be multiple optimal execution times given the same number of CPUs!
 
-```{bibliography} ../references.bib
+```{bibliography}
 :filter: docname in docnames
 ```

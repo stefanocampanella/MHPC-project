@@ -9,3 +9,26 @@ execute:
 html:
   home_page_in_navbar: false
   baseurl: https://stefanocampanella.github.io/MHPC-project
+
+bibtex_bibfiles:
+  - references.bib
+
+latex:
+  latex_documents:
+    targetname: book.tex
+  latex_engine: lualatex
+
+sphinx:
+  config:
+    latex_elements:
+      papersize: a4paper
+      geometry: \usepackage[a4paper]{geometry}
+      pointsize: 11pt
+      fontpkg: |
+        \setmainfont{FiraSans}
+        \setmonofont{Inconsolata}
+      preamble: |
+        \usepackage{lualatex-math}
+        \usepackage{unicode-math}
+        \setmathfont{STIX Two Math}
+        \usepackage{microtype}
