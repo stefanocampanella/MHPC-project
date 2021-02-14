@@ -168,3 +168,24 @@ The standard library also provides some abstractions to work with these low-leve
 Finally, it should be noted that Python supports non-preemptive threading natively with `asyncio`, and, while `asyncio.Future` objects are awaitable, `concurrent.futures.Future` ones are not. 
 
 ### Distributed Computing with Dask
+
+Dask is a library for parallel computing in Python which consists of two components: a scheduler and a collection of data structures with an interface familiar to Numpy and Pandas users. Indeed, it is possible to enable parallelism simply using Dask arrays and dataframes as a drop-in replacement for their Numpy and Pandas equivalent. Also, Dask can do out-of-core computations and exploit distributed systems. Since the application we are concerned with is CPU bounded, I will focus on the second. 
+
+In Dask, operations on the above-mentioned data structures are divided into smaller tasks, and the dependency relations among the tasks is encoded into a task graph. Afterwards, the scheduler use the task graph to distribute the work among different processing units. Moreover, the intermediate representation of a computation as a graph allows for some optimizations.
+
+Therefore, Dask fits naturally the domain of computations that can be efficiently expressed using array programming and involving large amounts of data. However, it also provides interfaces to interact directly with the scheduler, adapting to more general cases. One of them is the futures interface, which extends `concurrent.future` from the standard library. I briefly described the futures abstraction in the previous section and some further details will be discussed in the next chapter on implementation.
+
+Dask has different scheduler implementations, and it's responsability of the user to choose and setup the right one. All the implementations share the concept of worker: a piece of software that takes a task, performs some computations and returns the results. Tasks are scheduled for execution on a pool of workers. Different workers might be executed concurrently on different CPU cores, thus achieving parallelism (or serially for debug purposes). 
+
+Currently, there are four scheduler implementations available.
+
+1. Local Threads. Tasks are executed on separate threads, and the implementation internally uses `multiprocessing.pool.ThreadPool`. Given the above discussion on multi-threading in Python, this scheduler must be chosen only when the tasks release the GIL, such as for Numpy or Pandas. Also, the overhead per task is small.
+2. Local Processes. Tasks are executed on separate processes, and the implementation internally uses `multiprocessing.Pool`. There is a large communication overhead compared to threads, but pure Python tasks can be executed concurrently.
+3. Single thread. Tasks are executed in the local thread, for debug purposes.
+4. Dask Distributed. Tasks are executed by workers that runs as server applications.
+   
+Dask Distributed requires a runtime both for the scheduler and the workers, both running as separate daemon processes, and called `dask-scheduler` and `dask-worker`. It bundles an API to connect to `dask-scheduler` from Python via the `dask.distributed` module. However, it is possible to use this implementation on a single machine in the same fashion of the implementations, avoiding the setup and letting Dask Distributed manage the runtime. Using Dask Distributed on a single machine offers more advanced features than using local processes, such as profiling. For this reason, it is the recommended way of running Dask in most of the situations where using local threads is not.
+
+In a Dask Distributed setup, there can be $N$ `dask-worker` processes, each internally running a pool of $T$ threads using`multiprocessing.pool.ThreadPool`. This means that at most $N \times T$ tasks can be executed in parallel, if there are enough CPU cores are available. Choosing the right combination of processes and threads is part of performance tuning, and it is specific to the kind of workload considered.
+
+In a Dask cluster, there is one `dask-scheduler` and (possibly) multiple `dask-worker` processes. These processes do not need to be executed on the same machine, however, they must be on the same network, since the need to communicate one another. Communications among processes happens via TCP/IP, but UDP protocol is available and there is experimental support for Nvidia UCX. When starting the cluster the user must provide to each worker the address of the scheduler. The scheduler takes care of collecting and distributing the addresses of the workers on the network, so that point to point communications are possible without passing throught the scheduler.

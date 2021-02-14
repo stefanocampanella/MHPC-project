@@ -45,8 +45,6 @@
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -68,7 +66,7 @@
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/methodology/implementation.html" />
 <meta property="og:type"        content="article" />
 <meta property="og:title"       content="Implementation" />
-<meta property="og:description" content="Implementation  Talk is cheap, show me the code.  Linus Torvalds  Model, Parameters, Observations  A Look at the Optimization Loop  Executing the Program on a C" />
+<meta property="og:description" content="Implementation  Talk is cheap, show me the code.  Linus Torvalds  Model, Parameters, Observations  As discussed in the previous chapter, in order to have a func" />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -134,7 +132,7 @@
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../problem/problem.html">
-   Formal Definition of the Problem
+   Derivative-free Optimization using Evolutionary Algorithms
   </a>
  </li>
  <li class="toctree-l1">
@@ -292,6 +290,82 @@
 </div></blockquote>
 <div class="section" id="model-parameters-observations">
 <h2>Model, Parameters, Observations<a class="headerlink" href="#model-parameters-observations" title="Permalink to this headline">¶</a></h2>
+<p>As discussed in the previous chapter, in order to have a functioning interface to the GEOtop model using GEOtoPy it is necessary to specify how to do preprocessing of the data (basically meteorological forcings and input parameters) and postprocessing of simulation results. The following is the implementation used for simulations with uniform soil parameters.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">importlib.resources</span> <span class="k">as</span> <span class="nn">resources</span>
+<span class="kn">from</span> <span class="nn">geotopy</span> <span class="kn">import</span> <span class="n">GEOtop</span>
+<span class="kn">from</span> <span class="nn">mhpc_project.utils</span> <span class="kn">import</span> <span class="n">postprocess_full</span>
+
+<span class="k">class</span> <span class="nc">UniformSoilModel</span><span class="p">(</span><span class="n">GEOtop</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">resources</span><span class="o">.</span><span class="n">open_text</span><span class="p">(</span><span class="s1">&#39;mhpc_project&#39;</span><span class="p">,</span> <span class="s1">&#39;uniform_defaults.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">default_settings</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_dir</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_settings</span><span class="p">)</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clone_into</span><span class="p">(</span><span class="n">working_dir</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patch_inpts_file</span><span class="p">(</span><span class="n">working_dir</span><span class="p">,</span> <span class="n">settings</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_dir</span><span class="p">):</span>
+        <span class="n">settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_settings</span><span class="p">(</span><span class="n">working_dir</span> <span class="o">/</span> <span class="s1">&#39;geotop.inpts&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">postprocess_full</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">working_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this case, preprocessing is trivial and consist of copying the files to the proper directory and patching the <code class="docutils literal notranslate"><span class="pre">geotop.inpts</span></code> with the new value of the parameters. Notice that the <code class="docutils literal notranslate"><span class="pre">self.settings</span></code> dictionary of settings is copied to avoid nefarious side effects. Preprocessing also takes care of appling some defaults settings, which are assumed in the postprocessing phase.</p>
+<p>The postprocess is just a wrapper around a utility function. This is because the same postprocessing is done also in the variable soil model, discussed below. In this way one can avoid code duplication without introducing a intermediate class in the inheritance scheme.</p>
+<p>We will not walk through <code class="docutils literal notranslate"><span class="pre">postprocess_full</span></code>, but it’s implementation is just a sequence of repeated calls to <code class="docutils literal notranslate"><span class="pre">Pandas.read_csv</span></code>.</p>
+<p>The following is an example with varying depth of soil, number of soil layers and parameters accross layers.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">importlib.resources</span> <span class="k">as</span> <span class="nn">resources</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">geotopy</span> <span class="kn">import</span> <span class="n">GEOtop</span>
+<span class="kn">from</span> <span class="nn">mhpc_project.utils</span> <span class="kn">import</span> <span class="n">calculate_widths</span><span class="p">,</span> <span class="n">calculate_weights</span>
+
+<span class="k">class</span> <span class="nc">VariedSoilModel</span><span class="p">(</span><span class="n">GEOtop</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">resources</span><span class="o">.</span><span class="n">open_text</span><span class="p">(</span><span class="s1">&#39;mhpc_project&#39;</span><span class="p">,</span> <span class="s1">&#39;geotop_headers_map.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">headers_map</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">resources</span><span class="o">.</span><span class="n">open_text</span><span class="p">(</span><span class="s1">&#39;mhpc_project&#39;</span><span class="p">,</span> <span class="s1">&#39;varsoil_defaults.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">default_settings</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_dir</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">extra_settings</span><span class="p">,</span> <span class="n">inpts_settings</span><span class="p">,</span> <span class="n">soil_settings</span> <span class="o">=</span> \ 
+            <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;extra&#39;</span><span class="p">,</span> <span class="s1">&#39;inpts&#39;</span><span class="p">,</span> <span class="s1">&#39;soil&#39;</span><span class="p">])</span>
+
+        <span class="n">number_of_layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_settings</span><span class="p">[</span><span class="s1">&#39;SoilLayerNumber&#39;</span><span class="p">]</span>
+        <span class="n">first_layer_width</span> <span class="o">=</span> <span class="n">extra_settings</span><span class="p">[</span><span class="s1">&#39;FirstLayerWidth&#39;</span><span class="p">]</span>
+        <span class="n">max_depth</span> <span class="o">=</span> <span class="n">extra_settings</span><span class="p">[</span><span class="s1">&#39;MaxDepth&#39;</span><span class="p">]</span>
+        <span class="n">widths</span> <span class="o">=</span> <span class="n">calculate_widths</span><span class="p">(</span><span class="n">first_layer_width</span><span class="p">,</span>
+                                  <span class="n">number_of_layers</span><span class="p">,</span>
+                                  <span class="n">max_depth</span><span class="p">)</span>
+        <span class="n">soil</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">widths</span><span class="p">)</span>
+        <span class="n">soil</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;SoilLayerThicknesses&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">edge_depth</span> <span class="o">=</span> <span class="n">extra_settings</span><span class="p">[</span><span class="s1">&#39;EdgeDepth&#39;</span><span class="p">]</span>
+        <span class="n">edge_width</span> <span class="o">=</span> <span class="n">extra_settings</span><span class="p">[</span><span class="s1">&#39;EdgeWidth&#39;</span><span class="p">]</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">calculate_weights</span><span class="p">(</span><span class="n">edge_depth</span><span class="p">,</span> <span class="n">edge_width</span><span class="p">,</span> <span class="n">widths</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">parameter</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="ow">in</span> <span class="n">soil_settings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">soil</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">weights</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span>
+            <span class="n">header_keyword</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers_map</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span>
+            <span class="n">inpts_settings</span><span class="p">[</span><span class="n">header_keyword</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameter</span>
+            <span class="n">inpts_settings</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="n">settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">settings</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_settings</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">clone_into</span><span class="p">(</span><span class="n">working_dir</span><span class="p">)</span>
+
+        <span class="n">soil_file</span> <span class="o">=</span> <span class="n">working_dir</span> <span class="o">/</span> <span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SoilParFile&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;0001.txt&#39;</span><span class="p">)</span>
+        <span class="n">soil_file</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">soil</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">soil_file</span><span class="p">)</span>
+
+        <span class="n">settings</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">inpts_settings</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dump_in</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">working_dir</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The preprocessing for soil varying with depth is a bit more involved. The main idea is that the</p>
 </div>
 <div class="section" id="a-look-at-the-optimization-loop">
 <h2>A Look at the Optimization Loop<a class="headerlink" href="#a-look-at-the-optimization-loop" title="Permalink to this headline">¶</a></h2>
