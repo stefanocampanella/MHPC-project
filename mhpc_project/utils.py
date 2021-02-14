@@ -267,9 +267,9 @@ def get_scaling_data(book):
             log = nb.scraps['log'].data
             record['num_samples'] = len(log)
             record['samples_duration'] = sum(t for _, _, t in log)
-            good_samples = [(l, t) for _, l, t in log if l != 'nan']
+            good_samples = [(loss, t) for _, loss, t in log if loss != 'nan']
             record['num_good_samples'] = len(good_samples)
-            record['good_samples_duration'] = sum(t for l, t in good_samples)
+            record['good_samples_duration'] = sum(t for _, t in good_samples)
             record['efficiency'] = record['good_samples_duration'] / (record['num_cpus'] * record['duration'])
             data.append(record)
     data = pd.DataFrame.from_records(data)
