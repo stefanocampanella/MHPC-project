@@ -1,5 +1,17 @@
 # GEOtop calibration
 
+```{epigraph}
+When a program grows in power by an evolution of partially‑understood patches and fixes, the programmer begins to lose track of internal details and can no longer predict what will happen—and begins to hope instead of know, watching the program as though it were an individual of unpredictable behavior.
+
+--Marvin Minsky, _Why programming is a good medium for expressing poorly understood and sloppily formulated ideas_
+```
+
+## Brief Introduction to GEOtop
+
+What the model do, why simulation time is random, inputs and outputs
+
+## Model Calibration
+
 As previously discussed, GEOtop has many parameters. Their large number is the result of assembling many different submodels of statistical, physical (i.e. from first principles) and phenomenological nature. Not all of these parameters can be directly measured with an instrument or inferred in some other way than calibration. This fact is especially actual for the ones found in phenomenological relations, think for example to the Van Genuchten equation for soil retention. Furthermore, even when there is a straightforward experimental procedure to determine them, their value is affected by uncertainties, which could be large.
 
 One could think that there exist some default values which describe the average system and that, with due exceptions, these values would produce meaningful results once fed into the model or, in short, that these parameters simply need fine-tuning. However, he would fool himself.
@@ -40,3 +52,5 @@ However, at the end of a good calibration, we might have a good prior. In this c
 Hence if we want to find the holy grail of global optimum (or a local minimum with decent performance), we need to roam and wander, jumping here and there, with increasing confidence on our next guess as we grasp some (statistical) knowledge of the shape of the loss function.
 
 However, this process is very much time consuming: for the kind of simulations with which we are involved, each sampling takes about one minute, which leads to the next chapter.
+
+

@@ -14,7 +14,7 @@ Proper characterization of uncertainty remains a major research and operational 
 
 One of the challenges of calibration of these models is the large number of parameters involved. For this reason, preliminary sensitivity analysis may be used to reduce this number and select the relevant parameters. However the computational load of sensitivity analysis and calibration is high.
 
-In this work I used High-Performance Computing solutions to calibrate GEOtop (Rigon et al., 2006; Endrizzi et al., 2014), a complex, over parameterized hydrological model. I used the derivative-free optimization algorithms implemented in the Facebook Nevergrad Python library (Rapin and Teytaud, 2018), and run them on the Ulysses v2 HPC cluster, thanks to the Dask framework (Dask Development Team, 2016).
+In this work I used High-Performance Computing solutions to calibrate GEOtop {cite}`rigon2006geotop,endrizzi2014geotop`, a complex, over parameterized hydrological model. I used the derivative-free optimization algorithms implemented in the Facebook Nevergrad Python library {cite}`nevergrad`, and run them on the Ulysses v2 HPC cluster, thanks to the Dask framework {cite}`dask`.
 
 GEOtop has been used to simulate the time evolution of variables as soil water content and evapotranspiration of mountain agricultural sites in South Tyrol with different elevations, land cover (pasture, meadow, orchard), and soil types. In these simulations GEOtop solved the energy and water budget equations on a one-dimensional domain, i.e. on a column of soil and neglecting the lateral fluxes. Even in the simplified case of a homogeneous column of soil, one has tens of parameters. These parameters control the soil and vegetation properties, but only a few of them are experimentally available, hence the need for calibration.
 
@@ -28,6 +28,7 @@ The outline of the thesis is the following:
 2. **Problem, methodology and implementation.** Where I state the problem in mathematical terms, but without mathematical rigour. Afterwards, I discuss the tools and implementation details of calibration.
 3. **Results and conclusions.** Finally, I present the results of calibration, focusing on the HPC content.
 
+
 ## Nature of this Work
 
 This project is faceted, and placed at the intersection of hydrology, black-box optimization and HPC. For reasons of space (and time), I will concentrate on the last.
@@ -38,10 +39,6 @@ In many research fields, articles, reviews, and conference proceedings account o
 
 The issue is not just the consideration we have for programming as an intellectual activity. If one wants to apply the scientific method to numerical experiments, he has to attain the same standards used for laboratory experiments: in other words, they must be reproducible. Hence, the reason of the importance of documentation in scientific computing is that it is part of the reproducibility effort.
 
-```{bibliography}
-:filter: docname in docnames
-```
-
 ## Apology of the Thoughtful Dabbler
 
 Given the diversity of topics involved, the extent of the material, the time assigned to this project, its focus on HPC, and finally my background, I had to _use_ some tools (algorithms, concepts, etc.) without fully mastering them. This unavoidable fact is reflected in the frugality of the bibliography and in their presentation, which occasionally could be sloppy or contain plain errors. The responsibility for those is mine and mine only. However, I hope that the material presented here, if not the subject for more in-depth and broader research by the author, will be at least a prompt for more expert readers.
@@ -50,12 +47,7 @@ The growth of complexity in science, to which specialism was the universal respo
  
 It is unlikely that scientists will be replaced by scientific programmers in the future. However, good scientists surely will also be good programmers, i.e. they will be able to express elegantly both declarative knowledge by means of equations and of procedural knowledge, with the help of a computer.
 
-## Acknowledgements
 
-I would like to thank Giacomo Bertoldi, for giving me this opportunity and make this work possible, Alberto Sartori for his help during the whole master, Ing. Piero Calucci for his assistance, Stefano Salon for his advice, and Alessandro Vuan for his patience.
-
-I would also like to thank Nuno Carvalhais for the conversations we had and all the good ideas he gave me (all the bad ones are mine of course).
-
-Finally, I would like to thank Fulvio and Erica for being my guide and fellow psychonauts in this strange, difficult, transformative year, Cosimo for his tenacious encouragement and Giorgio, aka "Il Sommmo", whose discreet example and savvy words have so much influence on me; to him goes the merit (or demerit, the future will tell) of suggesting me to apply for the MHPC.
-
-OGS, Eurac and CINECA supported the research reported in this work. HPC-TRES program award number 2019-33.
+```{bibliography}
+:filter: docname in docnames
+```

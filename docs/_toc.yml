@@ -2,24 +2,24 @@
 
 - part:
   chapters:
-    - file: introduction/prologue
+    - file: frontmatter/prologue
+    - file: frontmatter/acknowledgements
 
 - part: Introduction and Motivations
   chapters:
-    - file: introduction/geotop
-    - file: motivations/calibration
-    - file: motivations/hpc
+    - file: intro/calibration
+    - file: intro/hpc
 
 - part: Problem, Methodology and Implementation
   chapters:
-    - file: problem/problem
-    - file: problem/hyperopt
-    - file: methodology/tools
-    - file: methodology/implementation
+    - file: method/problem
+    - file: method/tools
+    - file: method/implementation
 
 - part: Results
   chapters:
     - file: results/scaling
+    - file: results/examples
       sections:
         - file: results/examples/plots
         - file: results/examples/calibration
