@@ -12,7 +12,7 @@ The subject of this thesis is my final project for the 2019/20 edition of the Ma
 
 Proper characterization of uncertainty remains a major research and operational challenge in Earth and environmental systems models. In fact, model calibration is often more an art than a science: one must make several discretionary choices, guided more by his own experience and intuition than by the scientific method. In practice, this means that the result of calibration could be suboptimal. 
 
-One of the challenges of calibration of these models is the large number of parameters involved. For this reason, preliminary sensitivity analysis may be used to reduce this number and select the relevant parameters. However the computational load of sensitivity analysis and calibration is high.
+One of the challenges of calibration of these models is the large number of parameters involved. For this reason, preliminary sensitivity analysis may be used to reduce this number and select the relevant parameters. Still, the computational load of sensitivity analysis and calibration is high.
 
 In this work I used High-Performance Computing solutions to calibrate GEOtop {cite}`rigon2006geotop,endrizzi2014geotop`, a complex, over parameterized hydrological model. I used the derivative-free optimization algorithms implemented in the Facebook Nevergrad Python library {cite}`nevergrad`, and run them on the Ulysses v2 HPC cluster, thanks to the Dask framework {cite}`dask`.
 
@@ -20,7 +20,6 @@ GEOtop has been used to simulate the time evolution of variables as soil water c
 
 The computational aspects of GEOtop calibration have been examined, and the important issue of robustness against model convergence failures has been addressed. Finally, the scaling of calibration time has been measured up to 1024 cores for the case of covariance matrix adaptation evolution strategy.
 
-The use of HPC solutions allowed calibrating GEOtop within a reasonable time and exploring properly the parameters space. The developed framework, which is published and freely available on GitHub, also shows how libraries and tools used within the machine learning community could be useful and easily adapted to Earth-system and environmental models calibration.
 
 The outline of the thesis is the following:
 
@@ -43,7 +42,7 @@ The issue is not just the consideration we have for programming as an intellectu
 
 Given the diversity of topics involved, the extent of the material, the time assigned to this project, its focus on HPC, and finally my background, I had to _use_ some tools (algorithms, concepts, etc.) without fully mastering them. This unavoidable fact is reflected in the frugality of the bibliography and in their presentation, which occasionally could be sloppy or contain plain errors. The responsibility for those is mine and mine only. However, I hope that the material presented here, if not the subject for more in-depth and broader research by the author, will be at least a prompt for more expert readers.
 
-The growth of complexity in science, to which specialism was the universal response, is not going to decline; but maybe the compartmentalization of specialism will. When we will seek for systematic answers to the problems posed by this Cambrian explosion, one place to look will be Computer Science, which under many regards is the art of managing complexity by the human mind through abstractions. The simplest and most ubiquitous abstraction is the black box, and hence there is no shame in using black boxes when dealing with problems outside of our competence. However, in order to make scientific statements about them, neglecting their inner workings, one needs the strictest rigour on the assumptions on their inputs and outputs.
+The growth of complexity in science, to which specialism was the universal response, is not going to decline; but maybe the compartmentalization of specialism will. When we will seek for systematic answers to the problems posed by this Cambrian explosion, one place to look will be Computer Science, which under many regards is the art of managing complexity by the human mind through abstractions. The simplest and most ubiquitous abstraction is the black box, and hence there is no shame in using black boxes when dealing with problems outside our competence. However, in order to make scientific statements about them, neglecting their inner workings, one needs the strictest rigour on the assumptions on their inputs and outputs.
  
 It is unlikely that scientists will be replaced by scientific programmers in the future. However, good scientists surely will also be good programmers, i.e. they will be able to express elegantly both declarative knowledge by means of equations and of procedural knowledge, with the help of a computer.
 
