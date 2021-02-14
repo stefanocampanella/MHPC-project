@@ -1,0 +1,370 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The need for HPC &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/intro/hpc.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Derivative-free Optimization using Evolutionary Algorithms" href="../method/problem.html" />
+    <link rel="prev" title="GEOtop calibration" href="calibration.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/intro/hpc.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="The need for HPC" />
+<meta property="og:description" content="The need for HPC  The old joke is “HPC is the art of taking a CPU-bound computation and making it I/O bound”  dnautics, comment on Hacker News  I anticipated th" />
+<meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">An empirical study on the calibration of the GEOtop model using supercomputers</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../frontmatter/prologue.html">
+   Prologue
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../frontmatter/acknowledgements.html">
+   Acknowledgements
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction and Motivations
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="calibration.html">
+   GEOtop calibration
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   The need for HPC
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Problem, Methodology and Implementation
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../method/problem.html">
+   Derivative-free Optimization using Evolutionary Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../method/tools.html">
+   Tools
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../method/implementation.html">
+   Implementation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Results
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/scaling.html">
+   Scaling Analysis and Modeling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/examples/plots.html">
+   Example of Plots using GEOtoPy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/examples/calibration.html">
+   Example of Calibration
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/examples/sensitivity_analysis.html">
+   Example of Sensitivity Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/conclusions.html">
+   Conclusions
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/intro/hpc.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-curse-of-dimensionality">
+   The curse of dimensionality
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#optimize-the-optimzer">
+   Optimize the optimzer
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#scaling-doesn-t-matter-it-s-how-you-use-it">
+   Scaling doesn’t matter, it’s how you use it
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="the-need-for-hpc">
+<h1>The need for HPC<a class="headerlink" href="#the-need-for-hpc" title="Permalink to this headline">¶</a></h1>
+<blockquote class="epigraph">
+<div><p>The old joke is “HPC is the art of taking a CPU-bound computation and making it I/O bound”</p>
+<p class="attribution">—dnautics, comment on Hacker News</p>
+</div></blockquote>
+<p>I anticipated that the calibration process is time-consuming. What does this mean exactly?</p>
+<div class="section" id="the-curse-of-dimensionality">
+<h2>The curse of dimensionality<a class="headerlink" href="#the-curse-of-dimensionality" title="Permalink to this headline">¶</a></h2>
+<p>Let’s consider an imaginary calibration. The first problem is to establish what is the scale at which variations in a parameter produce relevant variations in the output of the model. Note that this quantity may not be constant, meaning that small changes can produce huge differences in a region of the parameters space and negligible in another. Furthermore, the parameter might take values in an interval or a very complicated domain, for example, with constraints given by other parameters. So paradoxically even before doing the calibration, we would need precise knowledge of the cost function to design a numerical experiment.</p>
+<p>Anyway, in the simplest model possible, each parameter can be quantized with one bit, and it is enough to sample just two of its values. Most readers will readily recognize the resemblance with the wheat and chessboard problem. With only 20 parameters, a perfectly reasonable number for these models, if not small, a brute force search would need <span class="math notranslate nohighlight">\(2^{20} \approx 10^6\)</span> evaluations of the cost function, which, as mentioned in the last chapter, take about one minute each. Hence a calibration of this toy model with 20 parameters would take two years on a single CPU, with 30 parameters 2000 years.</p>
+<p>The moral of the story is twofold: 1) that whatever algorithm we choose, it must significantly outperform random or grid search, 2) this algorithm must be executed in parallel to some degree. Ironically, random and grid search algorithms are the only truly embarrassingly parallel ones. Still, even on large supercomputers with hundreds of thousands of CPUs, the volume of the search space is just too large to use them.</p>
+</div>
+<div class="section" id="optimize-the-optimzer">
+<h2>Optimize the optimzer<a class="headerlink" href="#optimize-the-optimzer" title="Permalink to this headline">¶</a></h2>
+<p>The class of iterative algorithms which I will consider will use a random search at each step, making educated guesses. Hence within each step, one can perform massively parallel computations with very little communication among processes. But since there is a data dependency between one step and the following, these algorithms have an unavoidable sequential part.</p>
+<p>Here comes a crucial observation. Having access to a supercomputer, one could think to scale the parallel part up with impunity and find better results in the same amount of time or find the same ones in a shorter time. Unfortunately, this is not the case. As we scale the parallel part up, the number of steps to reach convergence generally increases, hence the time to solution. In other words, there is no way to go faster and scaling up means go slower.</p>
+<p>Given that, it could seem that the solution is to scale down the parallel part. But this misses an important point: increasing the number of guesses made at each step increases the chances to escape from a particular local minimum (indeed, this is why convergence slow down) and reach a better solution. Hence there will be a lower bound for this number under which the calibration will return “bad values” of the parameters.</p>
+<p>Which strategy (algorithm, number of concurrent guesses and iterations) returns “right enough” values the quickest? To find it, one can design a numerical experiment in which several calibrations take place at the same time, each one using a different one. But if you think about it, this is again an optimization problem.</p>
+<p>However, it is a multi-objective optimization, and the cost functions (whose arguments are the hyper-parameters of the strategy) are the fitness of the parameters found by calibration and the time to solution. To solve this problem, we can use the same algorithms, which, as discussed, have some degree of concurrency. But each evaluation of these cost functions requires many concurrent simulations. Finally, since the considered algorithms have a stochastic component, we need to run each calibration several times and average. Because concurrency is a multiplicative quantity, performing this hyper-parameters optimization requires a massive amount of parallel runs of GEOtop. Therefore such a numerical experiment is possible only on a modern supercomputer with many processing units.</p>
+</div>
+<div class="section" id="scaling-doesn-t-matter-it-s-how-you-use-it">
+<h2>Scaling doesn’t matter, it’s how you use it<a class="headerlink" href="#scaling-doesn-t-matter-it-s-how-you-use-it" title="Permalink to this headline">¶</a></h2>
+<p>In the previous section, I explained why High-Performance Computing resources are needed. Of course, it is interesting to see <em>how</em> these are employed. There are at least two HPC relevant aspects:</p>
+<ol class="simple">
+<li><p>How to distribute the work in a single calibration</p></li>
+<li><p>How to schedule multiple calibrations</p></li>
+</ol>
+<p>Furthermore, the scheduling must be asynchronous and guarantees some form of resiliency if something fails.</p>
+<p>The following sections, which explain the implementation of the numerical experiments, should be a sufficient commentary about these aspects and show the relevance of HPC techniques to the solution of the particular problem of GEOtop calibration.</p>
+<p>However, one must admit that black-box optimization is not a typical HPC application. As discussed, it does not scale, and therefore, it isn’t easy to benchmark. The domain of the problem one is trying to solve remains fixed, the solution changes from run to run without tending toward a particular value, and the time to solution increase on parallel execution instead of decreasing. Therefore, it is challenging to produce a good looking scaling plot and even to define what weak or hard scaling means in this context.</p>
+<p>Furthermore, the specific set of HPC techniques (a conveniently broad term) used in black-box optimizations depends on the particular model. A climatological model may present different challenges from drug discovery research. Nonetheless, from a strictly computational perspective, placing your objective function in one of the four quadrants of a plane where the axes are the boundedness (CPU, IO) and cost (cheap, expensive) is a good indication of what to expect.</p>
+<p>For example, the execution of cheap CPU-bounded functions may need a very responsive scheduler, as you may receive too many TCP requests on a distributed system or even waste too much time on forking and joining threads. An expensive IO-bound function will require almost certainly a distributed file system.</p>
+<p>Finally, I would like to point out that the calibration of physical or machine learning models is a vast, rapidly evolving field.</p>
+<p>On the one hand, it’s an effective way of taking advantage of supercomputer resources for tackling a real-world research problem without rewriting old, sequential code, sometimes known to work, virtually, without bugs. On the other, it is a way of dealing with models of which we have very little understanding (es. neural networks). Moral of the story: know how to deal with calibrations on a supercomputer is a marketable HPC skill!</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./intro"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="calibration.html" title="previous page">GEOtop calibration</a>
+    <a class='right-next' id="next-link" href="../method/problem.html" title="next page">Derivative-free Optimization using Evolutionary Algorithms</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stefano Campanella<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

@@ -1,0 +1,393 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Derivative-free Optimization using Evolutionary Algorithms &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/method/problem.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tools" href="tools.html" />
+    <link rel="prev" title="The need for HPC" href="../intro/hpc.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/method/problem.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Derivative-free Optimization using Evolutionary Algorithms" />
+<meta property="og:description" content="Derivative-free Optimization using Evolutionary Algorithms  My children, the only true technology is nature. All the other forms of manmade technology are perve" />
+<meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">An empirical study on the calibration of the GEOtop model using supercomputers</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../frontmatter/prologue.html">
+   Prologue
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../frontmatter/acknowledgements.html">
+   Acknowledgements
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction and Motivations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro/calibration.html">
+   GEOtop calibration
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro/hpc.html">
+   The need for HPC
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Problem, Methodology and Implementation
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Derivative-free Optimization using Evolutionary Algorithms
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="tools.html">
+   Tools
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="implementation.html">
+   Implementation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Results
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/scaling.html">
+   Scaling Analysis and Modeling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/examples/plots.html">
+   Example of Plots using GEOtoPy
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/examples/calibration.html">
+   Example of Calibration
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/examples/sensitivity_analysis.html">
+   Example of Sensitivity Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/conclusions.html">
+   Conclusions
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/method/problem.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.md</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hyperparameter-optimization">
+   Hyperparameter optimization
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="derivative-free-optimization-using-evolutionary-algorithms">
+<h1>Derivative-free Optimization using Evolutionary Algorithms<a class="headerlink" href="#derivative-free-optimization-using-evolutionary-algorithms" title="Permalink to this headline">¶</a></h1>
+<blockquote class="epigraph">
+<div><p>My children, the only true technology is nature. All the other forms of manmade technology are perversions.</p>
+<p class="attribution">—Ralph Bakshi, Wizards</p>
+</div></blockquote>
+<p>In this chapter, I would like to pinpoint in mathematical terms the ideas behind the numerical experiments with which this thesis is concerned. The following is far from a rigorous treatment, may seem pretentious or naive, and probably it is. Nonetheless, I think it’s helpful to have a mental model of the computations that are going to be performed.</p>
+<p>As more thoroughly explained in the previous chapters, we are concerned with the calibration of the GEOtop hydrological model. Calibration means to find the values of the input parameters that one has to set to obtain the best possible overlapping between the outputs of a simulation and the experimental data.</p>
+<p>“Overlapping” is not a precise term, but for the moment let’s suppose that we have a pure function, the cost function, which takes the value of the parameters as arguments, runs a simulation, and returns a real number representing the discrepancy with observations: higher values mean worst overlap, and 0 means perfection. We will consider only continuous parameters, and suppose that you can get arbitrarily small differences by evaluating the cost function with ” close enough” arguments, which we can image as points of the parameter/search space.</p>
+<p>Therefore, we can model our cost function as lower bounded, continuous function <span class="math notranslate nohighlight">\(f: D \subseteq \mathbb{R}^n \mapsto [0, +\infty)\)</span>, where the search space <span class="math notranslate nohighlight">\(D\)</span> is compact such that we know that there exist one or more global minima. We should consider an extension of <span class="math notranslate nohighlight">\([0, +\infty)\)</span> that includes failing computations, when the model crashes or fails to converge, something like bottom in Haskell. Let’s forget about it though, and consider this information encoded in the domain <span class="math notranslate nohighlight">\(D\)</span>, within which our computation acts like a real mathematical function.</p>
+<p>A black box optimizer is an iterator that at each step returns the approximate location of the minimum (referred to as recommendation or candidate), with increasing precision as the iterations go by. In this innocent statement lingers the assumption that it exists only one global minimum, assumption which for the moment we will ignore. In particular, we will consider only randomized algorithms which return a different sequence of points at each execution.</p>
+<p>Therefore, we can define an optimizer as a random process <span class="math notranslate nohighlight">\(X_i: \Omega \mapsto D\)</span> that gives better and better recommendations, that is <span class="math notranslate nohighlight">\(\forall \omega \in \Omega. \: f\left(X_i(\omega)\right) \leq f\left(X_{i-1}(\omega)\right)\)</span>.</p>
+<p>The first optimizer we consider is random search, in which we sample the search space uniformly at each step and recommend the best result to that point. Let <span class="math notranslate nohighlight">\(U_i: \Omega \mapsto D\)</span> a sequence of iid random variables uniformly distributed on <span class="math notranslate nohighlight">\(D\)</span> (that is compact, hence has finite Lebesgue measure), then we can define the random search <span class="math notranslate nohighlight">\(X_i\)</span> as follows</p>
+<div class="math notranslate nohighlight">
+\[\begin{split} \forall \omega \in \Omega. \: X_0(\omega) = U_0(\omega), \, X_i(\omega) = \begin{cases} U_i &amp; \text{if } f(U_i(\omega)) \leq f(X_{i-1}(\omega)) \\ X_{i-1}(\omega) &amp; \text{otherwise} \end{cases}.\end{split}\]</div>
+<p>In this way, the sequence of losses <span class="math notranslate nohighlight">\(Y_i = f(X_i)\)</span> (which are random variables themselves) is point-wise monotonically decreasing, so it converges point-wise to a random variable <span class="math notranslate nohighlight">\(Y = \lim\limits_{i \rightarrow \infty} Y_i\)</span>.</p>
+<div class="admonition-to-do admonition">
+<p class="admonition-title">To Do</p>
+<p>It should be possible, leveraging the uniform distribution of the <span class="math notranslate nohighlight">\(X_i\)</span> and the continuity of <span class="math notranslate nohighlight">\(f\)</span>, to prove that <span class="math notranslate nohighlight">\(Y = \min\limits_{x \in D} f(x)\)</span> almost everywhere.</p>
+</div>
+<p>The random search doesn’t perform poorly at all in the long run, and, if we could wait forever and sample infinite points of the search space, it would be a good option. Therefore, when we ask another optimizer <span class="math notranslate nohighlight">\(X'_i\)</span> to “outperform random search” what we mean is that, on average, we want smaller losses <span class="math notranslate nohighlight">\(Y'_i\)</span> after a finite number of steps: <span class="math notranslate nohighlight">\(\mathbf{E}[Y'_i] \leq \mathbf{E}[Y_i]\)</span>.</p>
+<p>To this purpose, other optimizers use a more refined strategy. At each step, they sample from random variables <span class="math notranslate nohighlight">\(U'_i\)</span> whose distribution is inferred from previous steps, and which usually converge to some a posteriori <span class="math notranslate nohighlight">\(U'\)</span>. In this way, these algorithms super-sample the region of the search space where, based on their assumptions, it is more probable to find a global minimum and accelerate the convergence of the best candidate <span class="math notranslate nohighlight">\(X'_i\)</span>. It is crucial to note that while they focus on a particular minimum (global or local), they subsample the rest of the search space.</p>
+<p>In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space (e.g. the population size in evolutionary algorithms), but which slows convergence: exploration vs exploitation.</p>
+<div class="section" id="hyperparameter-optimization">
+<h2>Hyperparameter optimization<a class="headerlink" href="#hyperparameter-optimization" title="Permalink to this headline">¶</a></h2>
+<p>Now we have a slightly more precise idea of the calibration process. However, from a practical point of view, there are still many unanswered questions. In the following, we will focus on “how do I choose an optimizer and its settings?”, and device how to find the best optimizer in town.</p>
+<p>To define what “best optimizer” we need a partial order, that is a way of comparing two algorithms. There are at least two grounds on which we can make this comparison: the “what” and the “how”. The first is the result of calibration, and the second the resources required (time, memory or CPUs). Let’s consider the first.</p>
+<p>If we want to rank the results of a calibration process, a point in the search space, the first option is to look at the corresponding loss. However, in this way, we could get completely different results with the exact same losses. More importantly, we would not be able to discriminate between an algorithm which samples from the neighbourhood of a global minimum and one that samples from the bottom of a local minimum, where the losses have the same magnitude by luck. This because the only information we have about the cost function is what the optimizer tells us.</p>
+<p>To circumvent this issue, we can add an assumption on the shape of the cost function and change the ranking of the results of optimizers. The new hypothesis is that the cost function has a unique global minimum at <span class="math notranslate nohighlight">\(x_\text{min}\)</span>, that is <span class="math notranslate nohighlight">\(\forall x \in D. \: f(x) \geq f(x_\text{min})\)</span> and if <span class="math notranslate nohighlight">\(f(x) = f(x_\text{min})\)</span> then <span class="math notranslate nohighlight">\(x = x_\text{min}\)</span>. The previous translates to a strong assumption on the model: we are saying that it could reproduce the data with fidelity and that the basic equations that describe the model allow for only one value of the parameters, which is the one we then could directly measure with some experimental procedure. We will make this simplifying assumption, although questionable (indeed, it is probably false).</p>
+<p>Now that we know that exists a unique ground truth, we can rank the result of calibration by the distance from it. Consider the set of all possible optimizers <span class="math notranslate nohighlight">\(\{X_\lambda\}\)</span> where <span class="math notranslate nohighlight">\(\lambda\)</span> is an index which encodes some possibly mixed continuous and categorical hyperparameters, including the iteration at which we stop the optimizer. The new ranking <span class="math notranslate nohighlight">\(F'\)</span> is then the Euclidean distance (or any other distance on <span class="math notranslate nohighlight">\(\mathbb{R}^n\)</span>, for that matter) between the result and the location of the minimum <span class="math notranslate nohighlight">\(x_\text{min}\)</span></p>
+<div class="math notranslate nohighlight">
+\[ F'_\lambda = \lVert X_\lambda - x_\text{min}\rVert \, ,\]</div>
+<p>which is again a random variable.</p>
+<p>Then, the expected value <span class="math notranslate nohighlight">\(\mathbf{E}\left[ F'_\lambda \right]\)</span> is an estimate of how far from the optimum we are, on average, after a calibration. However, a better metrics <span class="math notranslate nohighlight">\(F\)</span> would be how far from the optimum we are with respect to a random search after the same number of steps <span class="math notranslate nohighlight">\(X_\text{rand}\)</span>, which is our baseline</p>
+<div class="math notranslate nohighlight">
+\[F_\lambda = \frac{ \lVert X_\lambda - x_\text{min}\rVert}{\mathbf{E}
+\left[ \lVert X_\text{rand} - x_\text{min}\rVert \right]} \, .\]</div>
+<div class="admonition-to-do admonition">
+<p class="admonition-title">To Do</p>
+<p>In the case that the domain <span class="math notranslate nohighlight">\(D\)</span> is a hypercube of unit side length <span class="math notranslate nohighlight">\([0, 1]^n\)</span>, the denominator in the previous expression is a function of the number of parameters <span class="math notranslate nohighlight">\(n\)</span> only. Find a closed formula.</p>
+</div>
+<p>The nice thing is that now our ranking is wholly detached from the original cost function. Remember that there was a little bit of hand waving in the definition of the cost function. Indeed, the output of the model is a collection of time series that must be compared with another one, the experimental data. However, there isn’t a single way of measuring the discrepancy between these two. We can choose to compare the time series for a single observable quantity, a target, or aggregate more than one target by linear combination or some other mean. We can use different functions to compare the single time series, each of which may depend on parameters such as the time scale at which make the comparison.</p>
+<p>Provided that all these possible cost functions share the same unique global minimum, which is true by the assumption previously discussed, the ranking <span class="math notranslate nohighlight">\(F\)</span> is immune to the particular choice and tell us which optimizer makes the better guess of <span class="math notranslate nohighlight">\(x_\text{min}\)</span>. We can therefore include the cost function among the other hyperparameters of the optimizers <span class="math notranslate nohighlight">\(\lambda\)</span> (however there is also an implicit dependency).</p>
+<p>That’s all very good, but there is a teeny-weeny problem: we don’t know where <span class="math notranslate nohighlight">\(x_\text{min}\)</span> is. Before going “hands to the sky crying, why, oh why?” (as in a song of the glorious band Tool), let’s consider the options. For example, we could go on the field and measure the parameters, or we could use the values from a previous calibration which we trust. Here there is a third option.</p>
+<p>For the previous assumption, the experimental data is equal to the output of a simulation with the right values of the parameters. By reading backwards the last statement, we conclude that the output is equal to experimental data for all matter and purpose. That solves the problem because, if we choose a random value of the parameters and run the model, we have both the data and the location of the minimum <span class="math notranslate nohighlight">\(x_\text{min}\)</span>. Now that we have some synthetic data, we can rank an optimizer using <span class="math notranslate nohighlight">\(F\)</span>.</p>
+<p>However, we can still do better. The choice of <span class="math notranslate nohighlight">\(x_\text{min}\)</span> usually has a great impact on the optimal value of the hyperparameters. For example, it may increase or reduce the sensitivity of a cost function to some target. Also, notice that <span class="math notranslate nohighlight">\(F\)</span> depends explicitly (other than implicitly) on <span class="math notranslate nohighlight">\(x_\text{min}\)</span>. As a matter of fact, we can write <span class="math notranslate nohighlight">\(F\)</span> as <span class="math notranslate nohighlight">\(F_{\lambda, x}\)</span>.</p>
+<p>To estimate the expected value of <span class="math notranslate nohighlight">\(F_{\lambda, x}\)</span>, it is necessary to run several calibrations and then average. But nothing prevents us from drawing <span class="math notranslate nohighlight">\(x\)</span> from another random variable <span class="math notranslate nohighlight">\(X_\text{min}\)</span>. In this case, the expected value is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+g(\lambda) &amp;= \frac{ \mathbf{E} \left[ \lVert X_\lambda - X_\text{min}\rVert \right]}{\mathbf{E} \left[ \lVert X_\text{rand} - X_\text{min}\rVert \right]} \\
+&amp;= \sum\limits_\phi \phi \left( \sum\limits_x \mathbf{P}(F_{\lambda, x} = \phi \vert X = x) \mathbf{P}(X = x) \right) \\
+&amp;\approx \frac{1}{N} \sum\limits_{k = 1}^N \phi_k \, ,
+\end{aligned}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\phi_k\)</span> are samples of <span class="math notranslate nohighlight">\(F\)</span> obtained running a calibration <span class="math notranslate nohighlight">\(N\)</span> times, each time with <span class="math notranslate nohighlight">\(x\)</span> drawn from <span class="math notranslate nohighlight">\(X_\text{min}\)</span>. The hope is to average the effects of the choice of <span class="math notranslate nohighlight">\(x\)</span> and get a result that generalizes better to calibrations on real data. However, if this averaging makes real sense depends on the particular model and optimizers. Finally, what should be the distribution of <span class="math notranslate nohighlight">\(X_\text{min}\)</span>? The answer to this question is related to the typical values of the parameters encountered in applications.</p>
+<p>Now <span class="math notranslate nohighlight">\(g(\lambda)\)</span> is bounded from below, although it could have many global minima. Furthermore, in the considered cases, <span class="math notranslate nohighlight">\(\lambda\)</span> parametrizes a finite set of values of some categorical hyperparameters. Hence <span class="math notranslate nohighlight">\(g\)</span> is a suitable cost function for a further optimization process!</p>
+<p>However, this time it will be a multi-objective optimization. Indeed, we still need to talk about the “how” mentioned in the first lines of this section. For our purpose, we will pretend to live in a world where there are no queues on supercomputers, and where each user has unlimited access to the resources of the machine. In this wonderful world, the only finite resource is time (this, unfortunately, is unavoidable even in the wildest fantasies <span id="id1">[<a class="reference internal" href="#id6"><span>Pie20</span></a>]</span>, and hence <em>tempori parere</em> <span id="id2">[<a class="reference internal" href="#id7"><span>Dio20</span></a>]</span>). Therefore the second criteria for this multi-objective optimization will be <span class="math notranslate nohighlight">\(t(\lambda)\)</span>, the average execution time of <span class="math notranslate nohighlight">\(X_\lambda\)</span>.</p>
+<p>Finally, we can answer precisely the question of what scaling means for the calibration of GEOtop or, better, why it makes no sense to talk about scaling for this kind of applications.</p>
+<p>When reasoning about scaling one generally assumes that exist a functional relation between the number of Concurrent Processing Units (CPUs) and the execution time. However, in our case, the second is one of the criteria of a multi-objective optimization problem. Each point of the Pareto front of this optimization problem has its value of the number of CPUs, among the other hyperparameters.</p>
+<p>Therefore, in principle, we can select the point of the Pareto front corresponding to a particular execution time and return the number of CPUs, hence having a function. But, in general, it is not invertible: there might well be multiple optimal execution times given the same number of CPUs!</p>
+<p id="id3"><dl class="citation">
+<dt class="label" id="id7"><span class="brackets"><a class="fn-backref" href="#id2">Dio20</a></span></dt>
+<dd><p>Ivano Dionigi. <em>Segui il tuo demone</em>. Editori Laterza, 2020. ISBN 978-88-581-3235-6.</p>
+</dd>
+<dt class="label" id="id6"><span class="brackets"><a class="fn-backref" href="#id1">Pie20</a></span></dt>
+<dd><p>Telmo Pievani. <em>Finitudine</em>. Raffaello Cortina Editore, 2020. ISBN 978-88-328-5217-2.</p>
+</dd>
+</dl>
+</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./method"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../intro/hpc.html" title="previous page">The need for HPC</a>
+    <a class='right-next' id="next-link" href="tools.html" title="next page">Tools</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stefano Campanella<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
