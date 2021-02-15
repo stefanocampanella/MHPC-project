@@ -47,6 +47,6 @@ In this lumpy and bumpy landscape, moving towards the direction of the steepest 
 However, at the end of a good calibration, we might have a good prior. In this case, it would make sense to perform a local optimization search. In principle, this would boost the performance of the calibration strategy. Unfortunately, there was no time to develop this idea.
 ```
 
-Hence, if we want to find the holy grail of global optimum (or a local minimum with decent performance), we need to roam and wander, jumping here and there, with increasing confidence on our next guess as we grasp some (statistical) knowledge of the shape of the objective function. However, this process is very time-consuming: for the kind of simulations with which we are involved, each sampling takes about one minute. This fact leads to the need for HPC.
+Hence, if we want to find the holy grail of global optimum (or a local minimum with decent performance), we need to roam and wander, jumping here and there, with increasing confidence on our next guess as we grasp some (statistical) knowledge of the shape of the objective function. However, this process is very time-consuming: for the kind of simulations with which we are involved, each sampling takes about one minute.
 
 
