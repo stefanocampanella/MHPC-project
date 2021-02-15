@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Derivative-free Optimization using Evolutionary Algorithms &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
+    <title>Derivative-free Optimization &#8212; Calibration of the GEOtop model using evolutionary algorithms and supercomputers</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -67,8 +67,8 @@
 <!-- Opengraph tags -->
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/method/problem.html" />
 <meta property="og:type"        content="article" />
-<meta property="og:title"       content="Derivative-free Optimization using Evolutionary Algorithms" />
-<meta property="og:description" content="Derivative-free Optimization using Evolutionary Algorithms  My children, the only true technology is nature. All the other forms of manmade technology are perve" />
+<meta property="og:title"       content="Derivative-free Optimization" />
+<meta property="og:description" content="Derivative-free Optimization  My children, the only true technology is nature. All the other forms of manmade technology are perversions.  Ralph Bakshi, Wizards" />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -89,7 +89,7 @@
   <img src="../_static/logo.png" class="logo" alt="logo">
   
   
-  <h1 class="site-logo" id="site-title">An empirical study on the calibration of the GEOtop model using supercomputers</h1>
+  <h1 class="site-logo" id="site-title">Calibration of the GEOtop model using evolutionary algorithms and supercomputers</h1>
   
 </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -100,7 +100,7 @@
     <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../frontmatter/prologue.html">
-   Prologue
+   Summary and Outline of the Thesis
   </a>
  </li>
  <li class="toctree-l1">
@@ -134,7 +134,7 @@
 <ul class="current nav sidenav_l1">
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   Derivative-free Optimization using Evolutionary Algorithms
+   Derivative-free Optimization
   </a>
  </li>
  <li class="toctree-l1">
@@ -160,23 +160,15 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../results/examples/plots.html">
-   Example of Plots using GEOtoPy
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../results/examples/calibration.html">
-   Example of Calibration
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../results/examples/sensitivity_analysis.html">
-   Example of Sensitivity Analysis
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../results/conclusions.html">
    Conclusions
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../backmatter/final.html">
+   Final Thoughts Beyond the Scope of the Thesis
   </a>
  </li>
 </ul>
@@ -250,6 +242,16 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#random-search">
+   Random Search
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#evolutionary-algorithms">
+   Evolutionary Algorithms
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#hyperparameter-optimization">
    Hyperparameter optimization
   </a>
@@ -265,12 +267,14 @@
         
               <div>
                 
-  <div class="section" id="derivative-free-optimization-using-evolutionary-algorithms">
-<h1>Derivative-free Optimization using Evolutionary Algorithms<a class="headerlink" href="#derivative-free-optimization-using-evolutionary-algorithms" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="derivative-free-optimization">
+<h1>Derivative-free Optimization<a class="headerlink" href="#derivative-free-optimization" title="Permalink to this headline">¶</a></h1>
 <blockquote class="epigraph">
 <div><p>My children, the only true technology is nature. All the other forms of manmade technology are perversions.</p>
 <p class="attribution">—Ralph Bakshi, Wizards</p>
 </div></blockquote>
+<div class="section" id="random-search">
+<h2>Random Search<a class="headerlink" href="#random-search" title="Permalink to this headline">¶</a></h2>
 <p>In this chapter, I would like to pinpoint in mathematical terms the ideas behind the numerical experiments with which this thesis is concerned. The following is far from a rigorous treatment, may seem pretentious or naive, and probably it is. Nonetheless, I think it’s helpful to have a mental model of the computations that are going to be performed.</p>
 <p>As more thoroughly explained in the previous chapters, we are concerned with the calibration of the GEOtop hydrological model. Calibration means to find the values of the input parameters that one has to set to obtain the best possible overlapping between the outputs of a simulation and the experimental data.</p>
 <p>“Overlapping” is not a precise term, but for the moment let’s suppose that we have a pure function, the cost function, which takes the value of the parameters as arguments, runs a simulation, and returns a real number representing the discrepancy with observations: higher values mean worst overlap, and 0 means perfection. We will consider only continuous parameters, and suppose that you can get arbitrarily small differences by evaluating the cost function with ” close enough” arguments, which we can image as points of the parameter/search space.</p>
@@ -288,6 +292,10 @@
 <p>The random search doesn’t perform poorly at all in the long run, and, if we could wait forever and sample infinite points of the search space, it would be a good option. Therefore, when we ask another optimizer <span class="math notranslate nohighlight">\(X'_i\)</span> to “outperform random search” what we mean is that, on average, we want smaller losses <span class="math notranslate nohighlight">\(Y'_i\)</span> after a finite number of steps: <span class="math notranslate nohighlight">\(\mathbf{E}[Y'_i] \leq \mathbf{E}[Y_i]\)</span>.</p>
 <p>To this purpose, other optimizers use a more refined strategy. At each step, they sample from random variables <span class="math notranslate nohighlight">\(U'_i\)</span> whose distribution is inferred from previous steps, and which usually converge to some a posteriori <span class="math notranslate nohighlight">\(U'\)</span>. In this way, these algorithms super-sample the region of the search space where, based on their assumptions, it is more probable to find a global minimum and accelerate the convergence of the best candidate <span class="math notranslate nohighlight">\(X'_i\)</span>. It is crucial to note that while they focus on a particular minimum (global or local), they subsample the rest of the search space.</p>
 <p>In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space (e.g. the population size in evolutionary algorithms), but which slows convergence: exploration vs exploitation.</p>
+</div>
+<div class="section" id="evolutionary-algorithms">
+<h2>Evolutionary Algorithms<a class="headerlink" href="#evolutionary-algorithms" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="hyperparameter-optimization">
 <h2>Hyperparameter optimization<a class="headerlink" href="#hyperparameter-optimization" title="Permalink to this headline">¶</a></h2>
 <p>Now we have a slightly more precise idea of the calibration process. However, from a practical point of view, there are still many unanswered questions. In the following, we will focus on “how do I choose an optimizer and its settings?”, and device how to find the best optimizer in town.</p>

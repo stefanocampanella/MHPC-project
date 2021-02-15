@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scaling Analysis and Modeling &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
+    <title>Scaling Analysis and Modeling &#8212; Calibration of the GEOtop model using evolutionary algorithms and supercomputers</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -57,7 +57,7 @@
     <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/results/scaling.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="examples.html" />
+    <link rel="next" title="Conclusions" href="conclusions.html" />
     <link rel="prev" title="Implementation" href="../method/implementation.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -89,7 +89,7 @@
   <img src="../_static/logo.png" class="logo" alt="logo">
   
   
-  <h1 class="site-logo" id="site-title">An empirical study on the calibration of the GEOtop model using supercomputers</h1>
+  <h1 class="site-logo" id="site-title">Calibration of the GEOtop model using evolutionary algorithms and supercomputers</h1>
   
 </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -100,7 +100,7 @@
     <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../frontmatter/prologue.html">
-   Prologue
+   Summary and Outline of the Thesis
   </a>
  </li>
  <li class="toctree-l1">
@@ -134,7 +134,7 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../method/problem.html">
-   Derivative-free Optimization using Evolutionary Algorithms
+   Derivative-free Optimization
   </a>
  </li>
  <li class="toctree-l1">
@@ -160,23 +160,15 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="examples/plots.html">
-   Example of Plots using GEOtoPy
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="examples/calibration.html">
-   Example of Calibration
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="examples/sensitivity_analysis.html">
-   Example of Sensitivity Analysis
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="conclusions.html">
    Conclusions
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../backmatter/final.html">
+   Final Thoughts Beyond the Scope of the Thesis
   </a>
  </li>
 </ul>
@@ -289,16 +281,13 @@
   </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#a-linear-model">
-   A Linear Model
+  <a class="reference internal nav-link" href="#linear-scaling-model">
+   Linear Scaling Model
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#models-for-large-n">
-   Models for Large
-   <span class="math notranslate nohighlight">
-    \(n\)
-   </span>
+  <a class="reference internal nav-link" href="#models-for-large-numbers-of-cpus">
+   Models for Large Numbers of CPUs
   </a>
  </li>
 </ul>
@@ -404,7 +393,7 @@
       <td>4096</td>
       <td>421527.591743</td>
       <td>0.255531</td>
-      <td>15.277101</td>
+      <td>15.183880</td>
     </tr>
     <tr>
       <th>1</th>
@@ -419,7 +408,7 @@
       <td>4097</td>
       <td>425539.367783</td>
       <td>0.220430</td>
-      <td>13.054310</td>
+      <td>12.974652</td>
     </tr>
     <tr>
       <th>2</th>
@@ -434,7 +423,7 @@
       <td>4096</td>
       <td>422624.253288</td>
       <td>0.253130</td>
-      <td>15.094275</td>
+      <td>15.002170</td>
     </tr>
     <tr>
       <th>3</th>
@@ -449,7 +438,7 @@
       <td>4096</td>
       <td>423323.413666</td>
       <td>0.252583</td>
-      <td>15.036813</td>
+      <td>14.945059</td>
     </tr>
     <tr>
       <th>4</th>
@@ -464,7 +453,7 @@
       <td>4097</td>
       <td>420288.756369</td>
       <td>0.179474</td>
-      <td>10.761613</td>
+      <td>10.695945</td>
     </tr>
   </tbody>
 </table>
@@ -527,11 +516,9 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">weak_scaling_book</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="n">read_notebooks</span><span class="p">(</span><span class="s1">&#39;../runs/weak_scaling&#39;</span><span class="p">)</span>
 <span class="n">weak_scaling_data</span> <span class="o">=</span> <span class="n">get_scaling_data</span><span class="p">(</span><span class="n">weak_scaling_book</span><span class="p">)</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;duration&#39;</span><span class="p">,</span>
-             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">err_style</span><span class="o">=</span><span class="s1">&#39;bars&#39;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;duration&#39;</span><span class="p">,</span>
+             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#1f77b4&quot;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">value</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">value</span><span class="p">))</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">[</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
-             <span class="n">label</span><span class="o">=</span><span class="s1">&#39;reference&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Weak Scaling (num_cpus = popsize)&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -541,7 +528,7 @@
 <img alt="../_images/scaling_12_0.png" src="../_images/scaling_12_0.png" />
 </div>
 </div>
-<p>In the plot above, the reference indicating perfect scaling is chosen as the average execution time, and visual inspection suggests that the hypothesis of perfect weak scaling is compatible with the data within the errors. The same thing can be shown by means of linear regression in the plot and summary below.</p>
+<p>Visual inspection suggests that the hypothesis of perfect weak scaling is compatible with the data within the errors. The same thing can be shown by means of linear regression in the plot and summary below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">grid</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">JointGrid</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;num_cpus&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;duration&#39;</span><span class="p">)</span>
@@ -551,7 +538,6 @@
 <span class="n">grid</span><span class="o">.</span><span class="n">ax_marg_x</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;duration&#39;</span><span class="p">,</span> <span class="n">kde</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">grid</span><span class="o">.</span><span class="n">ax_marg_y</span><span class="p">)</span>
 <span class="n">grid</span><span class="o">.</span><span class="n">ax_joint</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">value</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">value</span><span class="p">))</span>
-<span class="c1"># plots.duration_regplot(weak_scaling_data)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
 <span class="n">smf</span><span class="o">.</span><span class="n">ols</span><span class="p">(</span><span class="n">formula</span><span class="o">=</span><span class="s1">&#39;duration ~ 1 + num_cpus&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">weak_scaling_data</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">()</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
@@ -563,25 +549,25 @@
 <div class="output text_html"><table class="simpletable">
 <caption>OLS Regression Results</caption>
 <tr>
-  <th>Dep. Variable:</th>        <td>duration</td>     <th>  R-squared:         </th> <td>   0.000</td>
+  <th>Dep. Variable:</th>        <td>duration</td>     <th>  R-squared:         </th> <td>   0.435</td>
 </tr>
 <tr>
-  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>  -0.033</td>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.424</td>
 </tr>
 <tr>
-  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td> 0.01208</td>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   39.98</td>
 </tr>
 <tr>
-  <th>Date:</th>             <td>Sun, 14 Feb 2021</td> <th>  Prob (F-statistic):</th>  <td> 0.913</td> 
+  <th>Date:</th>             <td>Mon, 15 Feb 2021</td> <th>  Prob (F-statistic):</th> <td>5.93e-08</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>15:40:07</td>     <th>  Log-Likelihood:    </th> <td> -212.99</td>
+  <th>Time:</th>                 <td>18:18:59</td>     <th>  Log-Likelihood:    </th> <td> -355.19</td>
 </tr>
 <tr>
-  <th>No. Observations:</th>      <td>    32</td>      <th>  AIC:               </th> <td>   430.0</td>
+  <th>No. Observations:</th>      <td>    54</td>      <th>  AIC:               </th> <td>   714.4</td>
 </tr>
 <tr>
-  <th>Df Residuals:</th>          <td>    30</td>      <th>  BIC:               </th> <td>   432.9</td>
+  <th>Df Residuals:</th>          <td>    52</td>      <th>  BIC:               </th> <td>   718.4</td>
 </tr>
 <tr>
   <th>Df Model:</th>              <td>     1</td>      <th>                     </th>     <td> </td>   
@@ -595,31 +581,31 @@
       <td></td>         <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
 </tr>
 <tr>
-  <th>Intercept</th> <td> 3964.6389</td> <td>  108.604</td> <td>   36.505</td> <td> 0.000</td> <td> 3742.840</td> <td> 4186.438</td>
+  <th>Intercept</th> <td> 4028.6849</td> <td>   41.274</td> <td>   97.609</td> <td> 0.000</td> <td> 3945.863</td> <td> 4111.507</td>
 </tr>
 <tr>
-  <th>num_cpus</th>  <td>   -0.2359</td> <td>    2.146</td> <td>   -0.110</td> <td> 0.913</td> <td>   -4.620</td> <td>    4.148</td>
+  <th>num_cpus</th>  <td>   -2.2335</td> <td>    0.353</td> <td>   -6.323</td> <td> 0.000</td> <td>   -2.942</td> <td>   -1.525</td>
 </tr>
 </table>
 <table class="simpletable">
 <tr>
-  <th>Omnibus:</th>       <td> 3.510</td> <th>  Durbin-Watson:     </th> <td>   1.804</td>
+  <th>Omnibus:</th>       <td> 4.681</td> <th>  Durbin-Watson:     </th> <td>   1.720</td>
 </tr>
 <tr>
-  <th>Prob(Omnibus):</th> <td> 0.173</td> <th>  Jarque-Bera (JB):  </th> <td>   2.950</td>
+  <th>Prob(Omnibus):</th> <td> 0.096</td> <th>  Jarque-Bera (JB):  </th> <td>   3.946</td>
 </tr>
 <tr>
-  <th>Skew:</th>          <td> 0.738</td> <th>  Prob(JB):          </th> <td>   0.229</td>
+  <th>Skew:</th>          <td> 0.655</td> <th>  Prob(JB):          </th> <td>   0.139</td>
 </tr>
 <tr>
-  <th>Kurtosis:</th>      <td> 2.823</td> <th>  Cond. No.          </th> <td>    160.</td>
+  <th>Kurtosis:</th>      <td> 3.192</td> <th>  Cond. No.          </th> <td>    200.</td>
 </tr>
 </table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</div></div>
 </div>
 </div>
 </div>
-<div class="section" id="a-linear-model">
-<h2>A Linear Model<a class="headerlink" href="#a-linear-model" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="linear-scaling-model">
+<h2>Linear Scaling Model<a class="headerlink" href="#linear-scaling-model" title="Permalink to this headline">¶</a></h2>
 <p>Previous results make sense since, without further assumptions, neither perfect weak scaling imply perfect strong scaling (as would contradict our observations), nor vice-versa. Also, the way in which we measure the problem size affects weak scaling. Howeer, if the execution time is proportional to the problem size, then one form of scaling imply the other.</p>
 <p>This fact is more evident in equations than words: the two contitions are</p>
 <div class="math notranslate nohighlight">
@@ -653,19 +639,19 @@
   <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.998</td> 
 </tr>
 <tr>
-  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>6.912e+04</td>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>9.417e+04</td>
 </tr>
 <tr>
-  <th>Date:</th>             <td>Sun, 14 Feb 2021</td> <th>  Prob (F-statistic):</th> <td>2.18e-198</td>
+  <th>Date:</th>             <td>Mon, 15 Feb 2021</td> <th>  Prob (F-statistic):</th> <td>1.06e-217</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>15:40:07</td>     <th>  Log-Likelihood:    </th> <td> -1048.0</td> 
+  <th>Time:</th>                 <td>18:18:59</td>     <th>  Log-Likelihood:    </th> <td> -1110.2</td> 
 </tr>
 <tr>
-  <th>No. Observations:</th>      <td>   149</td>      <th>  AIC:               </th> <td>   2100.</td> 
+  <th>No. Observations:</th>      <td>   157</td>      <th>  AIC:               </th> <td>   2224.</td> 
 </tr>
 <tr>
-  <th>Df Residuals:</th>          <td>   147</td>      <th>  BIC:               </th> <td>   2106.</td> 
+  <th>Df Residuals:</th>          <td>   155</td>      <th>  BIC:               </th> <td>   2230.</td> 
 </tr>
 <tr>
   <th>Df Model:</th>              <td>     1</td>      <th>                     </th>     <td> </td>    
@@ -679,24 +665,24 @@
       <td></td>         <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>  
 </tr>
 <tr>
-  <th>Intercept</th> <td>  689.4328</td> <td>   28.135</td> <td>   24.504</td> <td> 0.000</td> <td>  633.831</td> <td>  745.035</td>
+  <th>Intercept</th> <td>  693.5555</td> <td>   28.543</td> <td>   24.299</td> <td> 0.000</td> <td>  637.172</td> <td>  749.939</td>
 </tr>
 <tr>
-  <th>ratio</th>     <td> 1481.7185</td> <td>    5.636</td> <td>  262.903</td> <td> 0.000</td> <td> 1470.580</td> <td> 1492.857</td>
+  <th>ratio</th>     <td> 1478.6060</td> <td>    4.818</td> <td>  306.868</td> <td> 0.000</td> <td> 1469.088</td> <td> 1488.124</td>
 </tr>
 </table>
 <table class="simpletable">
 <tr>
-  <th>Omnibus:</th>       <td>50.719</td> <th>  Durbin-Watson:     </th> <td>   1.517</td>
+  <th>Omnibus:</th>       <td>55.623</td> <th>  Durbin-Watson:     </th> <td>   1.961</td>
 </tr>
 <tr>
-  <th>Prob(Omnibus):</th> <td> 0.000</td> <th>  Jarque-Bera (JB):  </th> <td> 112.764</td>
+  <th>Prob(Omnibus):</th> <td> 0.000</td> <th>  Jarque-Bera (JB):  </th> <td> 130.459</td>
 </tr>
 <tr>
-  <th>Skew:</th>          <td> 1.472</td> <th>  Prob(JB):          </th> <td>3.26e-25</td>
+  <th>Skew:</th>          <td> 1.527</td> <th>  Prob(JB):          </th> <td>4.69e-29</td>
 </tr>
 <tr>
-  <th>Kurtosis:</th>      <td> 6.081</td> <th>  Cond. No.          </th> <td>    6.29</td>
+  <th>Kurtosis:</th>      <td> 6.257</td> <th>  Cond. No.          </th> <td>    7.46</td>
 </tr>
 </table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.</div></div>
 </div>
@@ -757,7 +743,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.5826281218414213, 0.5741018578916333)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.5826281218414213, 0.5757807964773599)
 </pre></div>
 </div>
 </div>
@@ -774,15 +760,15 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1481.7184724242697, 1218.8136829756213)
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(1478.6059745169023, 1223.5256333571222)
 </pre></div>
 </div>
 </div>
 </div>
 <p>Notice that <span class="math notranslate nohighlight">\(\langle t \rangle\)</span> can be larger than the timeout of the objective function. The reason is that there could be multiple failing computations per successful one.</p>
 </div>
-<div class="section" id="models-for-large-n">
-<h2>Models for Large <span class="math notranslate nohighlight">\(n\)</span><a class="headerlink" href="#models-for-large-n" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="models-for-large-numbers-of-cpus">
+<h2>Models for Large Numbers of CPUs<a class="headerlink" href="#models-for-large-numbers-of-cpus" title="Permalink to this headline">¶</a></h2>
 <p>The previous model fails to describe the situation for large <span class="math notranslate nohighlight">\(n\)</span>. The reason is that when <span class="math notranslate nohighlight">\(n\)</span> is larger than the effective population size, adding more PUs should decrease sublinearly the execution time. Indeed, if we neglect the effects due to the statistics of successful computations, <span class="math notranslate nohighlight">\(T\)</span> should be constant. For this reason, I considered other two models which introduce a scale <span class="math notranslate nohighlight">\(x_0\)</span> for <span class="math notranslate nohighlight">\(p / n\)</span> separating the two regimes.</p>
 <p>The first one is a piecewise linear function</p>
 <div class="math notranslate nohighlight">
@@ -808,7 +794,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((1636.499511412791, 0.6829071451574584), array([18.24182801,  0.02277423]))
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((1643.998311434303, 0.6812057926420174), array([17.84071695,  0.02230667]))
 </pre></div>
 </div>
 </div>
@@ -841,7 +827,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>785.8421835216649
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>792.6453857507781
 </pre></div>
 </div>
 </div>
@@ -865,7 +851,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((1285.0263715586723, 1.0176191406712727), array([34.71024576,  0.19464359]))
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>((1289.9107027437187, 0.9928920943868828), array([34.51732288,  0.18671475]))
 </pre></div>
 </div>
 </div>
@@ -894,7 +880,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>434.3690436675462
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>438.55777706019376
 </pre></div>
 </div>
 </div>
@@ -968,7 +954,7 @@
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="../method/implementation.html" title="previous page">Implementation</a>
-    <a class='right-next' id="next-link" href="examples.html" title="next page">&lt;no title&gt;</a>
+    <a class='right-next' id="next-link" href="conclusions.html" title="next page">Conclusions</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

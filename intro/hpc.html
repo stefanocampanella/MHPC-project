@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The need for HPC &#8212; An empirical study on the calibration of the GEOtop model using supercomputers</title>
+    <title>The need for HPC &#8212; Calibration of the GEOtop model using evolutionary algorithms and supercomputers</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -57,7 +57,7 @@
     <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/intro/hpc.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Derivative-free Optimization using Evolutionary Algorithms" href="../method/problem.html" />
+    <link rel="next" title="Derivative-free Optimization" href="../method/problem.html" />
     <link rel="prev" title="GEOtop calibration" href="calibration.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -89,7 +89,7 @@
   <img src="../_static/logo.png" class="logo" alt="logo">
   
   
-  <h1 class="site-logo" id="site-title">An empirical study on the calibration of the GEOtop model using supercomputers</h1>
+  <h1 class="site-logo" id="site-title">Calibration of the GEOtop model using evolutionary algorithms and supercomputers</h1>
   
 </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -100,7 +100,7 @@
     <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../frontmatter/prologue.html">
-   Prologue
+   Summary and Outline of the Thesis
   </a>
  </li>
  <li class="toctree-l1">
@@ -134,7 +134,7 @@
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../method/problem.html">
-   Derivative-free Optimization using Evolutionary Algorithms
+   Derivative-free Optimization
   </a>
  </li>
  <li class="toctree-l1">
@@ -160,23 +160,15 @@
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../results/examples/plots.html">
-   Example of Plots using GEOtoPy
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../results/examples/calibration.html">
-   Example of Calibration
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../results/examples/sensitivity_analysis.html">
-   Example of Sensitivity Analysis
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../results/conclusions.html">
    Conclusions
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../backmatter/final.html">
+   Final Thoughts Beyond the Scope of the Thesis
   </a>
  </li>
 </ul>
@@ -255,8 +247,8 @@
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#evolutionary-algorithms">
-   Evolutionary Algorithms
+  <a class="reference internal nav-link" href="#scalability-of-evolutionary-algorithms">
+   Scalability of Evolutionary Algorithms
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
@@ -288,8 +280,8 @@
 <p>Anyway, in the simplest possible model, each parameter can be quantized with one bit, and it is enough to sample just two of its values. The reader will readily recognize the resemblance with the wheat and chessboard problem or viral disease spread. With only 20 parameters (a perfectly reasonable number for GEOtop, if not small), a brute force search would need <span class="math notranslate nohighlight">\(2^{20} \approx 10^6\)</span> evaluations of the objective function. Hence, a calibration of this toy model with 20 parameters and one minute per objective evaluation would take two years on a single CPU, and 2000 years with 30 parameters.</p>
 <p>The moral of the story is twofold: 1) whatever algorithm we choose, it must significantly outperform grid search, 2) this algorithm must be executed in parallel to some degree. Ironically, grid search algorithms is a truly embarrassingly parallel algorithm. Still, even on large supercomputers with hundreds of thousands of CPUs, the volume of the search space is just too large to use it.</p>
 </div>
-<div class="section" id="evolutionary-algorithms">
-<h2>Evolutionary Algorithms<a class="headerlink" href="#evolutionary-algorithms" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="scalability-of-evolutionary-algorithms">
+<h2>Scalability of Evolutionary Algorithms<a class="headerlink" href="#scalability-of-evolutionary-algorithms" title="Permalink to this headline">¶</a></h2>
 <p>The evolutionary algorithms used for calibration basically use random search at each iteration, making increasingly educated guesses. Within each iteration, one can perform massively parallel computations with very little communication among processes. However, since there is data dependency between one iteration and the following, these algorithms cannot scale indefinitely. Nonetheless, the upper limit for scaling within a iteration usually depends on a free parameter.</p>
 <p>Having access to a supercomputer, one could think to tweak this parameter and scale up the number processing units with impunity. This way, he could keep the same number of iterations and find “better” results in the same amount of time, or use fewer iterations and find the old results in shorter time. Unfortunately, this is not the case.</p>
 <p>As a first approximation, we can decompose calibration in two tasks. The first is locating the region of the search space containing the global minimum, and the second is exploring this region to locate its exact value. Increasing the number of guesses each iteration, which determines maximum scaling, increases the chances to escape from local minima, and move the exploration and refinement phase at later iterations. We can say that the convergence of the evolutionary algorithm slows down. Conversely, the fewer the guesses at each iteration, the sooner the local-search behaviour kicks in.</p>
@@ -346,7 +338,7 @@
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="calibration.html" title="previous page">GEOtop calibration</a>
-    <a class='right-next' id="next-link" href="../method/problem.html" title="next page">Derivative-free Optimization using Evolutionary Algorithms</a>
+    <a class='right-next' id="next-link" href="../method/problem.html" title="next page">Derivative-free Optimization</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
