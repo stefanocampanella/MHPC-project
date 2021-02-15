@@ -99,8 +99,8 @@
 <nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
     <ul class="nav sidenav_l1">
  <li class="toctree-l1">
-  <a class="reference internal" href="../frontmatter/prologue.html">
-   Summary and Outline of the Thesis
+  <a class="reference internal" href="../frontmatter/summary.html">
+   Summary and Outline
   </a>
  </li>
  <li class="toctree-l1">
@@ -293,19 +293,11 @@
 <div><p>In theory there is no difference between theory and practice - in practice there is</p>
 <p class="attribution">—Yogi Berra</p>
 </div></blockquote>
-<p>In the previous section I referred scaling was referred to algorithms. The question of the scaling of their implementation is a complete different matter.</p>
-<p>In the previous section, I explained why High-Performance Computing resources are needed. Of course, it is interesting to see <em>how</em> these are employed. There are at least two HPC relevant aspects:</p>
-<ol class="simple">
-<li><p>How to distribute the work in a single calibration</p></li>
-<li><p>How to schedule multiple calibrations</p></li>
-</ol>
-<p>Furthermore, the scheduling must be asynchronous and guarantees some form of resiliency if something fails.</p>
-<p>The following sections, which explain the implementation of the numerical experiments, should be a sufficient commentary about these aspects and show the relevance of HPC techniques to the solution of the particular problem of GEOtop calibration.</p>
-<p>However, one must admit that black-box optimization is not a typical HPC application. As discussed, it does not scale, and therefore, it isn’t easy to benchmark. The domain of the problem one is trying to solve remains fixed, the solution changes from run to run without tending toward a particular value, and the time to solution increase on parallel execution instead of decreasing. Therefore, it is challenging to produce a good looking scaling plot and even to define what weak or hard scaling means in this context.</p>
-<p>Furthermore, the specific set of HPC techniques (a conveniently broad term) used in black-box optimizations depends on the particular model. A climatological model may present different challenges from drug discovery research. Nonetheless, from a strictly computational perspective, placing your objective function in one of the four quadrants of a plane where the axes are the boundedness (CPU, IO) and cost (cheap, expensive) is a good indication of what to expect.</p>
-<p>For example, the execution of cheap CPU-bounded functions may need a very responsive scheduler, as you may receive too many TCP requests on a distributed system or even waste too much time on forking and joining threads. An expensive IO-bound function will require almost certainly a distributed file system.</p>
-<p>Finally, I would like to point out that the calibration of physical or machine learning models is a vast, rapidly evolving field.</p>
-<p>On the one hand, it’s an effective way of taking advantage of supercomputer resources for tackling a real-world research problem without rewriting old, sequential code, sometimes known to work, virtually, without bugs. On the other, it is a way of dealing with models of which we have very little understanding (es. neural networks). Moral of the story: know how to deal with calibrations on a supercomputer is a marketable HPC skill!</p>
+<p>The remarks on scaling of the algorithms sketched in the previous section and do not apply to their implementation. For example, they don’t take into account finite data transfer bandwidths and latencies among CPUs. Also, they neglect the CPU cycles needed by the optimizer itself and consider only the load due to objective function evaluations. Therefore, the scaling of real calibration is a different matter.</p>
+<p>A crucial difference from the ideal case, is that the objective function is not a total function. There are values of the parameters for which GEOtop crashes, immediately or at later times, or it does not converge, and the computation takes forever. This occurrence has an impact both on the implementation and scaling. On the one hand, the implementation must have some form of resiliency against objective function failure. On the other, it motivates speculative execution: it is convenient to evaluate the objetive function more times than needed, using all the available CPUs, because some of them will fail. The consequences of objective function failure will be investigated in later chapters.</p>
+<p>In the general case of black-box optimization, the specific bottlenecks that an implementation might find depends on the characteristics of the objective function. Placing the objective function in one of the four quadrants of a plane where the axes are the boundedness (CPU, IO) and cost (cheap, expensive) is a good indication of what to expect.</p>
+<p>For example, the execution of cheap CPU-bounded functions may need a very responsive scheduler, as you may receive too many requests on a distributed system or even waste too much time on forking and joining threads. An expensive IO-bound function will require almost certainly a distributed file system.</p>
+<p>This kind of optmization problems are common and already cited examples are earth-system model calibration and hyperparameters optimization in machine learning models. The application of HPC to these problems is an active reseach topic and a vast, rapidly evolving field.</p>
 </div>
 </div>
 

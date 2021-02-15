@@ -1,4 +1,4 @@
-# Summary and Outline of the Thesis
+# Summary and Outline
 
 This thesis is an address of my final project for the 2019/20 edition of the Master in High-Performance Computing at SISSA and ICTP. In this preliminary material, I will briefly present the content and context of the thesis.
 
