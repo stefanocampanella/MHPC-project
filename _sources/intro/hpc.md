@@ -29,6 +29,14 @@ It is reasonable that a sweet spot for the number of guesses exists, providing a
 
 ## Scaling in Theory and in Practice
 
+```{epigraph}
+In theory there is no difference between theory and practice - in practice there is
+
+-- Yogi Berra
+```
+
+In the previous section I referred scaling was referred to algorithms. The question of the scaling of their implementation is a complete different matter. 
+
 In the previous section, I explained why High-Performance Computing resources are needed. Of course, it is interesting to see *how* these are employed. There are at least two HPC relevant aspects:
 
 1. How to distribute the work in a single calibration
