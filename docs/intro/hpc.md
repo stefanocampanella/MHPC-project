@@ -16,7 +16,7 @@ Anyway, in the simplest possible model, each parameter can be quantized with one
 
 The moral of the story is twofold: 1) whatever algorithm we choose, it must significantly outperform grid search, 2) this algorithm must be executed in parallel to some degree. Ironically, grid search algorithms is a truly embarrassingly parallel algorithm. Still, even on large supercomputers with hundreds of thousands of CPUs, the volume of the search space is just too large to use it.
 
-## Evolutionary Algorithms
+## Scalability of Evolutionary Algorithms
 
 The evolutionary algorithms used for calibration basically use random search at each iteration, making increasingly educated guesses. Within each iteration, one can perform massively parallel computations with very little communication among processes. However, since there is data dependency between one iteration and the following, these algorithms cannot scale indefinitely. Nonetheless, the upper limit for scaling within a iteration usually depends on a free parameter.
 

@@ -1,10 +1,12 @@
-# Derivative-free Optimization using Evolutionary Algorithms 
+# Derivative-free Optimization
 
 ```{epigraph}
 My children, the only true technology is nature. All the other forms of manmade technology are perversions.
 
 --Ralph Bakshi, Wizards
 ```
+
+## Random Search
 
 In this chapter, I would like to pinpoint in mathematical terms the ideas behind the numerical experiments with which this thesis is concerned. The following is far from a rigorous treatment, may seem pretentious or naive, and probably it is. Nonetheless, I think it's helpful to have a mental model of the computations that are going to be performed.
 
@@ -33,6 +35,8 @@ The random search doesn't perform poorly at all in the long run, and, if we coul
 To this purpose, other optimizers use a more refined strategy. At each step, they sample from random variables $U'_i$ whose distribution is inferred from previous steps, and which usually converge to some a posteriori $U'$. In this way, these algorithms super-sample the region of the search space where, based on their assumptions, it is more probable to find a global minimum and accelerate the convergence of the best candidate $X'_i$. It is crucial to note that while they focus on a particular minimum (global or local), they subsample the rest of the search space.
 
 In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space (e.g. the population size in evolutionary algorithms), but which slows convergence: exploration vs exploitation.
+
+## Evolutionary Algorithms
 
 ## Hyperparameter optimization
 

@@ -1,4 +1,4 @@
-# An empirical study on the calibration of the GEOtop model using supercomputers
+# Calibration of the GEOtop model using evolutionary algorithms and supercomputers
 
 ```{panels}
 
