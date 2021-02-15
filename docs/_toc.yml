@@ -2,7 +2,7 @@
 
 - part:
   chapters:
-    - file: frontmatter/prologue
+    - file: frontmatter/summary
     - file: frontmatter/acknowledgements
 
 - part: Introduction and Motivations
