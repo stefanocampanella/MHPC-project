@@ -26,11 +26,10 @@ $$ \forall \omega \in \Omega. \: X_0(\omega) = U_0(\omega), \, X_i(\omega) = \be
 
 In this way, the sequence of losses $Y_i = f(X_i)$ (which are random variables themselves) is point-wise monotonically decreasing, so it converges point-wise to a random variable $Y = \lim\limits_{i \rightarrow \infty} Y_i$. It is easy to show that $Y = \min\limits_{x \in D} f(x)$ almost everywhere.
 
+## Evolutionary Algorithms
+
 Random search doesn't perform poorly at all in the long run, and, if we could wait forever and sample infinite points of the search space, it would be a good option. Therefore, when we ask another optimizer $X'_i$ to "outperform random search" what we mean is that, on average, we want smaller losses $Y'_i$ after a finite number of steps: $\mathbf{E}[Y'_i] \leq \mathbf{E}[Y_i]$.
 
 To this purpose, other optimizers use a more refined strategy. At each step, they sample from random variables $U'_i$ whose distribution is inferred from previous steps, and which usually converge to some a posteriori $U'$. In this way, these algorithms super-sample the region of the search space where, based on their assumptions, it is more probable to find a global minimum and accelerate the convergence of the best candidate $X'_i$. It is crucial to note that while they focus on a particular minimum (global or local), they subsample the rest of the search space.
 
-In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space (e.g. the population size in evolutionary algorithms), but which slows convergence: exploration vs exploitation.
-
-## Evolutionary Algorithms
-
+In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space, the population size, but which slows convergence: exploration vs exploitation.

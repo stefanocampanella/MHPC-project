@@ -8,7 +8,9 @@ Code reuse is the Holy Grail of Software Engineering
 
 ## The Python Programming Language
 
-Python is an interpreted, duck-typed language (footnote: however optional type annotations are available from version 3.6) with a terse syntax, allowing for fast-paced development. Python programs can easily integrate code written in other languages, such as C (the language of the reference implementation CPython), and for this reason, it is said to be a glue language. Moreover, it has a rich standard library and a full gamut of third-party libraries and tools. In 2020 Python has been the third language in the TIOBE index and its popularity has grown steadily in the past years, especially in machine learning and data science.
+Python is an interpreted, duck-typed language[^duck-type] with a terse syntax, allowing for fast-paced development. Python programs can easily integrate code written in other languages, such as C (the language of the reference implementation CPython), and for this reason, it is said to be a glue language. Moreover, it has a rich standard library and a full gamut of third-party libraries and tools. In 2020 Python has been the third language in the TIOBE index and its popularity has grown steadily in the past years, especially in machine learning and data science.
+
+[^duck-type]: Optional type annotations are available from Python 3.6. During execution, Python will ignore the type of objects anyway, and code defines behaviour using only the methods that objects implements. However, when annotations are available, types can be calculated and used for static analysis and debug purposes.
 
 The usage of Python in scientific computing is nowadays a consolidated practice. Among its reasons, there is the existence of mature, fully-featured, and open-source libraries like Numpy, Matplotlib, and Pandas, respectively, for numerical computing, plotting, and manipulation of tabular data. Thanks to these libraries, Python became a popular alternative to MATLAB and R. 
 
@@ -25,7 +27,9 @@ the availability of libraries for derivative-free optimization and distributed c
 
 I will discuss the points above more thoroughly in the following sections.
 
-Finally, almost all of the calibration time is spent executing the model and the overhead caused by a suboptimal optimizer (footnote: sorry for the wordplay), for example, due to the programming language used, is negligible. This statement, which has been discussed in the previous chapters, will be given a quantitative meaning in the next ones.
+Finally, almost all of the calibration time is spent executing the model and the overhead caused by a suboptimal optimizer[^wordplay], for example, due to the programming language used, is negligible. This statement, which has been discussed in the previous chapters, will be given a quantitative meaning in the next ones.
+
+[^wordplay]: Sorry for the wordplay.
 
 ## The Jupyter Ecosystem
 
@@ -107,7 +111,7 @@ def run_in(self, working_dir, *args, **kwargs):
 ```
 It is worth noticing a few design choices.
 
-First, the data flow via IO. The`postprocess` method has no arguments other than the working directory. The choice of the `postprocess` signature follows from the assumption that the derived class implements the wrapper for a specific type of simulation, with a particular shape of the inputs and outputs. However, the `preprocess` method can take additional arguments to change the values of (some of) the inputs and run different simulations.
+First, the data flow via IO. The `postprocess` method has no arguments other than the working directory. The choice of the `postprocess` signature follows from the assumption that the derived class implements the wrapper for a specific type of simulation, with a particular shape of the inputs and outputs. However, the `preprocess` method can take additional arguments to change the values of (some of) the inputs and run different simulations.
 
 Second, since we want to run the model multiple times in a concurrent fashion, it is fundamental that different runs do not interfere with one another. If `run_in` does not change the global state but change the internal one of the object to which it belongs, it is possible to run the method on multiple copies of the same object simultaneously without data races. If we want to avoid duplicates, the `run_in` method must be a pure function: it must not have side effects. However, strictly speaking, both scenarios are impossible since GEOtop works on files, and the running step is guaranteed to do IO. 
 
@@ -139,8 +143,10 @@ Indeed, the `GEOtoPy.GEOtop` class also provides some helper methods to implemen
 The panorama of existing Python libraries for derivative-free optimization is varied, as different libraries account for different needs. However, the vast majority of these libraries are designed for hyperparameters optimization of machine learning models. Hyperparameters optimization in machine learning is a vast topic, which is difficult to summarize in a few words.  Still, the main idea is to find the optimal values of the parameters that control the learning process. For different reasons, derivative-based algorithms, such as gradient descent or BFGS, are usually not suited for searching the optimal values of model hyperparameters (for example, because there is a mixture of continuous and discrete parameters). An interesting class of algorithms is the early stopping one, especially when model training is computationally expensive. Indeed, the application of early stopping algorithms to the calibration of earth-system and environmental models might be a good research topic.
 
 In general, derivative-free optimization libraries consist of two pieces:
-    1.one to model the search space, and
-    2. one to select the algorithm and perform the optimization.
+
+1. one to model the search space, and
+2. one to select the algorithm and perform the optimization.
+
 Also, these libraries typically assume that the interface with the objective function is a callable object.
 
 Nevergrad is a Python library for derivative-free optimization not explicitly targeted at hyperparameter optimization and focusing on evolutionary algorithms. It can handle continuous and discrete parameters, and Python containers, such as tuples, lists (arrays) and dictionaries. It has a wide range of preconfigured optimization algorithms, and it offers both a high level `minimize` function and a lower level ask-tell interface. Notice, that the `minimize` function is able to evaluate the objective function in parallel using the `concurrent.futures.Executor` interface.
@@ -149,7 +155,9 @@ As described in TODO, the ask-tell interface is a lower-level interface to acces
 
 The Nevergrad library implements several evolutionary algorithms, such as Particle Swarm Optimization (PSO), Covariance Matrix Adaptation - Evolutionary Strategy (CMAES). It also contains one-shot algorithms, i.e. algorithms where the points of the search space which will be sampled are known from the beginning. Finally, it has two meta-algorithms, Shiva and NGO, which select an algorithm among the available ones based on the available information using empirical rules.
 
-The algorithms implemented in Nevergrad follow the same philosophy as CMA-ES: the choice of the hyperparameters of the optimizer should be part of the algorithm's design (although it is possible to tweak and configure the optimizers if needed). The only parameters that the user must specify are the `budget` and `num_workers`. The first is, simplifying a bit, the number of allowed calls to `optimizer.ask()`. The budget is significant for some one-shot algorithms, where the optimizer must generate a low-discrepancy sequence of a given length apriori. The second is the number of objective function calls that can be evaluated in parallel, i.e. the number of CPUs. In evolutionary algorithms, the latter maps naturally to the number of individuals in a generation, the population size. In the next chapter, we will see how and why these two are involved in failing objective function evaluations.
+The algorithms implemented in Nevergrad follow the same philosophy as CMA-ES: the choice of the hyperparameters of the optimizer should be part of the algorithm's design (although it is possible to tweak and configure the optimizers if needed). The only parameters that the user must specify are the `budget` and `num_workers`. The first is, simplifying a bit, the number of allowed calls to `optimizer.ask()`. 
+
+The first (the budget), is significant for some one-shot algorithms, where the optimizer must generate a low-discrepancy sequence of a given length apriori. The second, `num_workers`, is the number of objective function calls that can be evaluated in parallel, i.e. the number of CPUs. In evolutionary algorithms, the latter maps naturally to the number of individuals in a generation, the population size. In the next chapter, we will see how and why these two are involved in failing objective function evaluations.
 
 ## High-Performance Computing in Python using Dask
 
@@ -186,6 +194,6 @@ Currently, there are four scheduler implementations available.
    
 Dask Distributed requires a runtime both for the scheduler and the workers, both running as separate daemon processes, and called `dask-scheduler` and `dask-worker`. It bundles an API to connect to `dask-scheduler` from Python via the `dask.distributed` module. However, it is possible to use this implementation on a single machine in the same fashion of the implementations, avoiding the setup and letting Dask Distributed manage the runtime. Using Dask Distributed on a single machine offers more advanced features than using local processes, such as profiling. For this reason, it is the recommended way of running Dask in most of the situations where using local threads is not.
 
-In a Dask Distributed setup, there can be $N$ `dask-worker` processes, each internally running a pool of $T$ threads using`multiprocessing.pool.ThreadPool`. This means that at most $N \times T$ tasks can be executed in parallel, if there are enough CPU cores are available. Choosing the right combination of processes and threads is part of performance tuning, and it is specific to the kind of workload considered.
+In a Dask Distributed setup, there can be $N$ `dask-worker` processes, each internally running a pool of $T$ threads using `multiprocessing.pool.ThreadPool`. This means that at most $N \times T$ tasks can be executed in parallel, if there are enough CPU cores are available. Choosing the right combination of processes and threads is part of performance tuning, and it is specific to the kind of workload considered.
 
 In a Dask cluster, there is one `dask-scheduler` and (possibly) multiple `dask-worker` processes. These processes do not need to be executed on the same machine, however, they must be on the same network, since the need to communicate one another. Communications among processes happens via TCP/IP, but UDP protocol is available and there is experimental support for Nvidia UCX. When starting the cluster the user must provide to each worker the address of the scheduler. The scheduler takes care of collecting and distributing the addresses of the workers on the network, so that point to point communications are possible without passing throught the scheduler.

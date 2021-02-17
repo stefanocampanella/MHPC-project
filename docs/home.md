@@ -1,4 +1,4 @@
-# Calibration of the GEOtop model using evolutionary algorithms and supercomputers
+# Calibration of the GEOtop model using evolutionary algorithms on supercomputers
 
 ```{panels}
 
