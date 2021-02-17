@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Summary and Outline &#8212; Calibration of the GEOtop model using evolutionary algorithms and supercomputers</title>
+    <title>Summary and Outline &#8212; Calibration of the GEOtop model using evolutionary algorithms on supercomputers</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -56,7 +56,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Acknowledgements" href="acknowledgements.html" />
-    <link rel="prev" title="Calibration of the GEOtop model using evolutionary algorithms and supercomputers" href="../home.html" />
+    <link rel="prev" title="Calibration of the GEOtop model using evolutionary algorithms on supercomputers" href="../home.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -66,7 +66,7 @@
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/frontmatter/summary.html" />
 <meta property="og:type"        content="article" />
 <meta property="og:title"       content="Summary and Outline" />
-<meta property="og:description" content="Summary and Outline  This thesis is an address of my final project for the 2019/20 edition of the Master in High-Performance Computing at SISSA and ICTP. In thi" />
+<meta property="og:description" content="Summary and Outline  This thesis addresses my final project for the 2019/20 edition of the Master in High-Performance Computing at SISSA and ICTP. In this preli" />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -87,7 +87,7 @@
   <img src="../_static/logo.png" class="logo" alt="logo">
   
   
-  <h1 class="site-logo" id="site-title">Calibration of the GEOtop model using evolutionary algorithms and supercomputers</h1>
+  <h1 class="site-logo" id="site-title">Calibration of the GEOtop model using evolutionary algorithms on supercomputers</h1>
   
 </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -243,17 +243,17 @@
                 
   <div class="section" id="summary-and-outline">
 <h1>Summary and Outline<a class="headerlink" href="#summary-and-outline" title="Permalink to this headline">¶</a></h1>
-<p>This thesis is an address of my final project for the 2019/20 edition of the Master in High-Performance Computing at SISSA and ICTP. In this preliminary material, I will briefly present the content and context of the thesis.</p>
-<p>Proper characterization of uncertainty remains a major research and operational challenge in Earth and environmental systems models. In fact, model calibration is often more an art than a science: one must make several discretionary choices, guided more by his own experience and intuition than by the scientific method. In practice, this means that the result of calibration could be suboptimal.</p>
-<p>One of the challenges of calibration of these models is the large number of parameters involved. For this reason, preliminary sensitivity analysis may be used to reduce this number and select the relevant parameters. Still, the computational load of sensitivity analysis and calibration is high.</p>
+<p>This thesis addresses my final project for the 2019/20 edition of the Master in High-Performance Computing at SISSA and ICTP. In this preliminary material, I will briefly present its content and context.</p>
+<p>Earth-system and environmental models calibration is a complex, computationally intensive task. At present, there is no general theory of model calibration, but instead a large collection of methods, algorithms and case studies. As a result, calibration is often more an art than a science: one must make several discretionary choices, guided more by his own experience and intuition than by the scientific method.</p>
+<p>One of the challenges is the large number of parameters involved. For this reason, preliminary sensitivity analysis may be used to reduce this number and select the relevant parameters. Still, the computational load of sensitivity analysis and calibration is high.</p>
 <p>In this work I used High-Performance Computing solutions to calibrate GEOtop <span id="id1">[<a class="reference internal" href="#id10"><span>RBO06</span></a>,<a class="reference internal" href="#id9"><span>EGDallAmicoR14</span></a>]</span>, a complex, over parameterized hydrological model. I used the derivative-free optimization algorithms implemented in the Facebook Nevergrad Python library <span id="id2">[<a class="reference internal" href="#id11"><span>RT18</span></a>]</span>, and run them on the Ulysses v2 HPC cluster, thanks to the Dask framework <span id="id3">[<a class="reference internal" href="#id12"><span>DaskDTeam16</span></a>]</span>.</p>
-<p>GEOtop has been used to simulate the time evolution of variables as soil water content and evapotranspiration of mountain agricultural sites in South Tyrol with different elevations, land cover (pasture, meadow, orchard), and soil types. In these simulations GEOtop solved the energy and water budget equations on a one-dimensional domain, i.e. on a column of soil and neglecting the lateral fluxes. Even in the simplified case of a homogeneous column of soil, one has tens of parameters. These parameters control the soil and vegetation properties, but only a few of them are experimentally available, hence the need for calibration.</p>
-<p>The computational aspects of GEOtop calibration have been examined, and the important issue of robustness against model convergence failures has been addressed. Finally, the scaling of calibration time has been measured up to 1024 cores for the case of covariance matrix adaptation evolution strategy.</p>
+<p>GEOtop has been used to simulate the time evolution of variables as soil water content and evapotranspiration of mountain agricultural sites in South Tyrol with different elevations, land cover (pasture, meadow, orchard), and soil types. In these simulations GEOtop solved the energy and water budget equations on a one-dimensional domain, i.e. on a thin column of soil and neglecting the lateral fluxes. Even in the simplified case of homogeneous soil, one has tens of parameters. These parameters control the soil and vegetation properties, but only a few of them are experimentally available, hence the need for calibration.</p>
+<p>The computational aspects of GEOtop calibration have been examined, and the important issue of robustness against model convergence failures has been addressed. Finally, the scaling of calibration time has been measured up to 1024 cores.</p>
 <p>The outline of the thesis is the following:</p>
 <ol class="simple">
 <li><p><strong>Introduction and motivations.</strong> Where I introduce relevant information about the GEOtop model. I also discuss the problem of GEOtop calibration, and the need for High-Performance Computing.</p></li>
 <li><p><strong>Problem, methodology and implementation.</strong> Where I state the problem in mathematical terms, but without mathematical rigour. Afterwards, I discuss the tools and implementation details of calibration.</p></li>
-<li><p><strong>Results and conclusions.</strong> Finally, I present the results of calibration, focusing on the HPC content.</p></li>
+<li><p><strong>Results and conclusions.</strong> Finally, I present the results and scaling of calibration, focusing on the HPC content.</p></li>
 </ol>
 <p id="id4"><dl class="citation">
 <dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id1">EGDallAmicoR14</a></span></dt>
@@ -300,7 +300,7 @@
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="../home.html" title="previous page">Calibration of the GEOtop model using evolutionary algorithms and supercomputers</a>
+    <a class='left-prev' id="prev-link" href="../home.html" title="previous page">Calibration of the GEOtop model using evolutionary algorithms on supercomputers</a>
     <a class='right-next' id="next-link" href="acknowledgements.html" title="next page">Acknowledgements</a>
 
     </div>

@@ -8,13 +8,18 @@ The old joke is "HPC is the art of taking a CPU-bound computation and making it 
 
 In the previous chapter, I anticipated that the calibration process is time-consuming. What does this mean exactly?
 
-## The curse of dimensionality
+## The Curse of Dimensionality
 
 Let's consider an imaginary calibration. The first problem is the discretization of the parameters space: i.e. establish what is the scale at which changes of a parameter produce relevant variations of the output of the model. Note that this quantity may not be constant, meaning that small changes can produce huge differences in a region of the parameters space and negligible in another. Furthermore, the parameters might take values on a domain with complicated shape. Paradoxically, even before doing the calibration, we would need precise knowledge of the objective function to design calibration. 
 
 Anyway, in the simplest possible model, each parameter can be quantized with one bit, and it is enough to sample just two of its values. The reader will readily recognize the resemblance with the wheat and chessboard problem or viral disease spread. With only 20 parameters (a perfectly reasonable number for GEOtop, if not small), a brute force search would need $2^{20} \approx 10^6$ evaluations of the objective function. Hence, a calibration of this toy model with 20 parameters and one minute per objective evaluation would take two years on a single CPU, and 2000 years with 30 parameters.
 
-The moral of the story is twofold: 1) whatever algorithm we choose, it must significantly outperform grid search, 2) this algorithm must be executed in parallel to some degree. Ironically, grid search algorithms is a truly embarrassingly parallel algorithm. Still, even on large supercomputers with hundreds of thousands of CPUs, the volume of the search space is just too large to use it.
+The moral of the story is twofold:
+
+1. whatever algorithm we choose, it must significantly outperform grid search, and
+2. this algorithm must be executed in parallel to some degree. 
+   
+Ironically, grid search algorithms is a truly embarrassingly parallel algorithm. Still, even on large supercomputers with hundreds of thousands of CPUs, the volume of the search space is just too large to use it.
 
 ## Scalability of Evolutionary Algorithms
 
@@ -35,7 +40,7 @@ In theory there is no difference between theory and practice - in practice there
 -- Yogi Berra
 ```
 
-The remarks on scaling of the algorithms sketched in the previous section and do not apply to their implementation. For example, they don't take into account finite data transfer bandwidths and latencies among CPUs. Also, they neglect the CPU cycles needed by the optimizer itself and consider only the load due to objective function evaluations. Therefore, the scaling of real calibration is a different matter. 
+The remarks on scaling of the algorithms sketched in the previous section do not apply to their implementation. For example, they don't take into account finite data transfer bandwidths and latencies among CPUs. Also, they neglect the CPU cycles needed by the optimizer itself and consider only the load due to objective function evaluations. Therefore, the scaling of real calibration is a different matter. 
 
 A crucial difference from the ideal case, is that the objective function is not a total function. There are values of the parameters for which GEOtop crashes, immediately or at later times, or it does not converge, and the computation takes forever. This occurrence has an impact both on the implementation and scaling. On the one hand, the implementation must have some form of resiliency against objective function failure. On the other, it motivates speculative execution: it is convenient to evaluate the objetive function more times than needed, using all the available CPUs, because some of them will fail. The consequences of objective function failure will be investigated in later chapters.
 

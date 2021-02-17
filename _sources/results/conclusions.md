@@ -6,5 +6,5 @@ Some examples of further research topics are:
 
 * empirical studies on the choice of optimization algorithms and hyperparameters,
 * determination of the optimal population size,  
-* use of local optimization algorithms for refinement of the solutions,
+* use of local optimization algorithms for refinement of the solutions, and
 * interpretation and validation of the solutions.

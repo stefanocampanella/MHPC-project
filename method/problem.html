@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Derivative-free Optimization &#8212; Calibration of the GEOtop model using evolutionary algorithms and supercomputers</title>
+    <title>Derivative-free Optimization &#8212; Calibration of the GEOtop model using evolutionary algorithms on supercomputers</title>
     
   <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
 
@@ -89,7 +89,7 @@
   <img src="../_static/logo.png" class="logo" alt="logo">
   
   
-  <h1 class="site-logo" id="site-title">Calibration of the GEOtop model using evolutionary algorithms and supercomputers</h1>
+  <h1 class="site-logo" id="site-title">Calibration of the GEOtop model using evolutionary algorithms on supercomputers</h1>
   
 </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -280,12 +280,12 @@
 <div class="math notranslate nohighlight">
 \[\begin{split} \forall \omega \in \Omega. \: X_0(\omega) = U_0(\omega), \, X_i(\omega) = \begin{cases} U_i &amp; \text{if } f(U_i(\omega)) \leq f(X_{i-1}(\omega)) \\ X_{i-1}(\omega) &amp; \text{otherwise} \end{cases}.\end{split}\]</div>
 <p>In this way, the sequence of losses <span class="math notranslate nohighlight">\(Y_i = f(X_i)\)</span> (which are random variables themselves) is point-wise monotonically decreasing, so it converges point-wise to a random variable <span class="math notranslate nohighlight">\(Y = \lim\limits_{i \rightarrow \infty} Y_i\)</span>. It is easy to show that <span class="math notranslate nohighlight">\(Y = \min\limits_{x \in D} f(x)\)</span> almost everywhere.</p>
-<p>Random search doesn’t perform poorly at all in the long run, and, if we could wait forever and sample infinite points of the search space, it would be a good option. Therefore, when we ask another optimizer <span class="math notranslate nohighlight">\(X'_i\)</span> to “outperform random search” what we mean is that, on average, we want smaller losses <span class="math notranslate nohighlight">\(Y'_i\)</span> after a finite number of steps: <span class="math notranslate nohighlight">\(\mathbf{E}[Y'_i] \leq \mathbf{E}[Y_i]\)</span>.</p>
-<p>To this purpose, other optimizers use a more refined strategy. At each step, they sample from random variables <span class="math notranslate nohighlight">\(U'_i\)</span> whose distribution is inferred from previous steps, and which usually converge to some a posteriori <span class="math notranslate nohighlight">\(U'\)</span>. In this way, these algorithms super-sample the region of the search space where, based on their assumptions, it is more probable to find a global minimum and accelerate the convergence of the best candidate <span class="math notranslate nohighlight">\(X'_i\)</span>. It is crucial to note that while they focus on a particular minimum (global or local), they subsample the rest of the search space.</p>
-<p>In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space (e.g. the population size in evolutionary algorithms), but which slows convergence: exploration vs exploitation.</p>
 </div>
 <div class="section" id="evolutionary-algorithms">
 <h2>Evolutionary Algorithms<a class="headerlink" href="#evolutionary-algorithms" title="Permalink to this headline">¶</a></h2>
+<p>Random search doesn’t perform poorly at all in the long run, and, if we could wait forever and sample infinite points of the search space, it would be a good option. Therefore, when we ask another optimizer <span class="math notranslate nohighlight">\(X'_i\)</span> to “outperform random search” what we mean is that, on average, we want smaller losses <span class="math notranslate nohighlight">\(Y'_i\)</span> after a finite number of steps: <span class="math notranslate nohighlight">\(\mathbf{E}[Y'_i] \leq \mathbf{E}[Y_i]\)</span>.</p>
+<p>To this purpose, other optimizers use a more refined strategy. At each step, they sample from random variables <span class="math notranslate nohighlight">\(U'_i\)</span> whose distribution is inferred from previous steps, and which usually converge to some a posteriori <span class="math notranslate nohighlight">\(U'\)</span>. In this way, these algorithms super-sample the region of the search space where, based on their assumptions, it is more probable to find a global minimum and accelerate the convergence of the best candidate <span class="math notranslate nohighlight">\(X'_i\)</span>. It is crucial to note that while they focus on a particular minimum (global or local), they subsample the rest of the search space.</p>
+<p>In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space, the population size, but which slows convergence: exploration vs exploitation.</p>
 </div>
 </div>
 
