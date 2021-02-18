@@ -14,13 +14,9 @@ A GEOtop simulation requires some input data, parameters and settings. The meteo
 
 Parameters can be divided into surface parameters, which values are single numbers of each point of the catchment, and soil parameters, that may vary with depth. The first ones are related to energy fluxes, as the albedo, and vegetation properties, as vegetation height and leaf area index, which may vary with time. The seconds can be either thermodynamical properties of the soil, as its thermal conductivity and capacity, or hydraulic properties. The latter are crucial for determination of the soil moisture content, and some of them appear in phenomenological relations which are highly non-linear, as the Van Genuchten equation. Small changes in these parameters correspond to very different behaviours of soil retention. Putting all together, there are around thirty parameters that describe a single point of the simulated catchment. However, soil parameters are arrays since different layers of soil can have different properties. This means that the total number of values that can be used to characterize a point of a basin, including default values, can exceed one hundred.
 
-TODO input files
-
 The core of a simulation is the solution of the system of coupled partial differential equations that describes the flow and diffusion of water, and thermodynamical properties of soil. GEOtop solves a finite difference approximation of this system of equations. It uses a fixed time-step length and a three-dimensional grid, whose upper bound is given by a digital elevation model of the catchment, and the lower one is at a specified varying depth.
 
 The two main equations are the water and energy balance equations with appropriate source and sink terms. The water balance equation also includes a diffusive term, as the soil is a porous medium. At each time-step, GEOtop uses an iterative method to solve these discretized equations. The number of iterations is determined by the residual, which must be under a user-defined threshold. Since the number of iteration is not fixed, the number of CPU cycles required to simulate the same time interval can vary and even diverge. GEOtop has several settings to limit the number of iterations of its internal routines. Nonetheless, it may be necessary to use an external timeout when dealing with batch executions of GEOtop.
-
-TODO outputs
 
 ## Model Calibration
 

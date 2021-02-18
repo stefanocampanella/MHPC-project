@@ -155,6 +155,11 @@
 </p>
 <ul class="nav sidenav_l1">
  <li class="toctree-l1">
+  <a class="reference internal" href="../results/DOMES.html">
+   Example GEOtop Calibration Report
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="../results/scaling.html">
    Scaling Analysis and Modeling
   </a>
@@ -263,7 +268,7 @@
               <div>
                 
   <div class="section" id="derivative-free-optimization">
-<h1>Derivative-free Optimization<a class="headerlink" href="#derivative-free-optimization" title="Permalink to this headline">¶</a></h1>
+<span id="content-optimization"></span><h1>Derivative-free Optimization<a class="headerlink" href="#derivative-free-optimization" title="Permalink to this headline">¶</a></h1>
 <blockquote class="epigraph">
 <div><p>My children, the only true technology is nature. All the other forms of manmade technology are perversions.</p>
 <p class="attribution">—Ralph Bakshi, Wizards</p>
@@ -285,7 +290,9 @@
 <h2>Evolutionary Algorithms<a class="headerlink" href="#evolutionary-algorithms" title="Permalink to this headline">¶</a></h2>
 <p>Random search doesn’t perform poorly at all in the long run, and, if we could wait forever and sample infinite points of the search space, it would be a good option. Therefore, when we ask another optimizer <span class="math notranslate nohighlight">\(X'_i\)</span> to “outperform random search” what we mean is that, on average, we want smaller losses <span class="math notranslate nohighlight">\(Y'_i\)</span> after a finite number of steps: <span class="math notranslate nohighlight">\(\mathbf{E}[Y'_i] \leq \mathbf{E}[Y_i]\)</span>.</p>
 <p>To this purpose, other optimizers use a more refined strategy. At each step, they sample from random variables <span class="math notranslate nohighlight">\(U'_i\)</span> whose distribution is inferred from previous steps, and which usually converge to some a posteriori <span class="math notranslate nohighlight">\(U'\)</span>. In this way, these algorithms super-sample the region of the search space where, based on their assumptions, it is more probable to find a global minimum and accelerate the convergence of the best candidate <span class="math notranslate nohighlight">\(X'_i\)</span>. It is crucial to note that while they focus on a particular minimum (global or local), they subsample the rest of the search space.</p>
-<p>In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space, the population size, but which slows convergence: exploration vs exploitation.</p>
+<p>In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space but which slows convergence: exploration vs exploitation.</p>
+<p>Evolutionary algorithm is a broad term applicable to a large collections of heuristic optimization algorithms inspired by biological evolution or other biological processes, as in Particle Swarm Optimization. An evolutionary algorithm starts by drawing a set of random points of the search space, the so-called individuals, with some a priori distribution, and then repeat the process using a modified distribution, which takes into account the losses of the individuals. Each iteration is called a generation, and the individuals of a generation are the population.</p>
+<p>In general, the population size behave as the parameter described above, allowing more or less exploration of the search space. The main difference between an evolutionary algorithm and another is how random variables from which individuals of a generation are drawn depend on the ones of the previous generation. The crucial point is that individuals of the same generation are independent one another.</p>
 </div>
 </div>
 

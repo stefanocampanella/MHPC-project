@@ -55,7 +55,7 @@
     <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/method/implementation.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Scaling Analysis and Modeling" href="../results/scaling.html" />
+    <link rel="next" title="Example GEOtop Calibration Report" href="../results/DOMES.html" />
     <link rel="prev" title="Tools" href="tools.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -66,7 +66,7 @@
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/method/implementation.html" />
 <meta property="og:type"        content="article" />
 <meta property="og:title"       content="Implementation" />
-<meta property="og:description" content="Implementation  Talk is cheap, show me the code.  Linus Torvalds  Model, Parameters, Observations  As discussed in the previous chapter, in order to have a func" />
+<meta property="og:description" content="Implementation  Talk is cheap, show me the code.  Linus Torvalds  Model and Objective Function  As discussed in the previous chapter, in order to have a functio" />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -152,6 +152,11 @@
  </span>
 </p>
 <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../results/DOMES.html">
+   Example GEOtop Calibration Report
+  </a>
+ </li>
  <li class="toctree-l1">
   <a class="reference internal" href="../results/scaling.html">
    Scaling Analysis and Modeling
@@ -240,18 +245,13 @@
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#model-parameters-observations">
-   Model, Parameters, Observations
+  <a class="reference internal nav-link" href="#model-and-objective-function">
+   Model and Objective Function
   </a>
  </li>
  <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#a-look-at-the-optimization-loop">
-   A Look at the Optimization Loop
-  </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#executing-the-program-on-a-cluster">
-   Executing the Program on a Cluster
+  <a class="reference internal nav-link" href="#a-closer-look-at-the-optimization-loop">
+   A Closer Look at the Optimization Loop
   </a>
  </li>
 </ul>
@@ -271,8 +271,8 @@
 <div><p>Talk is cheap, show me the code.</p>
 <p class="attribution">—Linus Torvalds</p>
 </div></blockquote>
-<div class="section" id="model-parameters-observations">
-<h2>Model, Parameters, Observations<a class="headerlink" href="#model-parameters-observations" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="model-and-objective-function">
+<h2>Model and Objective Function<a class="headerlink" href="#model-and-objective-function" title="Permalink to this headline">¶</a></h2>
 <p>As discussed in the previous chapter, in order to have a functioning interface to the GEOtop model using GEOtoPy it is necessary to specify how to do preprocessing of the data (basically meteorological forcings and input parameters) and postprocessing of simulation results. The following is the implementation used for simulations with uniform soil parameters.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">importlib.resources</span> <span class="k">as</span> <span class="nn">resources</span>
@@ -297,64 +297,150 @@
 </div>
 <p>In this case, preprocessing is trivial and consist of copying the files to the proper directory and patching the <code class="docutils literal notranslate"><span class="pre">geotop.inpts</span></code> with the new value of the parameters. Notice that the <code class="docutils literal notranslate"><span class="pre">self.settings</span></code> dictionary of settings is copied to avoid nefarious side effects. Preprocessing also takes care of appling some defaults settings, which are assumed in the postprocessing phase.</p>
 <p>The postprocess is just a wrapper around a utility function. This is because the same postprocessing is done also in the variable soil model, discussed below. In this way one can avoid code duplication without introducing a intermediate class in the inheritance scheme.</p>
-<p>We will not walk through <code class="docutils literal notranslate"><span class="pre">postprocess_full</span></code>, but it’s implementation is just a sequence of repeated calls to <code class="docutils literal notranslate"><span class="pre">Pandas.read_csv</span></code>.</p>
-<p>The following is an example with varying depth of soil, number of soil layers and parameters accross layers.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">import</span> <span class="nn">importlib.resources</span> <span class="k">as</span> <span class="nn">resources</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">geotopy</span> <span class="kn">import</span> <span class="n">GEOtop</span>
-<span class="kn">from</span> <span class="nn">mhpc_project.utils</span> <span class="kn">import</span> <span class="n">calculate_widths</span><span class="p">,</span> <span class="n">calculate_weights</span>
-
-<span class="k">class</span> <span class="nc">VariedSoilModel</span><span class="p">(</span><span class="n">GEOtop</span><span class="p">):</span>
-    <span class="k">with</span> <span class="n">resources</span><span class="o">.</span><span class="n">open_text</span><span class="p">(</span><span class="s1">&#39;mhpc_project&#39;</span><span class="p">,</span> <span class="s1">&#39;geotop_headers_map.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="n">headers_map</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-
-    <span class="k">with</span> <span class="n">resources</span><span class="o">.</span><span class="n">open_text</span><span class="p">(</span><span class="s1">&#39;mhpc_project&#39;</span><span class="p">,</span> <span class="s1">&#39;varsoil_defaults.json&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-        <span class="n">default_settings</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-
-    <span class="k">def</span> <span class="nf">preprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">working_dir</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="n">extra_settings</span><span class="p">,</span> <span class="n">inpts_settings</span><span class="p">,</span> <span class="n">soil_settings</span> <span class="o">=</span> \ 
-            <span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;extra&#39;</span><span class="p">,</span> <span class="s1">&#39;inpts&#39;</span><span class="p">,</span> <span class="s1">&#39;soil&#39;</span><span class="p">])</span>
-
-        <span class="n">number_of_layers</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_settings</span><span class="p">[</span><span class="s1">&#39;SoilLayerNumber&#39;</span><span class="p">]</span>
-        <span class="n">first_layer_width</span> <span class="o">=</span> <span class="n">extra_settings</span><span class="p">[</span><span class="s1">&#39;FirstLayerWidth&#39;</span><span class="p">]</span>
-        <span class="n">max_depth</span> <span class="o">=</span> <span class="n">extra_settings</span><span class="p">[</span><span class="s1">&#39;MaxDepth&#39;</span><span class="p">]</span>
-        <span class="n">widths</span> <span class="o">=</span> <span class="n">calculate_widths</span><span class="p">(</span><span class="n">first_layer_width</span><span class="p">,</span>
-                                  <span class="n">number_of_layers</span><span class="p">,</span>
-                                  <span class="n">max_depth</span><span class="p">)</span>
-        <span class="n">soil</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">widths</span><span class="p">)</span>
-        <span class="n">soil</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;SoilLayerThicknesses&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-        <span class="n">edge_depth</span> <span class="o">=</span> <span class="n">extra_settings</span><span class="p">[</span><span class="s1">&#39;EdgeDepth&#39;</span><span class="p">]</span>
-        <span class="n">edge_width</span> <span class="o">=</span> <span class="n">extra_settings</span><span class="p">[</span><span class="s1">&#39;EdgeWidth&#39;</span><span class="p">]</span>
-        <span class="n">weights</span> <span class="o">=</span> <span class="n">calculate_weights</span><span class="p">(</span><span class="n">edge_depth</span><span class="p">,</span> <span class="n">edge_width</span><span class="p">,</span> <span class="n">widths</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">parameter</span><span class="p">,</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span> <span class="ow">in</span> <span class="n">soil_settings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">soil</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">weights</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">-</span> <span class="n">a</span><span class="p">)</span>
-            <span class="n">header_keyword</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">headers_map</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span>
-            <span class="n">inpts_settings</span><span class="p">[</span><span class="n">header_keyword</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameter</span>
-            <span class="n">inpts_settings</span><span class="p">[</span><span class="n">parameter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="n">settings</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">settings</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">default_settings</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">clone_into</span><span class="p">(</span><span class="n">working_dir</span><span class="p">)</span>
-
-        <span class="n">soil_file</span> <span class="o">=</span> <span class="n">working_dir</span> <span class="o">/</span> <span class="p">(</span><span class="n">settings</span><span class="p">[</span><span class="s1">&#39;SoilParFile&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;0001.txt&#39;</span><span class="p">)</span>
-        <span class="n">soil_file</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">soil</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">soil_file</span><span class="p">)</span>
-
-        <span class="n">settings</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">inpts_settings</span><span class="p">)</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">dump_in</span><span class="p">(</span><span class="n">settings</span><span class="p">,</span> <span class="n">working_dir</span><span class="p">)</span>
+<p>Once having a functioning model, the objective function can be easily implemented.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">objective</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">candidate</span><span class="p">,</span> <span class="n">observations</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
+            <span class="n">predictions</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">run_in</span><span class="p">(</span><span class="n">tmpdir</span><span class="p">,</span> <span class="o">*</span><span class="n">candidate</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">candidate</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">CalledProcessError</span><span class="p">,</span> <span class="n">TimeoutExpired</span><span class="p">):</span>
+        <span class="n">predictions</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="n">compare</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">observations</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The preprocessing for soil varying with depth is a bit more involved. The main idea is that the</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">compare</span></code> function should return the loss value. A good choice is to use the Kling-Gupta or Nash-Sutcliffe efficiencies, notice however that higher number of these correspond to better overlap of simulation and observations.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">TemporaryDirectory</span></code> from the tempfile module allows running the model in <code class="docutils literal notranslate"><span class="pre">tmpfs</span></code> (i.e. in RAM) and automatic deletion of files on exit (also in case of exceptions and canceled Dask task). The <code class="docutils literal notranslate"><span class="pre">CalledProcessError</span></code> and <code class="docutils literal notranslate"><span class="pre">TimeoutExpired</span></code> exceptions from the subprocess module must be caught since they represent routine GEOtop failures. Other exceptions will be propagated since they signal abnormal behaviours.</p>
 </div>
-<div class="section" id="a-look-at-the-optimization-loop">
-<h2>A Look at the Optimization Loop<a class="headerlink" href="#a-look-at-the-optimization-loop" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="a-closer-look-at-the-optimization-loop">
+<h2>A Closer Look at the Optimization Loop<a class="headerlink" href="#a-closer-look-at-the-optimization-loop" title="Permalink to this headline">¶</a></h2>
+<p>A wide class of algorithms can be implemented using the unique interface described in <span id="id1">[<a class="reference internal" href="tools.html#id19"><span>CHP+13</span></a>]</span>, and the ones sketched in the chapter <a class="reference internal" href="problem.html#content-optimization"><span class="std std-ref">Derivative-free Optimization</span></a> belong to them. Let’s say we want to minimize the objective function <code class="docutils literal notranslate"><span class="pre">f</span></code>, the optimization loop will look like the following</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">while</span> <span class="ow">not</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">stop</span><span class="p">():</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">ask</span><span class="p">()</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">tell</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="executing-the-program-on-a-cluster">
-<h2>Executing the Program on a Cluster<a class="headerlink" href="#executing-the-program-on-a-cluster" title="Permalink to this headline">¶</a></h2>
+<p>The pseudocode is rather self explicative: the <code class="docutils literal notranslate"><span class="pre">optimizer.stop</span></code> method must implement some stopping criterion, the <code class="docutils literal notranslate"><span class="pre">optimizer.ask</span></code> method suggests a new point where to evaluate the objective function, and <code class="docutils literal notranslate"><span class="pre">optimizer.tell</span></code> communicates the result to the optimizer. This design allows decoupling the optimizer from the objective function.</p>
+<p>Since the state of the <code class="docutils literal notranslate"><span class="pre">optimizer</span></code> object contains the information about the history of evaluations, different criteria are possible, such as asking a decrease of the objective above some threshold. The simplest is to use an internal counter to allow a maximum number of objective evaluations, the budget in the Nevergrad parlance. It is crucial to notice that the number of <code class="docutils literal notranslate"><span class="pre">optimizer.ask</span></code> calls can differ from the one of <code class="docutils literal notranslate"><span class="pre">optimizer.tell</span></code> calls.</p>
+<p>As it is, the loop is fully serial. We need an optimization algorithm capable of suggesting several points at ones to make it parallel. The requirement is non-trivial, for example Bayesian optimization does not fulfill it. Evolutionary algorithms generally satisfy the requirement, since individuals of the same generation are independent one another.</p>
+<p>A parallelizable loop using generation count as stopping criterion will look like the following.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_generations</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">popsize</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">ask</span><span class="p">()</span>
+        
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">popsize</span><span class="p">):</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">popsize</span><span class="p">):</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">tell</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>In theory, <code class="docutils literal notranslate"><span class="pre">optimizer.ask</span></code> could be read-only, and the first loop could be executed in parallel. In practice, it must change the state of the internal pseudo-random generator. Since <code class="docutils literal notranslate"><span class="pre">optimizer.tell</span></code> changes the state of the object (with exception of random search), concurrent execution of the third loop is guaranteed to cause race conditions unless <code class="docutils literal notranslate"><span class="pre">optimizer.tell</span></code> uses some mutex. However, both <code class="docutils literal notranslate"><span class="pre">optimizer.ask</span></code> and <code class="docutils literal notranslate"><span class="pre">optimizer.tell</span></code> are not supposed to be expensive to call<a class="footnote-reference brackets" href="#expensive-ask" id="id2">1</a>, hence their loops can be executed in serial fashion without performance degradation.</p>
+<p>When the objective function evaluation is time-consuming, as it is the case for GEOtop, most of the time is spent in the second loop. The objective loop is embarrassingly parallel and can be executed concurrently for example using futures. Let’s suppose to have a Dask Client <code class="docutils literal notranslate"><span class="pre">client</span></code>, the loop becomes.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_generations</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">popsize</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">ask</span><span class="p">()</span>
+        
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">popsize</span><span class="p">):</span>
+        <span class="n">futures</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">popsize</span><span class="p">):</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">futures</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+        
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">popsize</span><span class="p">):</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">tell</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>The first two loops can be fused, as well as the second two. Notice that Dask assumes that <code class="docutils literal notranslate"><span class="pre">f</span></code> is a pure function (otherwise, the whole computation would not make sense anyway).</p>
+<p>The previous design however has a serious flaw: the third loop is executed synchronously (there is no event loop) and <code class="docutils literal notranslate"><span class="pre">future.result()</span></code> is blocking. Therefore, the interpreter will wait the first future, then the second, and so go on. However, since the execution time of <code class="docutils literal notranslate"><span class="pre">f</span></code> is random (and varies in a large interval of values), some results may be ready much before their turn. Fortunately Dask Distributed as the <code class="docutils literal notranslate"><span class="pre">as_completed</span></code> class, which iterates the futures as soon as they are done.</p>
+<p>However, since we lost the information about the order of the results, we need to use a small wrapper that keeps track of the argument and the loss.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_generations</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">popsize</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">ask</span><span class="p">()</span>
+        
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">popsize</span><span class="p">):</span>
+        <span class="n">futures</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+   
+    <span class="n">to_tell</span> <span class="o">=</span> <span class="p">[]</span> 
+    <span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">):</span>
+        <span class="n">to_tell</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+        
+    <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">to_tell</span><span class="p">:</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">tell</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Such optimization loop still does not take into account objective function failures. In our implementation failing computations return nan. We can check that the result is valid using the <code class="docutils literal notranslate"><span class="pre">isfinite</span></code> function from Numpy. It is possible to elegantly solve the problem by submitting other computations to <code class="docutils literal notranslate"><span class="pre">as_completed</span></code>. Indeed, it has two methods <code class="docutils literal notranslate"><span class="pre">as_completed.add</span></code> and <code class="docutils literal notranslate"><span class="pre">as_completed.update</span></code> which allow adding one or more futures to the queue respectively, and a <code class="docutils literal notranslate"><span class="pre">as_completed.count()</span></code> method which counts how many futures are still in the queue.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">completed_queue</span> <span class="o">=</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>   
+<span class="n">to_tell</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">completed_queue</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="n">to_tell</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_tell</span><span class="p">)</span> <span class="o">+</span> <span class="n">completed_queue</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">popsize</span><span class="p">:</span>
+        <span class="n">new_x</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">ask</span><span class="p">()</span>
+        <span class="n">new_future</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">new_x</span><span class="p">)</span>
+        <span class="n">completed_queue</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_future</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The previous code works since to exit the loop <code class="docutils literal notranslate"><span class="pre">completed_queue</span></code> must be empty. If <code class="docutils literal notranslate"><span class="pre">completed_queue</span></code> is empty, then bottom of the loop has been reached without a insertion of a new future, that is <code class="docutils literal notranslate"><span class="pre">len(to_tell)</span> <span class="pre">+</span> <span class="pre">completed_queue.count()</span> <span class="pre">&lt;</span> <span class="pre">popsize</span></code> must have been false. But <code class="docutils literal notranslate"><span class="pre">completed_queue.count()</span></code> is equal to zero, hence <code class="docutils literal notranslate"><span class="pre">len(to_tell)</span> <span class="pre">&gt;=</span> <span class="pre">popsize</span></code>. However, the number of failures equals the number of insertions, hence <code class="docutils literal notranslate"><span class="pre">len(to_tell)</span> <span class="pre">==</span> <span class="pre">popsize</span></code>.</p>
+<p>Let’s consider what happen when we reach the end of a generation. There are <code class="docutils literal notranslate"><span class="pre">popsize</span> <span class="pre">-</span> <span class="pre">1</span></code> elements in <code class="docutils literal notranslate"><span class="pre">to_tell</span></code>, and if the objective fails a single new future is added to <code class="docutils literal notranslate"><span class="pre">completed_queue</span></code>: all CPUs except one will wait in idle. A better idea is to speculatively execute more objective functions, so to increase the chances that at least of them does not fail.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">completed_queue</span> <span class="o">=</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>   
+<span class="n">to_tell</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">completed_queue</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="n">to_tell</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_tell</span><span class="p">)</span> <span class="o">+</span> <span class="n">completed_queue</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">popsize</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_new_futures</span><span class="p">):</span>
+            <span class="n">new_x</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">ask</span><span class="p">()</span>
+            <span class="n">new_future</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">new_x</span><span class="p">)</span>
+            <span class="n">completed_queue</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_future</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this way, there will be a buffer of approximately <code class="docutils literal notranslate"><span class="pre">num_new_futures</span></code> extra futures. Indeed, the upper bound for the size of the queue is <code class="docutils literal notranslate"><span class="pre">popsize</span> <span class="pre">-</span> <span class="pre">len(to_tell)</span> <span class="pre">+</span> <span class="pre">num_new_futures</span> <span class="pre">-</span> <span class="pre">1</span></code>. However, with this modification there is no guarantee that at the end of a calculation we have <code class="docutils literal notranslate"><span class="pre">popsize</span></code> elements in <code class="docutils literal notranslate"><span class="pre">to_tell</span></code>. Usually this is not a problem, since the optimizer will throw away the worst individuals (or include them in computations, in a non-elitist fashion). However, we can enforce the old behaviour using a <code class="docutils literal notranslate"><span class="pre">break</span></code> statement and <code class="docutils literal notranslate"><span class="pre">completed_queue.clear()</span></code>. When the latter is called, the futures still in the queue are garbage collected, and Dask cancels the corresponding computations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">completed_queue</span> <span class="o">=</span> <span class="n">as_completed</span><span class="p">(</span><span class="n">futures</span><span class="p">)</span>   
+<span class="n">to_tell</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">future</span> <span class="ow">in</span> <span class="n">completed_queue</span><span class="p">:</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">isfinite</span><span class="p">(</span><span class="n">y</span><span class="p">):</span>
+        <span class="n">to_tell</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_tell</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">popsize</span><span class="p">:</span>
+        <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">to_tell</span><span class="p">)</span> <span class="o">+</span> <span class="n">completed_queue</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">popsize</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_new_futures</span><span class="p">):</span>
+                <span class="n">new_x</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">ask</span><span class="p">()</span>
+                <span class="n">new_future</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="n">new_x</span><span class="p">)</span>
+                <span class="n">completed_queue</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">new_future</span><span class="p">)</span>
+<span class="n">completed_queue</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>However, this introduces a bias: futures that terminates earlier have more chance to be reported to the optimizer, whatever their loss is. This new behaviour is located near the end of a generation, when the computation start to consume the buffer, and it is more evident the larger <code class="docutils literal notranslate"><span class="pre">num_new_futures</span></code>.</p>
+<p>Let’s suppose that we are able to guess how many computations will be successful. In this case, we could add to the queue only the futures that will be consumed. If the fraction of valid futures in the queue is <code class="docutils literal notranslate"><span class="pre">r</span></code> then we will need to add new futures to the queue only if <code class="docutils literal notranslate"><span class="pre">len(to_tell)</span> <span class="pre">+</span> <span class="pre">r</span> <span class="pre">*</span> <span class="pre">completed_queue.count()</span> <span class="pre">&lt;</span> <span class="pre">popsize</span></code>. Not only, we can now get rid of the free parameter <code class="docutils literal notranslate"><span class="pre">num_new_futures</span></code>. Indeed, if <code class="docutils literal notranslate"><span class="pre">r</span></code> can be expected to stay constant within a generation, a reasonable heuristic is to add each time <code class="docutils literal notranslate"><span class="pre">(popsize</span> <span class="pre">-</span> <span class="pre">len(to_tell)</span> <span class="pre">-</span> <span class="pre">r</span> <span class="pre">*</span> <span class="pre">completed_queue.count())</span> <span class="pre">/</span> <span class="pre">r</span></code> new futures.</p>
+<p>The actual optimization loop used implements this strategy, estimating <code class="docutils literal notranslate"><span class="pre">r</span></code> as the weighted average success rate using the following function.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># log is a list of triples [(individual, loss, execution time)]</span>
+<span class="k">def</span> <span class="nf">average_success_rate</span><span class="p">(</span><span class="n">log</span><span class="p">,</span> <span class="n">alpha</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">log</span><span class="p">:</span>
+        <span class="n">successes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span> <span class="k">for</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">log</span><span class="p">)]</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">log</span><span class="p">))]</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">w</span> <span class="o">*</span> <span class="n">x</span> <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">successes</span><span class="p">))</span> <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+<p>In this way, the success rate looses memory of older evaluations. The timescale parameter <code class="docutils literal notranslate"><span class="pre">alpha</span></code> is chosen as <code class="docutils literal notranslate"><span class="pre">1</span> <span class="pre">/</span> <span class="pre">popsize</span></code>.</p>
+<p>However, it turns out that this strategy fails when the number of missing futures is small. For this reason the actual optimization loop implements also an <code class="docutils literal notranslate"><span class="pre">overshoot</span></code> parameter that allows to submit more new futures than estimated (but introducing again a bias related to execution times). Also, the actual implementation prefetches futures in batches, and pre-scatters the data across the Dask cluster.</p>
+<p id="id3"><dl class="citation">
+<dt class="label" id="id14"><span class="brackets"><a class="fn-backref" href="#id1">CHP+13</a></span></dt>
+<dd><p>Y. Collette, N. Hansen, G. Pujol, D. Salazar Aponte, and R. Le Riche. Object-oriented programming of optimizers–examples in scilab. <em>Multidisciplinary Design Optimization in Computational Mechanics</em>, pages 499–538, 2013.</p>
+</dd>
+</dl>
+</p>
+<hr class="footnotes docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="expensive-ask"><span class="brackets"><a class="fn-backref" href="#id2">1</a></span></dt>
+<dd><p>This is true within a generation. From one generation and the next, in case of large population size, the optimizer can perform expensive computations.</p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -387,7 +473,7 @@
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="tools.html" title="previous page">Tools</a>
-    <a class='right-next' id="next-link" href="../results/scaling.html" title="next page">Scaling Analysis and Modeling</a>
+    <a class='right-next' id="next-link" href="../results/DOMES.html" title="next page">Example GEOtop Calibration Report</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

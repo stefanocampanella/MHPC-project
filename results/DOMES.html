@@ -1,0 +1,737 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example GEOtop Calibration Report &#8212; Calibration of the GEOtop model using evolutionary algorithms on supercomputers</title>
+    
+  <link rel="stylesheet" href="../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="canonical" href="https://stefanocampanella.github.io/MHPC-project/results/DOMES.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Scaling Analysis and Modeling" href="scaling.html" />
+    <link rel="prev" title="Implementation" href="../method/implementation.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+<!-- Opengraph tags -->
+<meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/results/DOMES.html" />
+<meta property="og:type"        content="article" />
+<meta property="og:title"       content="Example GEOtop Calibration Report" />
+<meta property="og:description" content="Example GEOtop Calibration Report  What follows is an example of GEOtop calibration report.  # Defaults model_path = &#39;../data/testbed/inputs&#39; timeout = 120 obse" />
+<meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
+
+<meta name="twitter:card" content="summary" />
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../index.html">
+  
+  <img src="../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Calibration of the GEOtop model using evolutionary algorithms on supercomputers</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../frontmatter/summary.html">
+   Summary and Outline
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../frontmatter/acknowledgements.html">
+   Acknowledgements
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Introduction and Motivations
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro/calibration.html">
+   GEOtop calibration
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro/hpc.html">
+   The need for HPC
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Problem, Methodology and Implementation
+ </span>
+</p>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../method/problem.html">
+   Derivative-free Optimization
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../method/tools.html">
+   Tools
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../method/implementation.html">
+   Implementation
+  </a>
+ </li>
+</ul>
+<p class="caption collapsible-parent">
+ <span class="caption-text">
+  Results
+ </span>
+</p>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Example GEOtop Calibration Report
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="scaling.html">
+   Scaling Analysis and Modeling
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="conclusions.html">
+   Conclusions
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../backmatter/final.html">
+   Final Thoughts Beyond the Scope of the Thesis
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/results/DOMES.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/results/DOMES.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="example-geotop-calibration-report">
+<h1>Example GEOtop Calibration Report<a class="headerlink" href="#example-geotop-calibration-report" title="Permalink to this headline">¶</a></h1>
+<p>What follows is an example of GEOtop calibration report.</p>
+<div class="cell tag_parameters docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defaults</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s1">&#39;../data/testbed/inputs&#39;</span>
+<span class="n">timeout</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="n">observations_path</span> <span class="o">=</span> <span class="s1">&#39;../data/testbed/observations/obs.csv&#39;</span>
+<span class="n">parameters_path</span> <span class="o">=</span> <span class="s1">&#39;../data/parameters/testbed.csv&#39;</span>
+<span class="n">default_parameters</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">algorithm</span> <span class="o">=</span> <span class="s1">&#39;Random&#39;</span>
+<span class="n">popsize</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">num_generations</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">scheduler_file</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">num_cpus</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">num_workers</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">performance_report_filename</span><span class="o">=</span><span class="s1">&#39;report.html&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_injected-parameters docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parameters</span>
+<span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;/scratch/scampane/MHPC-project/data/DOMES/inputs&quot;</span>
+<span class="n">timeout</span> <span class="o">=</span> <span class="mi">150</span>
+<span class="n">observations_path</span> <span class="o">=</span> <span class="s2">&quot;/scratch/scampane/MHPC-project/data/DOMES/observations/obs.csv&quot;</span>
+<span class="n">parameters_path</span> <span class="o">=</span> <span class="s2">&quot;/scratch/scampane/MHPC-project/data/parameters/all.csv&quot;</span>
+<span class="n">algorithm</span> <span class="o">=</span> <span class="s2">&quot;NGO&quot;</span>
+<span class="n">popsize</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">num_generations</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="n">scheduler_file</span> <span class="o">=</span> <span class="s2">&quot;/scratch/scampane/MHPC-project/scheduler_files/scheduler-Q61.json&quot;</span>
+<span class="n">num_cpus</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">num_workers</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="n">performance_report_filename</span> <span class="o">=</span> <span class="s2">&quot;/scratch/scampane/MHPC-project/runs/short/DOMES-NGO-4096-256-DeW-performance-report.html&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">scrapbook</span> <span class="k">as</span> <span class="nn">sb</span>
+<span class="kn">import</span> <span class="nn">dask.config</span>
+<span class="kn">from</span> <span class="nn">dask.distributed</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">performance_report</span>
+
+<span class="kn">from</span> <span class="nn">mhpc_project.utils</span> <span class="kn">import</span> <span class="n">date_parser</span><span class="p">,</span> <span class="n">kge_cmp</span><span class="p">,</span> <span class="n">calibrate</span><span class="p">,</span> <span class="n">delta_mim</span>
+<span class="kn">from</span> <span class="nn">mhpc_project.parameters</span> <span class="kn">import</span> <span class="n">UniformSoilParameters</span> <span class="k">as</span> <span class="n">Parameters</span>
+<span class="kn">from</span> <span class="nn">mhpc_project.models</span> <span class="kn">import</span> <span class="n">UniformSoilModel</span> <span class="k">as</span> <span class="n">Model</span>
+<span class="kn">import</span> <span class="nn">mhpc_project.plots</span> <span class="k">as</span> <span class="nn">plots</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Store dask config</span>
+<span class="n">sb</span><span class="o">.</span><span class="n">glue</span><span class="p">(</span><span class="s1">&#39;dask_config&#39;</span><span class="p">,</span> <span class="n">dask</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">parameters</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">(</span><span class="n">parameters_path</span><span class="p">,</span> <span class="n">default_parameters</span><span class="p">)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">model_path</span><span class="p">,</span> <span class="n">store</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+<span class="n">observations</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">observations_path</span><span class="p">,</span>
+                           <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                           <span class="n">date_parser</span><span class="o">=</span><span class="n">date_parser</span><span class="p">,</span>
+                           <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">scheduler_file</span><span class="p">:</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="n">scheduler_file</span><span class="o">=</span><span class="n">scheduler_file</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">()</span>
+<span class="n">client</span><span class="o">.</span><span class="n">wait_for_workers</span><span class="p">(</span><span class="n">n_workers</span><span class="o">=</span><span class="n">num_workers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">240</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">performance_report</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">performance_report_filename</span><span class="p">):</span>
+    <span class="n">recommendation</span><span class="p">,</span> <span class="n">predictions</span><span class="p">,</span> <span class="n">log</span> <span class="o">=</span> <span class="n">calibrate</span><span class="p">(</span><span class="n">model</span><span class="p">,</span>
+                                                 <span class="n">parameters</span><span class="p">,</span>
+                                                 <span class="n">observations</span><span class="p">,</span>
+                                                 <span class="n">algorithm</span><span class="p">,</span>
+                                                 <span class="n">popsize</span><span class="p">,</span>
+                                                 <span class="n">num_generations</span><span class="p">,</span>
+                                                 <span class="n">client</span><span class="p">,</span>
+                                                 <span class="n">num_cpus</span><span class="p">)</span>
+
+<span class="n">sb</span><span class="o">.</span><span class="n">glue</span><span class="p">(</span><span class="s1">&#39;loss&#39;</span><span class="p">,</span> <span class="n">kge_cmp</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">observations</span><span class="p">))</span>
+<span class="n">sb</span><span class="o">.</span><span class="n">glue</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="p">[((</span><span class="n">x</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span> <span class="ow">in</span> <span class="n">log</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(64_w,128)-aCMA-ES (mu_w=34.2,w_1=6%) in dimension 29 (seed=nan, Thu Feb 18 09:36:33 2021)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot</span> <span class="o">=</span> <span class="n">plots</span><span class="o">.</span><span class="n">convergence</span><span class="p">([(</span><span class="n">x</span><span class="o">.</span><span class="n">generation</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">log</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">l</span><span class="p">)])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
+<span class="n">sb</span><span class="o">.</span><span class="n">glue</span><span class="p">(</span><span class="s1">&#39;convergence_plot&#39;</span><span class="p">,</span> <span class="n">plot</span><span class="p">,</span> <span class="s1">&#39;display&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/DOMES_8_0.png" src="../_images/DOMES_8_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">plot</span> <span class="ow">in</span> <span class="n">plots</span><span class="o">.</span><span class="n">comparisons</span><span class="p">(</span><span class="n">predictions</span><span class="p">,</span> <span class="n">observations</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
+    <span class="n">sb</span><span class="o">.</span><span class="n">glue</span><span class="p">(</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_plot&#39;</span><span class="p">,</span> <span class="n">plot</span><span class="p">,</span> <span class="s1">&#39;display&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/DOMES_9_0.png" src="../_images/DOMES_9_0.png" />
+<img alt="../_images/DOMES_9_1.png" src="../_images/DOMES_9_1.png" />
+<img alt="../_images/DOMES_9_2.png" src="../_images/DOMES_9_2.png" />
+<img alt="../_images/DOMES_9_3.png" src="../_images/DOMES_9_3.png" />
+<img alt="../_images/DOMES_9_4.png" src="../_images/DOMES_9_4.png" />
+<img alt="../_images/DOMES_9_5.png" src="../_images/DOMES_9_5.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">report</span> <span class="o">=</span> <span class="n">delta_mim</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="p">[(</span><span class="n">x</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span><span class="p">,</span> <span class="n">l</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">log</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">l</span><span class="p">)])</span>
+<span class="n">report</span><span class="p">[</span><span class="s1">&#39;best&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parameters</span><span class="o">.</span><span class="n">from_instrumentation</span><span class="p">(</span><span class="n">recommendation</span><span class="p">)</span>
+<span class="n">sb</span><span class="o">.</span><span class="n">glue</span><span class="p">(</span><span class="s1">&#39;report&#39;</span><span class="p">,</span> <span class="n">report</span><span class="p">,</span> <span class="s1">&#39;pandas&#39;</span><span class="p">)</span>
+
+<span class="n">report</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>delta</th>
+      <th>delta_conf</th>
+      <th>S1</th>
+      <th>S1_conf</th>
+      <th>best</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>FieldCapacity</th>
+      <td>0.196860</td>
+      <td>0.016790</td>
+      <td>0.083046</td>
+      <td>0.231401</td>
+      <td>3.870706e-02</td>
+    </tr>
+    <tr>
+      <th>ThetaRes</th>
+      <td>0.180005</td>
+      <td>0.014483</td>
+      <td>0.104353</td>
+      <td>0.282825</td>
+      <td>2.985520e-03</td>
+    </tr>
+    <tr>
+      <th>ThetaSat</th>
+      <td>0.168758</td>
+      <td>0.015870</td>
+      <td>0.097108</td>
+      <td>0.266497</td>
+      <td>5.557729e-01</td>
+    </tr>
+    <tr>
+      <th>DecayCoeffCanopy</th>
+      <td>0.167036</td>
+      <td>0.012630</td>
+      <td>0.087294</td>
+      <td>0.237451</td>
+      <td>1.165855e+00</td>
+    </tr>
+    <tr>
+      <th>NormalHydrConductivity</th>
+      <td>0.163122</td>
+      <td>0.018452</td>
+      <td>0.043401</td>
+      <td>0.147470</td>
+      <td>1.975318e-04</td>
+    </tr>
+    <tr>
+      <th>CanopyFraction</th>
+      <td>0.162160</td>
+      <td>0.017316</td>
+      <td>0.054883</td>
+      <td>0.169293</td>
+      <td>8.927573e-01</td>
+    </tr>
+    <tr>
+      <th>MinStomatalRes</th>
+      <td>0.152129</td>
+      <td>0.013413</td>
+      <td>0.043169</td>
+      <td>0.110797</td>
+      <td>2.081448e+02</td>
+    </tr>
+    <tr>
+      <th>AlphaVanGenuchten</th>
+      <td>0.137440</td>
+      <td>0.014014</td>
+      <td>0.056531</td>
+      <td>0.136567</td>
+      <td>2.450772e-03</td>
+    </tr>
+    <tr>
+      <th>NVanGenuchten</th>
+      <td>0.136678</td>
+      <td>0.017649</td>
+      <td>0.039043</td>
+      <td>0.125220</td>
+      <td>1.827232e+00</td>
+    </tr>
+    <tr>
+      <th>LSAI</th>
+      <td>0.127544</td>
+      <td>0.017510</td>
+      <td>0.039181</td>
+      <td>0.119751</td>
+      <td>2.178355e+00</td>
+    </tr>
+    <tr>
+      <th>SoilEmissiv</th>
+      <td>0.125561</td>
+      <td>0.017766</td>
+      <td>0.041374</td>
+      <td>0.119356</td>
+      <td>4.216430e-01</td>
+    </tr>
+    <tr>
+      <th>VegSnowBurying</th>
+      <td>0.119362</td>
+      <td>0.021109</td>
+      <td>0.026987</td>
+      <td>0.086476</td>
+      <td>3.022595e+00</td>
+    </tr>
+    <tr>
+      <th>ThermalCapacitySoilSolids</th>
+      <td>0.117335</td>
+      <td>0.018992</td>
+      <td>0.025219</td>
+      <td>0.095252</td>
+      <td>3.709680e+06</td>
+    </tr>
+    <tr>
+      <th>SoilAlbNIRWet</th>
+      <td>0.116171</td>
+      <td>0.016200</td>
+      <td>0.025704</td>
+      <td>0.095070</td>
+      <td>6.082924e-01</td>
+    </tr>
+    <tr>
+      <th>SoilAlbNIRDry</th>
+      <td>0.112665</td>
+      <td>0.014766</td>
+      <td>0.040809</td>
+      <td>0.094023</td>
+      <td>3.240326e-01</td>
+    </tr>
+    <tr>
+      <th>SoilAlbVisDry</th>
+      <td>0.111565</td>
+      <td>0.015490</td>
+      <td>0.023665</td>
+      <td>0.097089</td>
+      <td>3.549442e-01</td>
+    </tr>
+    <tr>
+      <th>ThermalConductivitySoilSolids</th>
+      <td>0.109694</td>
+      <td>0.018087</td>
+      <td>0.030302</td>
+      <td>0.079683</td>
+      <td>2.883452e+00</td>
+    </tr>
+    <tr>
+      <th>SoilAlbVisWet</th>
+      <td>0.106393</td>
+      <td>0.018053</td>
+      <td>0.026151</td>
+      <td>0.059908</td>
+      <td>2.886453e-01</td>
+    </tr>
+    <tr>
+      <th>VMualem</th>
+      <td>0.104845</td>
+      <td>0.019058</td>
+      <td>0.021472</td>
+      <td>0.065113</td>
+      <td>2.914712e-01</td>
+    </tr>
+    <tr>
+      <th>VegReflectVis</th>
+      <td>0.104551</td>
+      <td>0.013805</td>
+      <td>0.015882</td>
+      <td>0.067012</td>
+      <td>5.010492e-01</td>
+    </tr>
+    <tr>
+      <th>SpecificStorativity</th>
+      <td>0.102199</td>
+      <td>0.018316</td>
+      <td>0.021701</td>
+      <td>0.078875</td>
+      <td>1.643646e-07</td>
+    </tr>
+    <tr>
+      <th>RootDepth</th>
+      <td>0.100619</td>
+      <td>0.018432</td>
+      <td>0.023663</td>
+      <td>0.080024</td>
+      <td>5.512460e+02</td>
+    </tr>
+    <tr>
+      <th>CanDensSurface</th>
+      <td>0.099391</td>
+      <td>0.017148</td>
+      <td>0.027862</td>
+      <td>0.076559</td>
+      <td>4.069320e+00</td>
+    </tr>
+    <tr>
+      <th>WiltingPoint</th>
+      <td>0.097252</td>
+      <td>0.013059</td>
+      <td>0.032982</td>
+      <td>0.074388</td>
+      <td>7.603242e-01</td>
+    </tr>
+    <tr>
+      <th>SoilRoughness</th>
+      <td>0.096809</td>
+      <td>0.015322</td>
+      <td>0.030851</td>
+      <td>0.062250</td>
+      <td>1.077662e+00</td>
+    </tr>
+    <tr>
+      <th>VegTransVis</th>
+      <td>0.088482</td>
+      <td>0.016014</td>
+      <td>0.014867</td>
+      <td>0.052614</td>
+      <td>2.124748e-01</td>
+    </tr>
+    <tr>
+      <th>VegTransNIR</th>
+      <td>0.077449</td>
+      <td>0.018123</td>
+      <td>0.012616</td>
+      <td>0.032653</td>
+      <td>4.469694e-01</td>
+    </tr>
+    <tr>
+      <th>VegReflNIR</th>
+      <td>0.068249</td>
+      <td>0.018172</td>
+      <td>0.009401</td>
+      <td>0.027690</td>
+      <td>1.406107e-01</td>
+    </tr>
+    <tr>
+      <th>VegHeight</th>
+      <td>0.037858</td>
+      <td>0.014848</td>
+      <td>0.003969</td>
+      <td>0.005968</td>
+      <td>9.226614e+02</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./results"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="../method/implementation.html" title="previous page">Implementation</a>
+    <a class='right-next' id="next-link" href="scaling.html" title="next page">Scaling Analysis and Modeling</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stefano Campanella<br/>
+        
+            &copy; Copyright 2020.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
