@@ -204,9 +204,9 @@ def calibrate(model, parameters, observations,
                 break
             else:
                 r = average_success_rate(log, 1 / popsize)
-                if (num_remaining_samples := popsize - len(to_tell) - r * completed_queue.count()) > 0:
+                if (num_missing_samples := popsize - len(to_tell) - r * completed_queue.count()) > 0:
                     if r > 0:
-                        num_new_samples = min(num_workers, int(overshoot * num_remaining_samples / r))
+                        num_new_samples = min(num_workers, int(overshoot * num_missing_samples / r))
                     else:
                         num_new_samples = num_workers
                     remote_samples = [client.submit(wrapped_objective,
@@ -220,7 +220,8 @@ def calibrate(model, parameters, observations,
         if paranoid:
             nodes_cleanup(client)
 
-        for candidate, loss in to_tell:
+        to_tell.sort(key=lambda x: x[1], reverse=True)
+        for candidate, loss in to_tell[:popsize]:
             optimizer.tell(candidate, loss)
 
     recommendation = optimizer.recommend()

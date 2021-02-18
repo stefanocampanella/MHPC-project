@@ -1,3 +1,4 @@
+(content:optimization)=
 # Derivative-free Optimization
 
 ```{epigraph}
@@ -32,4 +33,8 @@ Random search doesn't perform poorly at all in the long run, and, if we could wa
 
 To this purpose, other optimizers use a more refined strategy. At each step, they sample from random variables $U'_i$ whose distribution is inferred from previous steps, and which usually converge to some a posteriori $U'$. In this way, these algorithms super-sample the region of the search space where, based on their assumptions, it is more probable to find a global minimum and accelerate the convergence of the best candidate $X'_i$. It is crucial to note that while they focus on a particular minimum (global or local), they subsample the rest of the search space.
 
-In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space, the population size, but which slows convergence: exploration vs exploitation.
+In other words, if a heuristic algorithm converges, usually it does rapidly to a minimum and then sits there, with minimal chances to discover different minima. Therefore, these algorithms typically have a parameter that can be tweaked to explore more the search space but which slows convergence: exploration vs exploitation.
+
+Evolutionary algorithm is a broad term applicable to a large collections of heuristic optimization algorithms inspired by biological evolution or other biological processes, as in Particle Swarm Optimization. An evolutionary algorithm starts by drawing a set of random points of the search space, the so-called individuals, with some a priori distribution, and then repeat the process using a modified distribution, which takes into account the losses of the individuals. Each iteration is called a generation, and the individuals of a generation are the population.
+
+In general, the population size behave as the parameter described above, allowing more or less exploration of the search space. The main difference between an evolutionary algorithm and another is how random variables from which individuals of a generation are drawn depend on the ones of the previous generation. The crucial point is that individuals of the same generation are independent one another.

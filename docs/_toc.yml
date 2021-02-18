@@ -18,12 +18,8 @@
 
 - part: Results
   chapters:
+    - file: results/DOMES
     - file: results/scaling
-#    - file: results/examples
-#      sections:
-#        - file: results/examples/plots
-#        - file: results/examples/calibration
-#        - file: results/examples/sensitivity_analysis
     - file: results/conclusions
 
 - part:
