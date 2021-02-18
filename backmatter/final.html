@@ -291,12 +291,12 @@
 <blockquote>
 <div><p>There’s something else in software that we are particularly bad at: we have a very weak sense of history. So it is not simply that we keep rediscovering and reinventing the wheel, and eventually we might actually make it round; it’s that we have a very poor cultural sense of history, and so we live in a constant state of astonishment and rediscovery.</p>
 </div></blockquote>
-<p>At best, computer science is misunderstood, as wonderfully explained by Abelson and Sussman in their classic on the subject <span id="id1">[<a class="reference internal" href="#id13"><span>ASPS96</span></a>]</span>.</p>
+<p>At best, computer science is misunderstood, as wonderfully explained by Abelson and Sussman in their classic on the subject <span id="id1">[<a class="reference internal" href="#id15"><span>ASPS96</span></a>]</span>.</p>
 <blockquote>
 <div><p>Underlying our approach to this subject is our conviction that “computer science” is not a science and that its significance has little to do with computers. The computer revolution is a revolution in the way we think and in the way we express what we think. The essence of this change is the emergence of what might best be called procedural epistemology–the study of the structure of knowledge from an imperative point of view, as opposed to the more declarative point of view taken by classical mathematical subjects. Mathematics provides a framework for dealing precisely with notions of “what is”. Computation provides a framework for dealing precisely with notions of “how to”.</p>
 </div></blockquote>
 <p>If we don’t free ourselves from utilitiarian views on computer science and programming, we will be doomed to poorly reinvent the wheel. Only when we will clearly see their beautiful ineffectiveness, we will be able to make progress.</p>
-<p>In many research fields, articles, reviews, and conference proceedings account only for a part of the writing duty of researchers, the other being computer programs. Nonetheless, this is something for which they are not always given the proper credit. Furthermore, code is not always published, and its quality is not always at best. However, if programming is theory-building <span id="id2">[<a class="reference internal" href="#id8"><span>Nau85</span></a>]</span>, then we need to consider code as literature and write correct, clear, reusable and extensively documented code to make real scientific progress and not waste our collective efforts.</p>
+<p>In many research fields, articles, reviews, and conference proceedings account only for a part of the writing duty of researchers, the other being computer programs. Nonetheless, this is something for which they are not always given the proper credit. Furthermore, code is not always published, and its quality is not always at best. However, if programming is theory-building <span id="id2">[<a class="reference internal" href="#id10"><span>Nau85</span></a>]</span>, then we need to consider code as literature and write correct, clear, reusable and extensively documented code to make real scientific progress and not waste our collective efforts.</p>
 <p>The issue is not just the consideration we have for programming as an intellectual activity. If one wants to apply the scientific method to numerical experiments, he has to attain the same standards used for laboratory experiments: in other words, they must be reproducible. Hence, the reason of the importance of code and documentation in scientific computing is that they are part of the reproducibility effort.</p>
 </div>
 <div class="section" id="math-is-the-ultimate-javascript-framework">
@@ -306,19 +306,26 @@
 <p>I was mesmerized and stared intensely at the inner of the radio. The whole circuitry contained less than ten bipolar junction transistors, for both amplitude and frequency modulation. I pointed with my finger at some components I wasn’t able to recognize, and asked him what they were and why they were there, as I used to do as a kid. The strangest thing to me were the small radio frequency inductors. They had small red marks made with permanent ink. A long time before, he explained to me, he marked the original positions of the tuning screws, before trying to adjust the tune. A whole piece of the circuit board was covered with wax—which I thought was glue—, to avoid changing the position and orientation of some components, changing the inductance of the circuits and losing the right tuning.</p>
 <p>That world is gone<a class="footnote-reference brackets" href="#howsad" id="id3">1</a>. We now live in a world of integrated circuits. In our world, physical devices are assembled using tools similar to the ones found in software: abstractions. Black-boxes are combined, or replaced with equivalent ones. Most of the time, it is simply cheaper to use programmable electronics.</p>
 <p>This transformation is concerned with physical objects only to a lesser degree. The biggest shift was cultural. A generation of highly trained engineers has become obsolete. The knowledge and mental models they used were outdated. It has not happened during a century, but in few decades. It is highly unlikely that it will not happen again. Instead, if we extrapolate the trend, it is conceivable that the timescale of transformations will become shorter and shorter, due to technological acceleration.</p>
-<p>In short, there are excellent chances that the knowledge about a particular technology that one acquires today will be worthless within the time span of his professional career<a class="footnote-reference brackets" href="#frontend" id="id4">2</a>. It is probable that our high-level code will look like to future programmers like assembly looks like to us. The GPT-3 model offers a hint of how this might happen.</p>
-<p>Are we doomed to learn useless stuff? I think that the answer is no. Nonetheless, I think that learning a particular technology, which does not teach us something more general, is a waste of time. Details of implementation will come and go<a class="footnote-reference brackets" href="#details" id="id5">3</a>, general questions will stay: the deeper the longer. Bartosz Milewski ends with the following words an article on his blog <span id="id6">[<a class="reference internal" href="#id19"><span>Mil20</span></a>]</span> titled “Math is your insurance policy”.</p>
+<p>In short, there are excellent chances that the knowledge about a particular technology that one acquires today will be worthless within the time span of his professional career<a class="footnote-reference brackets" href="#frontend" id="id4">2</a>. It is probable that our high-level code will look to future programmers like assembly looks to us today. All the more reason for our carefully hand-unrolled loops considered as primitive as the monkeys screaming around the monolith in 2001: A Space Odissey by Stanley Kubrick<a class="footnote-reference brackets" href="#monolith" id="id5">3</a>. The GPT-3 model offers a hint of how this might happen.</p>
+<p>Are we doomed to learn useless stuff? I think that the answer is no. Nonetheless, I think that learning a particular technology, which does not teach us something more general, is a waste of time. Details of implementation will come and go<a class="footnote-reference brackets" href="#details" id="id6">4</a>, general questions will stay: the deeper the longer. Bartosz Milewski ends with the following words an article on his blog <span id="id7">[<a class="reference internal" href="#id21"><span>Mil20</span></a>]</span> titled “Math is your insurance policy”.</p>
 <blockquote>
 <div><p>I’m often asked by programmers: How is learning category theory going to help me in my everyday programming? The implication being that it’s not worth learning math if it can’t be immediately applied to your current job. This makes sense if you are trying to locally optimize your life. You are close to the local minimum of your utility function and you want to get even closer to it. But the utility function is not constant–it evolves in time. Local minima disappear. Category theory is the insurance policy against the drying out of your current watering hole.</p>
 </div></blockquote>
-<p id="id7"><dl class="citation">
-<dt class="label" id="id13"><span class="brackets"><a class="fn-backref" href="#id1">ASPS96</a></span></dt>
+<p>We will need new tools however. From the preface of in Category Theory for Programmers <span id="id8">[<a class="reference internal" href="#id22"><span>Mil18</span></a>]</span></p>
+<blockquote>
+<div><p>There is an unfinished gothic cathedral in Beauvais, France, that stands witness to this deeply human struggle with limitations. It was intended to beat all previous records of height and lightness, but it suffered a series of collapses. Ad hoc measures like iron rods and wooden supports keep it from disintegrating, but obviously a lot of things went wrong. From a modern perspective, it’s a miracle that so many gothic structures had been successfully completed without the help of modern material science, computer modelling, finite element analysis, and general math and physics. I hope future generations will be as admiring of the programming skills we’ve been displaying in building complex operating systems, web servers, and the internet infrastructure. And, frankly, they should, because we’ve done all this based on very flimsy theoretical foundations. We have to fix those foundations if we want to move forward.</p>
+</div></blockquote>
+<p id="id9"><dl class="citation">
+<dt class="label" id="id15"><span class="brackets"><a class="fn-backref" href="#id1">ASPS96</a></span></dt>
 <dd><p>H. Abelson, G.J. Sussman, A.J. Perlis, and J. Sussman. <em>Structure and Interpretation of Computer Programs</em>. Electrical engineering and computer science series. Addison-Wesley, 1996. ISBN 9780262510875.</p>
 </dd>
-<dt class="label" id="id19"><span class="brackets"><a class="fn-backref" href="#id6">Mil20</a></span></dt>
+<dt class="label" id="id22"><span class="brackets"><a class="fn-backref" href="#id8">Mil18</a></span></dt>
+<dd><p>B. Milewski. <em>Category theory for programmers</em>. Blurb, 2018. URL: <a class="reference external" href="https://github.com/hmemcpy/milewski-ctfp-pdf">https://github.com/hmemcpy/milewski-ctfp-pdf</a>.</p>
+</dd>
+<dt class="label" id="id21"><span class="brackets"><a class="fn-backref" href="#id7">Mil20</a></span></dt>
 <dd><p>B. Milewski. Math is your insurance policy. 2020. Last accessed on 2021-2-17. URL: <a class="reference external" href="https://bartoszmilewski.com/2020/02/24/math-is-your-insurance-policy">https://bartoszmilewski.com/2020/02/24/math-is-your-insurance-policy</a>.</p>
 </dd>
-<dt class="label" id="id8"><span class="brackets"><a class="fn-backref" href="#id2">Nau85</a></span></dt>
+<dt class="label" id="id10"><span class="brackets"><a class="fn-backref" href="#id2">Nau85</a></span></dt>
 <dd><p>Peter Naur. Programming as theory building. <em>Microprocessing and microprogramming</em>, 15(5):253–261, 1985.</p>
 </dd>
 </dl>
@@ -331,7 +338,10 @@
 <dt class="label" id="frontend"><span class="brackets"><a class="fn-backref" href="#id4">2</a></span></dt>
 <dd><p>Frontend developers experience this inconvenience on a daily basis. However, here I am not really talking about javascript frameworks.</p>
 </dd>
-<dt class="label" id="details"><span class="brackets"><a class="fn-backref" href="#id5">3</a></span></dt>
+<dt class="label" id="monolith"><span class="brackets"><a class="fn-backref" href="#id5">3</a></span></dt>
+<dd><p>Actually, this is true as of today.</p>
+</dd>
+<dt class="label" id="details"><span class="brackets"><a class="fn-backref" href="#id6">4</a></span></dt>
 <dd><p>As well as languages, libraries, compilers, and beloved compiler flags.</p>
 </dd>
 </dl>

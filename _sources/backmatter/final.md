@@ -60,9 +60,11 @@ That world is gone[^howsad]. We now live in a world of integrated circuits. In o
 
 This transformation is concerned with physical objects only to a lesser degree. The biggest shift was cultural. A generation of highly trained engineers has become obsolete. The knowledge and mental models they used were outdated. It has not happened during a century, but in few decades. It is highly unlikely that it will not happen again. Instead, if we extrapolate the trend, it is conceivable that the timescale of transformations will become shorter and shorter, due to technological acceleration.
 
-In short, there are excellent chances that the knowledge about a particular technology that one acquires today will be worthless within the time span of his professional career[^frontend]. It is probable that our high-level code will look like to future programmers like assembly looks like to us. The GPT-3 model offers a hint of how this might happen.
+In short, there are excellent chances that the knowledge about a particular technology that one acquires today will be worthless within the time span of his professional career[^frontend]. It is probable that our high-level code will look to future programmers like assembly looks to us today. All the more reason for our carefully hand-unrolled loops considered as primitive as the monkeys screaming around the monolith in 2001: A Space Odissey by Stanley Kubrick[^monolith]. The GPT-3 model offers a hint of how this might happen.
 
 [^frontend]: Frontend developers experience this inconvenience on a daily basis. However, here I am not really talking about javascript frameworks.
+
+[^monolith]: Actually, this is true as of today.
 
 Are we doomed to learn useless stuff? I think that the answer is no. Nonetheless, I think that learning a particular technology, which does not teach us something more general, is a waste of time. Details of implementation will come and go[^details], general questions will stay: the deeper the longer. Bartosz Milewski ends with the following words an article on his blog {cite}`milewski2020math` titled "Math is your insurance policy".
 
@@ -70,6 +72,9 @@ Are we doomed to learn useless stuff? I think that the answer is no. Nonetheless
 
 > I’m often asked by programmers: How is learning category theory going to help me in my everyday programming? The implication being that it’s not worth learning math if it can’t be immediately applied to your current job. This makes sense if you are trying to locally optimize your life. You are close to the local minimum of your utility function and you want to get even closer to it. But the utility function is not constant–it evolves in time. Local minima disappear. Category theory is the insurance policy against the drying out of your current watering hole. 
 
+We will need new tools however. From the preface of in Category Theory for Programmers {cite}`milewski2018category` 
+
+> There is an unfinished gothic cathedral in Beauvais, France, that stands witness to this deeply human struggle with limitations. It was intended to beat all previous records of height and lightness, but it suffered a series of collapses. Ad hoc measures like iron rods and wooden supports keep it from disintegrating, but obviously a lot of things went wrong. From a modern perspective, it’s a miracle that so many gothic structures had been successfully completed without the help of modern material science, computer modelling, finite element analysis, and general math and physics. I hope future generations will be as admiring of the programming skills we’ve been displaying in building complex operating systems, web servers, and the internet infrastructure. And, frankly, they should, because we’ve done all this based on very flimsy theoretical foundations. We have to fix those foundations if we want to move forward.
 
 ```{bibliography}
 :filter: docname in docnames
