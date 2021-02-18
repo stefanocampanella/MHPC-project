@@ -56,7 +56,7 @@ I was mesmerized and stared intensely at the inner of the radio. The whole circu
 
 That world is gone[^howsad]. We now live in a world of integrated circuits. In our world, physical devices are assembled using tools similar to the ones found in software: abstractions. Black-boxes are combined, or replaced with equivalent ones. Most of the time, it is simply cheaper to use programmable electronics. 
 
-[^howsad]: I can't help myself to stop thinking how awfully sad this is. That world was beautiful and understandable. It was made of things you could tear apart and put back together, things that you could touch and smell, things that would let you the time to think.
+[^howsad]: I can't help thinking how awfully sad this is. That world was beautiful and understandable. It was made of things you could tear apart and put back together, things that you could touch and smell, things that would let you the time to think.
 
 This transformation is concerned with physical objects only to a lesser degree. The biggest shift was cultural. A generation of highly trained engineers has become obsolete. The knowledge and mental models they used were outdated. It has not happened during a century, but in few decades. It is highly unlikely that it will not happen again. Instead, if we extrapolate the trend, it is conceivable that the timescale of transformations will become shorter and shorter, due to technological acceleration.
 
@@ -64,11 +64,12 @@ In short, there are excellent chances that the knowledge about a particular tech
 
 [^frontend]: Frontend developers experience this inconvenience on a daily basis. However, here I am not really talking about javascript frameworks.
 
-Are we doomed to learn useless stuff? I think that the answer is no. Nonetheless, I think that learning a particular technology, which does not teach us something more general, is a waste of time. Details of implementation will come and go[^details], general questions will stay: the deeper the longer. Bartosz Milewski writes the following ending to a blog post {cite}`milewski2020math` with the title "Math is your insurance policy".
+Are we doomed to learn useless stuff? I think that the answer is no. Nonetheless, I think that learning a particular technology, which does not teach us something more general, is a waste of time. Details of implementation will come and go[^details], general questions will stay: the deeper the longer. Bartosz Milewski ends with the following words an article on his blog {cite}`milewski2020math` titled "Math is your insurance policy".
+
+[^details]: As well as languages, libraries, compilers, and beloved compiler flags. 
 
 > I’m often asked by programmers: How is learning category theory going to help me in my everyday programming? The implication being that it’s not worth learning math if it can’t be immediately applied to your current job. This makes sense if you are trying to locally optimize your life. You are close to the local minimum of your utility function and you want to get even closer to it. But the utility function is not constant–it evolves in time. Local minima disappear. Category theory is the insurance policy against the drying out of your current watering hole. 
 
-[^details]: As well as languages, libraries, compilers, and beloved compiler flags. 
 
 ```{bibliography}
 :filter: docname in docnames
