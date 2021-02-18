@@ -46,21 +46,23 @@ In many research fields, articles, reviews, and conference proceedings account o
 
 The issue is not just the consideration we have for programming as an intellectual activity. If one wants to apply the scientific method to numerical experiments, he has to attain the same standards used for laboratory experiments: in other words, they must be reproducible. Hence, the reason of the importance of code and documentation in scientific computing is that they are part of the reproducibility effort.
 
-## Math is the Ultimate Programming
+## Math is the Ultimate Javascript Framework
 
-I would go as far as saying that a playful interest in fundamental questions, beyond practical applications, is a good professional investment as a programmer too.
+I would go as far as saying that a playful interest in fundamental questions, beyond practical applications, is a good professional investment for a programmer too.
 
 During the last Christmas holidays, I was chatting with my father about medium wave and longwave antennas. Since physical evidence is better than words, he suddenly went away and reappeared from the closet with a radio in his hand. It was a Grundig from the mid 80's. Once opened the back of the radio, the ferrite rod antenna and the long and medium wave windings were clearly visible. 
 
-I was mesmerized and stared intensely at the inner of the radio. The whole circuitry contained less than ten bipolar junction transistors, for both amplitude and frequency modulation. I pointed with my finger at some components I wasn't able to recognize, and asked him what they were and why they were there, as I used to do as a kid. The strangest thing to me were the small radio frequency inductors. A long time before, when he was trying to better tune the circuitry, he marked the original positions of the tuning screws with a permanent marker. A whole piece of the circuit board was covered with wax, to avoid changing the position and orientation of some components, changing the inductance of the circuits and losing the right tuning. 
+I was mesmerized and stared intensely at the inner of the radio. The whole circuitry contained less than ten bipolar junction transistors, for both amplitude and frequency modulation. I pointed with my finger at some components I wasn't able to recognize, and asked him what they were and why they were there, as I used to do as a kid. The strangest thing to me were the small radio frequency inductors. They had small red marks made with permanent ink. A long time before, he explained to me, he marked the original positions of the tuning screws, before trying to adjust the tune. A whole piece of the circuit board was covered with wax---which I thought was glue---, to avoid changing the position and orientation of some components, changing the inductance of the circuits and losing the right tuning. 
 
-That world is gone. We now live in a world of integrated circuits. In our world, physical devices are assembled using tools similar to the ones found in software: abstractions. Black-boxes are combined, or replaced with equivalent ones. Most of the time, it is simply cheaper to use programmable electronics. At any rate, we always use computer aided design of electronics. 
+That world is gone[^howsad]. We now live in a world of integrated circuits. In our world, physical devices are assembled using tools similar to the ones found in software: abstractions. Black-boxes are combined, or replaced with equivalent ones. Most of the time, it is simply cheaper to use programmable electronics. 
 
-This transformation is concerned with physical objects only to a lesser degree. The biggest shift was cultural. The competence and understanding of a generation of engineers has become obsolete. The knowledge and mental models they used were outdated. It has not happened during a century, but in few decades. It is highly unlikely that it will not happen again. Instead, if we extrapolate the trend, it is conceivable that the timescale of transformations will become shorter and shorter, due to technological acceleration.
+[^howsad]: I can't help myself to stop thinking how awfully sad this is. That world was beautiful and understandable. It was made of things you could tear apart and put back together, things that you could touch and smell, things that would let you the time to think.
+
+This transformation is concerned with physical objects only to a lesser degree. The biggest shift was cultural. A generation of highly trained engineers has become obsolete. The knowledge and mental models they used were outdated. It has not happened during a century, but in few decades. It is highly unlikely that it will not happen again. Instead, if we extrapolate the trend, it is conceivable that the timescale of transformations will become shorter and shorter, due to technological acceleration.
 
 In short, there are excellent chances that the knowledge about a particular technology that one acquires today will be worthless within the time span of his professional career[^frontend]. It is probable that our high-level code will look like to future programmers like assembly looks like to us. The GPT-3 model offers a hint of how this might happen.
 
-[^frontend]: Frontend developers experience this inconvenience on a daily basis. However, I am not talking about javascript frameworks.
+[^frontend]: Frontend developers experience this inconvenience on a daily basis. However, here I am not really talking about javascript frameworks.
 
 Are we doomed to learn useless stuff? I think that the answer is no. Nonetheless, I think that learning a particular technology, which does not teach us something more general, is a waste of time. Details of implementation will come and go[^details], general questions will stay: the deeper the longer. Bartosz Milewski writes the following ending to a blog post {cite}`milewski2020math` with the title "Math is your insurance policy".
 
