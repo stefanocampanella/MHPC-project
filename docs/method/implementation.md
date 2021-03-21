@@ -49,7 +49,7 @@ def objective(model, candidate, observations):
     return compare(predictions, observations)
 ```
 
-The `compare` function should return the loss value. A good choice is to use the Kling-Gupta or Nash-Sutcliffe efficiencies, notice however that higher number of these correspond to better overlap of simulation and observations.
+The `compare` function should return the loss value. A good choice is to use the Kling-Gupta or Nash-Sutcliffe efficiencies, which are well-suited for hydrological models, notice however that higher number of these correspond to better overlap of simulation and observations.
 
 Using `TemporaryDirectory` from the tempfile module allows running the model in `tmpfs` (i.e. in RAM) and automatic deletion of files on exit (also in case of exceptions and canceled Dask task). The `CalledProcessError` and `TimeoutExpired` exceptions from the subprocess module must be caught since they represent routine GEOtop failures. Other exceptions will be propagated since they signal abnormal behaviours. 
 
@@ -144,7 +144,7 @@ for future in completed_queue:
 
 The previous code works since to exit the loop `completed_queue` must be empty. If `completed_queue` is empty, then bottom of the loop has been reached without a insertion of a new future, that is `len(to_tell) + completed_queue.count() < popsize` must have been false. But `completed_queue.count()` is equal to zero, hence `len(to_tell) >= popsize`. However, the number of failures equals the number of insertions, hence `len(to_tell) == popsize`.
 
-Let's consider what happen when we reach the end of a generation. There are `popsize - 1` elements in `to_tell`, and if the objective fails a single new future is added to `completed_queue`: all CPUs except one will wait in idle. A better idea is to speculatively execute more objective functions, so to increase the chances that at least of them does not fail.
+Let's consider what happen when we reach the end of a generation. There are `popsize - 1` elements in `to_tell`, and if the objective fails a single new future is added to `completed_queue`: all CPUs except one will wait in idle. A better idea is to speculatively execute more objective functions, so to increase the chances that at least one of them does not fail.
 
 ```python
 completed_queue = as_completed(futures)   

@@ -6,8 +6,6 @@ The old joke is "HPC is the art of taking a CPU-bound computation and making it 
 -- dnautics, comment on Hacker News
 ```
 
-In the previous chapter, I anticipated that the calibration process is time-consuming. What does this mean exactly?
-
 ## The Curse of Dimensionality
 
 Let's consider an imaginary calibration. The first problem is the discretization of the parameters space: i.e. establish what is the scale at which changes of a parameter produce relevant variations of the output of the model. Note that this quantity may not be constant, meaning that small changes can produce huge differences in a region of the parameters space and negligible in another. Furthermore, the parameters might take values on a domain with complicated shape. Paradoxically, even before doing the calibration, we would need precise knowledge of the objective function to design calibration. 
@@ -23,9 +21,9 @@ Ironically, grid search algorithms is a truly embarrassingly parallel algorithm.
 
 ## Scalability of Evolutionary Algorithms
 
-The evolutionary algorithms used for calibration basically use random search at each iteration, making increasingly educated guesses. Within each iteration, one can perform massively parallel computations with very little communication among processes. However, since there is data dependency between one iteration and the following, these algorithms cannot scale indefinitely. Nonetheless, the upper limit for scaling within a iteration usually depends on a free parameter.
+The evolutionary algorithms used for calibration basically use random search at each iteration, making increasingly educated guesses. Within each iteration, one can perform massively parallel computations with very little communication among processes. However, since there is data dependency between one iteration and the following, these algorithms cannot scale indefinitely. Nonetheless, the upper limit for scaling within an iteration usually depends on a free parameter.
 
-Having access to a supercomputer, one could think to tweak this parameter and scale up the number processing units with impunity. This way, he could keep the same number of iterations and find "better" results in the same amount of time, or use fewer iterations and find the old results in shorter time. Unfortunately, this is not the case. 
+Having access to a supercomputer, one could think to tweak this parameter and scale up the number processing units with impunity. In this way, he could keep the same number of iterations and find "better" results in the same amount of time, or use fewer iterations and find the old results in shorter time. Unfortunately, this is not the case. 
 
 As a first approximation, we can decompose calibration in two tasks. The first is locating the region of the search space containing the global minimum, and the second is exploring this region to locate its exact value. Increasing the number of guesses each iteration, which determines maximum scaling, increases the chances to escape from local minima, and move the exploration and refinement phase at later iterations. We can say that the convergence of the evolutionary algorithm slows down. Conversely, the fewer the guesses at each iteration, the sooner the local-search behaviour kicks in. 
 
