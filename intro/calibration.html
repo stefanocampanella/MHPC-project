@@ -26,7 +26,7 @@
 
     
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -44,7 +44,7 @@
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script src="../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -191,21 +191,21 @@
           
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="row topbar fixed-top container-xl">
-    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
-    </div>
-    <div class="col pl-2 topbar-main">
-        
-        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-            <i class="fas fa-bars"></i>
-            <i class="fas fa-arrow-left"></i>
-            <i class="fas fa-arrow-up"></i>
-        </button>
-        
-        
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
             class="fas fa-download"></i></button>
@@ -223,24 +223,25 @@
     </div>
 </div>
 
-        <!-- Source interaction buttons -->
+            <!-- Source interaction buttons -->
 
 
-        <!-- Full screen (wrap in <a> to have style consistency -->
-        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                title="Fullscreen mode"><i
-                    class="fas fa-expand"></i></button></a>
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
 
-        <!-- Launch buttons -->
+            <!-- Launch buttons -->
 
-    </div>
+        </div>
 
-    <!-- Table of contents -->
-    <div class="d-none d-md-block col-md-2 bd-toc show">
-        
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
         <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
+            <i class="fas fa-list"></i>
+            Contents
         </div>
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
@@ -258,6 +259,7 @@
 
         </nav>
         
+        </div>
     </div>
 </div>
     <div id="main-content" class="row">
@@ -273,43 +275,43 @@
 </div></blockquote>
 <div class="section" id="brief-introduction-to-geotop">
 <h2>Brief Introduction to GEOtop<a class="headerlink" href="#brief-introduction-to-geotop" title="Permalink to this headline">¶</a></h2>
-<p>GEOtop is a model of the mass and energy balance of the hydrological cycle aimed for simulations of small catchments. It is a distributed model and can simulate the evolution of snow cover, soil temperature and moisture. GEOtop takes into account vegetation processes, such as evapotranspiration, to correctly describe the water and energy exchange with atmosphere.</p>
-<p>A GEOtop simulation requires some input data, parameters and settings. The meteorological data strictly necessary to run the model consist of: air temperature, relative humidity (air water content, air vapor pressure, or dew point), wind speed, shortwave radiation, pressure, and precipitation. The meteorological time series must come from at least one station with a resolution of at least one hour.</p>
-<p>Parameters can be divided into surface parameters, which values are single numbers of each point of the catchment, and soil parameters, that may vary with depth. The first ones are related to energy fluxes, as the albedo, and vegetation properties, as vegetation height and leaf area index, which may vary with time. The seconds can be either thermodynamical properties of the soil, as its thermal conductivity and capacity, or hydraulic properties. The latter are crucial for determination of the soil moisture content, and some of them appear in phenomenological relations which are highly non-linear, as the Van Genuchten equation. Small changes in these parameters correspond to very different behaviours of soil retention. Putting all together, there are around thirty parameters that describe a single point of the simulated catchment. However, soil parameters are arrays since different layers of soil can have different properties. This means that the total number of values that can be used to characterize a point of a basin, including default values, can exceed one hundred.</p>
+<p>GEOtop is a model of the mass and energy balance of the hydrological cycle aimed for simulations of small catchments. It is a distributed model and can simulate the evolution of snow cover, soil temperature, and water content. GEOtop takes into account vegetation processes, such as evapotranspiration, to correctly describe the water and energy exchange with atmosphere.</p>
+<p>A GEOtop simulation requires some input data, parameters and settings. The meteorological data strictly necessary to run the model consist of: air temperature, relative humidity (air water content, air vapor pressure, or dew point), wind speed, shortwave radiation, pressure, and precipitation. The meteorological time series must come from at least one station with a resolution of at least six hours.</p>
+<p>Parameters can be divided into surface parameters, which values are single numbers for each point of the catchment, and soil parameters, that may vary with depth. The first ones are related to energy fluxes, as the albedo, and vegetation properties, as vegetation height and leaf area index, which may vary with time. The seconds can be either thermodynamical properties of the soil, as its thermal conductivity and capacity, or hydraulic properties. The latter are crucial for determination of the soil moisture content, and some of them appear in phenomenological relations which are highly non-linear, as the Van Genuchten equation. Small changes in these parameters correspond to very different behaviours of soil retention. Putting all together, there are around thirty parameters that describe a single point of the simulated catchment. However, soil parameters are arrays since different layers of soil can have different properties. This means that the total number of values that can be used to characterize a point of a basin, including default values, can exceed one hundred.</p>
 <p>The core of a simulation is the solution of the system of coupled partial differential equations that describes the flow and diffusion of water, and thermodynamical properties of soil. GEOtop solves a finite difference approximation of this system of equations. It uses a fixed time-step length and a three-dimensional grid, whose upper bound is given by a digital elevation model of the catchment, and the lower one is at a specified varying depth.</p>
 <p>The two main equations are the water and energy balance equations with appropriate source and sink terms. The water balance equation also includes a diffusive term, as the soil is a porous medium. At each time-step, GEOtop uses an iterative method to solve these discretized equations. The number of iterations is determined by the residual, which must be under a user-defined threshold. Since the number of iteration is not fixed, the number of CPU cycles required to simulate the same time interval can vary and even diverge. GEOtop has several settings to limit the number of iterations of its internal routines. Nonetheless, it may be necessary to use an external timeout when dealing with batch executions of GEOtop.</p>
 </div>
 <div class="section" id="model-calibration">
 <h2>Model Calibration<a class="headerlink" href="#model-calibration" title="Permalink to this headline">¶</a></h2>
 <p>As discussed in the previous section, GEOtop has many free parameters. Their large number is the result of assembling many different submodels of various nature. Not all of them can be directly measured with an instrument or inferred in some other way than calibration. This fact is especially actual for the ones found in phenomenological relations, think for example to the Van Genuchten equation for soil retention. Furthermore, even when there is a straightforward experimental procedure to determine them, their value is affected by uncertainties, which could be large.</p>
-<p>One could think that default values of the parameters exist, which describe the average system, and that any further adjustment of the parameters describes small deviations from it. Unfortunately, this is not the case, and parameters do not simply need fine-tuning.</p>
+<p>One could think that default values of the parameters exist, which describe the average system, and that any further adjustment of the parameters describes small deviations from it. However, because of the strong non-linearity of the associated processes, this is not the case, and parameters do not simply need fine-tuning.</p>
 <p>Indeed, the outputs of a simulation can change wildly, and without carefully chosen values of the parameters, the results are entirely meaningless. Hence, the predictive power of GEOtop is strictly related to good calibration.</p>
 <p>What it means to calibrate the model? The intuitive idea of “finding the values of the inputs with best outputs” contains a certain degree of hand waving. Practically, one should answer the following questions:</p>
 <ol class="simple">
 <li><p>How do I compare the time series produced by the model with the experimental data?</p></li>
-<li><p>How do I choose how many and which input parameters I need to calibrate?</p></li>
+<li><p>How do I choose which input parameters I need to calibrate?</p></li>
 <li><p>Which optimization algorithm and hyperparameters should I choose?</p></li>
 <li><p>How much computational resources do I need?</p></li>
 <li><p>How long should I wait for the results?</p></li>
 <li><p>Are they meaningful?</p></li>
-<li><p>And finally, is there a way to get the same or better results with fewer resources, i.e. waiting less or using less
+<li><p>Finally, is there a way to get the same or better results with fewer resources, i.e. waiting less or using less
 computational power?</p></li>
 </ol>
 <p>The task of model calibration is more an art than a science. Still, it would be useful to have hints and heuristics. The analyses in this work answer only a few of the previous questions. However, the developed code enable making further experiments and empirical studies on the subject. Let’s consider the challenges that calibration entail.</p>
-<p>The multitude of parameters translates into dimensionality curse, that is the exponential growth of the volume of the search space with respect to the number of parameters. However, the dimensionality curse is not an obstacle per se, take the example of neural networks. Yet, neural networks have two peculiar properties. On the one hand, the derivatives of the objective function with respect to the model parameters can be easily calculated. On the other, it turns out that wherever you start from in the search space, there is always a good set of parameters nearby.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>As noted in a <a class="reference external" href="https://news.ycombinator.com/item?id=24835336">recent article</a> posted on Hacker News on our intuition around neural networks, it is implausible that local optima exist in such high dimensional spaces. Endowed with the gargantuan dimensionality of models like GTP3, the concept of direction (and distance) assumes a statistical meaning: just by chance, there will always be a direction along which you could move to smaller values of the cost function.</p>
-</div>
+<p>The multitude of parameters translates into dimensionality curse, that is the exponential growth of the volume of the search space with respect to the number of parameters. However, the dimensionality curse is not an obstacle per se, take for example neural networks. Yet, neural networks have two peculiar properties. On the one hand, the derivatives of the objective function with respect to the model parameters can be easily calculated. On the other, it turns out that wherever you start from in the search space, there is always a good set of parameters nearby<a class="footnote-reference brackets" href="#nn-intuition" id="id1">1</a></p>
 <p>Leaving out categorical parameters, in the case of GEOtop, the first point is not a real impediment. In principle, we could use a numerical differentiation scheme (supposing that there are no threats of numerical instability and that the objective function is smooth enough). However, the second point has no similar in GEOtop.</p>
-<p>If one could put himself in the parameters space of GEOtop, and look at the cost function, he would see hills and canyons, craters where the model crashes, swamps where it doesn’t converge, mirages of oasis with unphysical parameters, and deadly desert plateaus where one moves from meaningless outputs to equally meaningless outputs.</p>
-<p>In this lumpy and bumpy landscape, moving towards the direction of the steepest descent would lead, in the best scenario, to a useless local optimum.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>However, at the end of a good calibration, we might have a good prior. In this case, it would make sense to perform a local optimization search. In principle, this would boost the performance of the calibration strategy. Unfortunately, there was no time to develop this idea.</p>
-</div>
+<p>In pictorial form, if one could put himself in the parameters space of GEOtop, and look at the cost function, he would see hills and canyons, craters where the model crashes, swamps where it doesn’t converge, mirages of oasis with unphysical parameters, and deadly desert plateaus where one moves from meaningless outputs to equally meaningless outputs. In this lumpy and bumpy landscape, moving towards the direction of the steepest descent would lead, in the best scenario, to a useless local optimum<a class="footnote-reference brackets" href="#local-optimum" id="id2">2</a>.</p>
 <p>Hence, if we want to find the holy grail of global optimum, we need to roam and wander, jumping here and there, with increasing confidence on our next guess as we grasp some (statistical) knowledge of the shape of the objective function. However, this process is very time-consuming: for the kind of simulations with which we are involved, each sampling takes about one minute, hence serial computations are not feasible.</p>
-<p>The results of calibration strongly suggest that a global optimum does not exist. Instead, the objective has a plethora of equivalent local minima. This is an interesting feature of the model, and a strong indication that it is over-parametrized. Indeed, this open the possibility for further analysis of the data collected during calibration.</p>
+<p>The results of calibration strongly suggest that a global optimum does not exist. Instead, the objective has a plethora of equivalent local minima. This is an interesting feature of the model, and a strong indication that it is over-parametrized. Indeed, this open the possibility for further analysis of the data collected during calibration. It could allow getting useful information for a better understanding of the model behaviour and future models improvements.</p>
+<hr class="footnotes docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="nn-intuition"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>It is implausible that local optima exist in such high dimensional spaces. Given the gargantuan dimensionality of models like GTP3, the concept of direction, or distance assume a statistical meaning: just by chance, there will always be a direction along which you could move to smaller values of the cost function.</p>
+</dd>
+<dt class="label" id="local-optimum"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>However, at the end of a good calibration, we might have a good prior. In this case, it would make sense to perform a local optimization search. In principle, this would boost the performance of the calibration strategy. Unfortunately, there was no time to develop this idea.</p>
+</dd>
+</dl>
 </div>
 </div>
 
@@ -335,15 +337,15 @@ computational power?</p></li>
 
               </div>
               
-        </div>
-    </div>
-    
-    
-    <div class='prev-next-bottom'>
         
+        <div class='prev-next-bottom'>
+            
     <a class='left-prev' id="prev-link" href="../frontmatter/acknowledgements.html" title="previous page">Acknowledgements</a>
     <a class='right-next' id="next-link" href="hpc.html" title="next page">The need for HPC</a>
 
+        </div>
+        
+        </div>
     </div>
     <footer class="footer mt-5 mt-md-0">
     <div class="container">

@@ -1,6 +1,6 @@
 # Summary and Outline
 
-This thesis addresses my final project for the 2019/20 edition of the Master in High-Performance Computing at SISSA and ICTP. In this preliminary material, I will briefly present its content and context.
+This thesis addresses my final project for the 2019/20 edition of the Master in High-Performance Computing at SISSA and ICTP.
 
 Earth-system and environmental models calibration is a complex, computationally intensive task. At present, there is no general theory of model calibration, but instead a large collection of methods, algorithms and case studies. As a result, calibration is often more an art than a science: one must make several discretionary choices, guided more by his own experience and intuition than by the scientific method. 
 
