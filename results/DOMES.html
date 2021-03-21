@@ -66,7 +66,7 @@
 <meta property="og:url"         content="https://stefanocampanella.github.io/MHPC-project/results/DOMES.html" />
 <meta property="og:type"        content="article" />
 <meta property="og:title"       content="Example GEOtop Calibration Report" />
-<meta property="og:description" content="Example GEOtop Calibration Report  What follows is an example of GEOtop calibration report.  # Defaults model_path = &#39;../data/testbed/inputs&#39; timeout = 120 obse" />
+<meta property="og:description" content="Example GEOtop Calibration Report  What follows is an example of GEOtop calibration report.  In this report the GEOtop model has been run in 1D mode solving the" />
 <meta property="og:image"       content="https://stefanocampanella.github.io/MHPC-project/_static/logo.png" />
 
 <meta name="twitter:card" content="summary" />
@@ -267,6 +267,10 @@
   <div class="section" id="example-geotop-calibration-report">
 <h1>Example GEOtop Calibration Report<a class="headerlink" href="#example-geotop-calibration-report" title="Permalink to this headline">¶</a></h1>
 <p>What follows is an example of GEOtop calibration report.</p>
+<p>In this report the GEOtop model has been run in 1D mode solving the water and energy balance for one site DOMEF 2000 located in a mountain grassland in the Italian Alps in South Tyrol. The model was run using in input meteorological parameters for a period of about 4 years, with about 35 months of warm up and then calibrated with respect of soil moisture observations for the last 18 months.
+We considered here 16 layers up to 1m depth. The chosen cost function is based on the Kling-Gupta efficiency. The model was optimized for 29 parameters, which control soil, surface and vegetation properties.
+The chosen optimization algorithm was CMA-ES. In this case 256 CPUs were used.</p>
+<p>The reports show the decrease of the cost function as function of the generations and the comparison of the simulated time series with the observations after the calibration, at different time scales, aggregated hourly, daily and monthly.</p>
 <div class="cell tag_parameters docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defaults</span>

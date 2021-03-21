@@ -49,7 +49,7 @@ def objective(model, candidate, observations):
     return compare(predictions, observations)
 ```
 
-The `compare` function should return the loss value. A good choice is to use the Kling-Gupta or Nash-Sutcliffe efficiencies, which are well-suited for hydrological models, notice however that higher number of these correspond to better overlap of simulation and observations.
+The `compare` function should return the loss value. A good choice is to use the Kling-Gupta or Nash-Sutcliffe efficiencies {cite}`gupta2009decomposition,nash1970river`, which are well-suited for hydrological models, notice however that higher number of these correspond to better overlap of simulation and observations.
 
 Using `TemporaryDirectory` from the tempfile module allows running the model in `tmpfs` (i.e. in RAM) and automatic deletion of files on exit (also in case of exceptions and canceled Dask task). The `CalledProcessError` and `TimeoutExpired` exceptions from the subprocess module must be caught since they represent routine GEOtop failures. Other exceptions will be propagated since they signal abnormal behaviours. 
 
