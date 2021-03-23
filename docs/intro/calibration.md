@@ -55,3 +55,6 @@ Hence, if we want to find the holy grail of global optimum, we need to roam and 
 
 The results of calibration strongly suggest that a global optimum does not exist. Instead, the objective has a plethora of equivalent local minima. This is an interesting feature of the model, and a strong indication that it is over-parametrized. Indeed, this open the possibility for further analysis of the data collected during calibration. It could allow getting useful information for a better understanding of the model behaviour and future models improvements.
 
+```{bibliography}
+:filter: docname in docnames
+```
