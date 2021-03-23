@@ -14,3 +14,7 @@ Some examples of further research topics are:
 * determination of the optimal population size,  
 * use of local optimization algorithms for refinement of the solutions, and
 * interpretation and validation of the solutions from a physical point of view.
+
+```{bibliography}
+:filter: docname in docnames
+```

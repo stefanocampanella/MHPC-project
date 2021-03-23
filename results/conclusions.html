@@ -249,8 +249,8 @@
                 
   <div class="section" id="conclusions">
 <h1>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h1>
-<p>In this thesis a modern HPC approach has been applied to calibrate the GEOtop hydrological model <span id="id1">[<a class="reference internal" href="../frontmatter/summary.html#id7"><span>RBO06</span></a>,<a class="reference internal" href="../frontmatter/summary.html#id6"><span>EGDallAmicoR14</span></a>]</span>, a complex, over parameterized hydrological model, with the aim of predicting the time evolution of variables as soil water content and evapotranspiration for several mountain agricultural sites in South Tyrol.</p>
-<p>After developing a Python wrapper for the GEOtop code, I applied the derivative-free optimization algorithms implemented in the Facebook Nevergrad Python library <span id="id2">[<a class="reference internal" href="../method/tools.html#id14"><span>RT18</span></a>]</span> on a HPC cluster, thanks to the Dask framework <span id="id3">[<a class="reference internal" href="../frontmatter/summary.html#id9"><span>Tea16</span></a>]</span>.</p>
+<p>In this thesis a modern HPC approach has been applied to calibrate the GEOtop hydrological model <span id="id1">[<a class="reference internal" href="#id7"><span>RBO06</span></a>,<a class="reference internal" href="#id6"><span>EGDallAmicoR14</span></a>]</span>, a complex, over parameterized hydrological model, with the aim of predicting the time evolution of variables as soil water content and evapotranspiration for several mountain agricultural sites in South Tyrol.</p>
+<p>After developing a Python wrapper for the GEOtop code, I applied the derivative-free optimization algorithms implemented in the Facebook Nevergrad Python library <span id="id2">[<a class="reference internal" href="#id8"><span>RT18</span></a>]</span> on a HPC cluster, thanks to the Dask framework <span id="id3">[<a class="reference internal" href="#id9"><span>Tea16</span></a>]</span>.</p>
 <p>Particular care has been put in the implementation in order to properly treat model failures, as the model does not produce a valid solution for all combinations of parameters.</p>
 <p>The use of HPC solutions allowed calibrating GEOtop using HPC within a reasonable time and with acceptable results, notwithstanding the large parameters space. The code developed, which is published and freely available on GitHub, also shows how libraries and tools used within the machine learning community could be useful and address Earth-system and environmental models calibration. Finally, a simple performance model for the computation has been discussed.</p>
 <p>Some examples of further research topics are:</p>
@@ -260,6 +260,21 @@
 <li><p>use of local optimization algorithms for refinement of the solutions, and</p></li>
 <li><p>interpretation and validation of the solutions from a physical point of view.</p></li>
 </ul>
+<p id="id4"><dl class="citation">
+<dt class="label" id="id6"><span class="brackets"><a class="fn-backref" href="#id1">EGDallAmicoR14</a></span></dt>
+<dd><p>S. Endrizzi, S. Gruber, M. Dall'Amico, and R. Rigon. Geotop 2.0: simulating the combined energy and water balance at and below the land surface accounting for soil freezing, snow cover and terrain effects. <em>Geoscientific Model Development</em>, 7(6):2831–2857, 2014. URL: <a class="reference external" href="https://gmd.copernicus.org/articles/7/2831/2014/">https://gmd.copernicus.org/articles/7/2831/2014/</a>, <a class="reference external" href="https://doi.org/10.5194/gmd-7-2831-2014">doi:10.5194/gmd-7-2831-2014</a>.</p>
+</dd>
+<dt class="label" id="id8"><span class="brackets"><a class="fn-backref" href="#id2">RT18</a></span></dt>
+<dd><p>J. Rapin and O. Teytaud. Nevergrad — a gradient-free optimization platform. 2018. Last accessed on 2021-2-17. URL: <a class="reference external" href="https://GitHub.com/FacebookResearch/Nevergrad">https://GitHub.com/FacebookResearch/Nevergrad</a>.</p>
+</dd>
+<dt class="label" id="id7"><span class="brackets"><a class="fn-backref" href="#id1">RBO06</a></span></dt>
+<dd><p>Riccardo Rigon, Giacomo Bertoldi, and Thomas M. Over. Geotop: a distributed hydrological model with coupled water and energy budgets. <em>Journal of Hydrometeorology</em>, 7(3):371 – 388, 01 Jun. 2006. URL: <a class="reference external" href="https://journals.ametsoc.org/view/journals/hydr/7/3/jhm497_1.xml">https://journals.ametsoc.org/view/journals/hydr/7/3/jhm497_1.xml</a>, <a class="reference external" href="https://doi.org/10.1175/JHM497.1">doi:10.1175/JHM497.1</a>.</p>
+</dd>
+<dt class="label" id="id9"><span class="brackets"><a class="fn-backref" href="#id3">Tea16</a></span></dt>
+<dd><p>Dask Development Team. <em>Dask: Library for dynamic task scheduling</em>. 2016. URL: <a class="reference external" href="https://dask.org">https://dask.org</a>.</p>
+</dd>
+</dl>
+</p>
 </div>
 
     <script type="text/x-thebe-config">
