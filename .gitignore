@@ -3,3 +3,4 @@
 docs/_build
 __pycache__
 .conda-env
+.DS_Store
